@@ -8,7 +8,8 @@ import java.util.List;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+//import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import org.apache.xerces.parsers.DOMParser;
 
 /**
  * This class is a wrapper around the DOM xml parser and provides methods that make parsing easier.
