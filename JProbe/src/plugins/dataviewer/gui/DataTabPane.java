@@ -1,17 +1,24 @@
 package plugins.dataviewer.gui;
 
 import java.awt.GridBagConstraints;
+//import java.awt.event.FocusEvent;
+//import java.awt.event.FocusListener;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
-
+//import javax.swing.event.ChangeEvent;
+//
+//import javafx.beans.value.ChangeListener;
+//import javafx.beans.value.ObservableValue;
 import plugins.dataviewer.gui.services.DataViewer;
 import jprobe.services.CoreEvent;
 import jprobe.services.CoreListener;
 import jprobe.services.DataManager;
 import jprobe.services.data.Data;
+
+//import org.fife.ui.TabbedPaneTransferHandler;
 
 public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer{
 	private static final long serialVersionUID = 1L;
@@ -22,12 +29,15 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	private Map<Data, DataTab> m_Tabs;
 	private Map<Data, DataTabLabel> m_TabLables;
 	private GridBagConstraints m_Constraints;
+	//private DraggableTabbedPane m_tabPane; // added
 	
 	public DataTabPane(DataManager dataManager){
 		super();
+		
 		m_DataManager = dataManager;
-		m_DataManager.addListener(this);
+		m_DataManager.addListener(this);  // what is "this"?
 		m_Constraints = new GridBagConstraints();
+		//m_tabPane = new DraggableTabbedPane(); // added
 		m_Constraints.fill = GridBagConstraints.BOTH;
 		m_Constraints.weightx = 0.7;
 		m_Constraints.weighty = 0.7;
@@ -41,22 +51,32 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 			public void run() {
 				initTabs();
 			}
-			
 		});
 	}
 	
+		
 	public void initTabs(){
 		for(Data d : m_DataManager.getAllData()){
-			DataTab tab = new  DataTab(d);
+			DataTab tab = new DataTab(d);
 			m_Tabs.put(d, tab);
+			
 			this.addTab("", tab);
 			int index = this.indexOfComponent(tab);
+//			m_tabPane.addTab("", tab);
+//			int index = m_tabPane.indexOfComponent(tab);
+			
 			DataTabLabel lable = new DataTabLabel(this, tab, m_DataManager.getDataName(d));
 			m_TabLables.put(d, lable);
+			
 			this.setTabComponentAt(index, lable);
+//			m_tabPane.setTabComponentAt(index, lable);
 		}
+		// added 
+//		this.addFocusListener((FocusListener) new tabOnFocus_changeListener(this));
 	}
 	
+
+
 	public GridBagConstraints getGridBagConstraints(){
 		return m_Constraints;
 	}
@@ -65,6 +85,7 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	public void selectData(Data data){
 		if(!m_Tabs.containsKey(data)){
 			this.displayData(data);
+			//m_tabPane.displayData(data);
 		}
 		final DataTab select = m_Tabs.get(data);
 		SwingUtilities.invokeLater(new Runnable(){
@@ -81,14 +102,16 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	
 	@Override
 	public void displayData(Data data) {
+		// create new tab for imported data
 		if(!m_Tabs.containsKey(data)){
-			DataTab tab = new DataTab(data);
+			DataTab tab = new DataTab(data); 
 			m_Tabs.put(data, tab);
 			this.addTab("", tab);
 			int index = this.indexOfComponent(tab);
 			DataTabLabel lable = new DataTabLabel(this, tab, m_DataManager.getDataName(data));
 			m_TabLables.put(data, lable);
 			this.setTabComponentAt(index, lable);
+			this.setSelectedIndex(index);
 		}
 	}
 
@@ -151,6 +174,4 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	}
 
 
-	
-	
 }

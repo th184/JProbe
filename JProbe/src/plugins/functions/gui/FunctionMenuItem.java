@@ -1,9 +1,14 @@
 package plugins.functions.gui;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
+import javax.swing.JToolTip;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 
 import org.osgi.framework.Bundle;
 
@@ -13,6 +18,7 @@ import jprobe.services.Debug;
 import jprobe.services.JProbeCore;
 import jprobe.services.Log;
 import jprobe.services.function.Function;
+
 
 public class FunctionMenuItem extends JMenuItem implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -25,12 +31,29 @@ public class FunctionMenuItem extends JMenuItem implements ActionListener{
 		super(function.getName());
 		m_Bundle = bundle;
 		m_FunctionDialog = dialogWindow;
-		m_FunctionPanel = new FunctionPanel(function, core, bundle);
+		m_FunctionPanel = new FunctionPanel(function, core, bundle);		
+				
 		this.setEnabled(true);
 		this.setVisible(true);
 		this.setToolTipText(function.getDescription());
 		this.addActionListener(this);
 	}
+	
+	@Override
+    public JToolTip createToolTip()
+    {
+        JMultiLineToolTip multiTool = new JMultiLineToolTip();
+		multiTool.setFixedWidth(300);
+		ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
+		
+//		Font myFont = new Font("TimesRoman", Font.PLAIN, 12);
+//		multiTool.setFont(myFont);
+		
+//		UIManager.put("ToolTip.font",
+//				new FontUIResource("SansSerif", Font.BOLD, 18));
+//		
+		return multiTool; 
+    }
 	
 	private void doFunction(){
 		//code for executing function here

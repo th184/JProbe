@@ -1,14 +1,21 @@
 package plugins.jprobe.gui;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+
 
 public class Constants {
 	
 	public static final String CONFIG_FILE_NAME = "jprobe-gui.pref";
 	
-	public static final int DEFAULT_WIDTH = 1000;
-	public static final int DEFAULT_HEIGHT = 800;
+	
+	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	public static final int DEFAULT_WIDTH = (int) screenSize.getWidth();
+	public static final int DEFAULT_HEIGHT = (int) screenSize.getHeight();
 	
 	public static final String BACKGROUND_THREAD_NAME = "BackgroundThread";
 	

@@ -21,6 +21,7 @@ import util.gui.OnPress;
 import jprobe.services.ErrorHandler;
 import jprobe.services.JProbeCore;
 import jprobe.services.function.Function;
+import plugins.functions.gui.JMultiLineToolTip;
 
 public class FunctionPanel extends JPanel implements ActionListener, Observer<Boolean>{
 	private static final long serialVersionUID = 1L;
@@ -121,5 +122,6 @@ public class FunctionPanel extends JPanel implements ActionListener, Observer<Bo
 	public void update(Subject<Boolean> observed, Boolean notification) {
 		m_RunButton.setEnabled(notification);
 	}
+	
 	
 }

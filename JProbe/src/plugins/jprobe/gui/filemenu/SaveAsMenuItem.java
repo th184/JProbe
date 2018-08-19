@@ -18,8 +18,9 @@ public class SaveAsMenuItem extends JMenuItem implements ActionListener{
 	
 	private JProbeCore m_Core;
 	
+	
 	public SaveAsMenuItem(JProbeCore core){
-		super("Save Workspace As");
+		super("Save Workspace As...");
 		m_Core = core;
 		this.addActionListener(this);
 		this.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.SHIFT_DOWN_MASK + Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));

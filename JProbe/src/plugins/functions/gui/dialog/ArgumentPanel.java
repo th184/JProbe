@@ -15,10 +15,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToolTip;
+import javax.swing.ToolTipManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import plugins.functions.gui.Constants;
+import plugins.functions.gui.JMultiLineToolTip;
 import util.Observer;
 import util.Subject;
 import util.gui.ValidLabel;
@@ -49,6 +52,14 @@ public class ArgumentPanel<T> extends JPanel implements Subject<Boolean>, Argume
 		this.setBorder(this.makeBorder());
 		this.setToolTipText(arg.getTooltip());
 	}
+	@Override
+    public JToolTip createToolTip()
+    {
+        JMultiLineToolTip multiTool = new JMultiLineToolTip();
+		multiTool.setFixedWidth(300);
+		ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
+		return multiTool; 
+    }
 	
 	public boolean isArgValid(){
 		return m_Arg.isValid() || !m_Optional.isSelected();

@@ -9,12 +9,10 @@ import jprobe.services.Log;
 public class Launcher {
 	
 	public static void main(String[] args){
-		
 		//init the user's jprobe directory
 		initUserDirectory();
 		//init the logs
 		initLogs();
-		
 		//init the user subdirectories
 		initDir(Constants.USER_PLUGINS_DIR);
 		initDir(Constants.FELIX_CACHE_DIR);

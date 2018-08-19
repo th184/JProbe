@@ -88,6 +88,7 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 		m_Listeners = new HashSet<GUIListener>();
 		m_MenuBar = new JMenuBar();
 		m_ContentPane = new JPanel(new GridBagLayout());
+		
 		m_ContentPane.setOpaque(true);
 		this.setJMenuBar(m_MenuBar);
 		this.setContentPane(m_ContentPane);
@@ -110,6 +111,7 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 		
 		m_NotePanel = initNotificationPanel(m_Core);
 		
+			
 		this.setModified(false);
 		this.pack();
 		initSizeAndLocation(config);
@@ -136,8 +138,10 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 		
 	}
 
-	private void initSizeAndLocation(GUIConfig config) {
+	private void initSizeAndLocation(GUIConfig config) {  
+	    
 		this.setSize(config.getDimension());
+		
 		Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
 		int x;
 		if(config.getX() < 0 || !SwingUtils.isXOnScreen(config.getX())){
@@ -251,11 +255,15 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 	}
 	
 	public void addDropdownMenu(JMenu menu, Bundle responsible){
+		
+		System.out.println("drop down menu added...");
+		
 		m_PluginMenuItems.add(menu);
 		m_MenuBar.removeAll();
 		m_MenuBar.add(m_FileMenu);
 		for(JMenu m : m_PluginMenuItems){
 			m_MenuBar.add(m);
+			System.out.println("plug in menu items");
 		}
 		if(m_PreferencesMenu != null){
 			m_MenuBar.add(m_PreferencesMenu);

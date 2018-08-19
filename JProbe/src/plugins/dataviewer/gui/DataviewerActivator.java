@@ -18,6 +18,7 @@ import plugins.jprobe.gui.services.JProbeGUI;
 
 public class DataviewerActivator implements BundleActivator{
 	
+	
 	private static Bundle BUNDLE = null;
 	private static JProbeGUI m_Gui;
 	
@@ -26,8 +27,12 @@ public class DataviewerActivator implements BundleActivator{
 	private DataViewerSplitPane m_Panel;
 
 	private ServiceListener sl = new ServiceListener() {
+		
 		@Override
 		public void serviceChanged(ServiceEvent ev) {
+			
+			
+			
 			ServiceReference<?> sr = ev.getServiceReference();
 			switch(ev.getType()) {
 				case ServiceEvent.REGISTERED:

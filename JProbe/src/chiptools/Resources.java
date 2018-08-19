@@ -2,6 +2,7 @@ package chiptools;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +31,10 @@ public class Resources {
 		try {
 			while((line = reader.readLine()) != null){
 				String[] tokens = line.split(DELIM);
+				
 				if(tokens.length == NUM_FUNC_ENTRIES){
 					Class<?> clazz = Class.forName(tokens[FUNCTION_CLASS]);
+					
 					if(Function.class.isAssignableFrom(clazz)){
 						FUNCTION_MAP.put((Class<? extends Function>) clazz , tokens);
 					}
@@ -42,6 +45,8 @@ public class Resources {
 							);
 				}
 			}
+			
+			
 			reader.close();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -63,7 +68,9 @@ public class Resources {
 	}
 	
 	public static String getFunctionName(Class<? extends Function> clazz){
+				
 		String[] entries = getFunctionEntries(clazz);
+		
 		if(entries != null){
 			return entries[FUNCTION_NAME];
 		}

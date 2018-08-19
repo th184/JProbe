@@ -29,7 +29,7 @@ public class GUIConfig {
 	private final File m_File;
 	
 	private Dimension m_Dim = new Dimension(Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT);
-	private int m_ExtendedState = Frame.NORMAL;
+	private int m_ExtendedState = Frame.MAXIMIZED_BOTH;
 	private int m_X = Constants.CENTER;
 	private int m_Y = Constants.CENTER;
 	private boolean m_Autosave = true;

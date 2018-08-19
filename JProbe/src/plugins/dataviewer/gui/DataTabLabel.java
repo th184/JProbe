@@ -22,6 +22,7 @@ public class DataTabLabel extends JPanel implements ActionListener{
 		m_Label = new JLabel(title);
 		m_Label.setOpaque(false);
 		this.add(m_Label);
+		
 		JButton close = new IconButton(Constants.getXIcon(), Constants.getXHighlightedIcon(), Constants.getXClickedIcon());
 		close.addActionListener(this);
 		this.add(close);

@@ -1,5 +1,7 @@
 package plugins.jprobe.gui;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,8 +64,19 @@ public class GUIActivator implements BundleActivator{
 		File prefFile = new File(m_Core.getPreferencesDir() + File.separator + Constants.CONFIG_FILE_NAME);
 		m_GuiConfig = new GUIConfig(prefFile);
 		
+		
 		//start gui
 		m_Gui = new JProbeGUIFrame(m_Core, m_Core.getName()+"-"+m_Core.getVersion(), context.getBundle(), m_GuiConfig);
+		m_Gui.addWindowStateListener(new WindowStateListener() {
+			// set the window size and pos when user un-maximize it
+	        @Override
+	        public void windowStateChanged(WindowEvent e) {
+	                if (e.getNewState() != JFrame.MAXIMIZED_BOTH && e.getNewState() != 7 && e.getNewState() != JFrame.ICONIFIED) {  
+	                    m_Gui.setSize(1000, 600);
+	                    m_Gui.setLocationRelativeTo(null);
+	                }
+	        }
+	    });
 		m_Gui.setVisible(true);
 		m_ErrorManager = new GUIErrorManager(m_Gui);
 		ErrorHandler.getInstance().addErrorManager(m_ErrorManager);
