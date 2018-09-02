@@ -17,6 +17,7 @@ import util.progress.ProgressEvent.Type;
 import chiptools.jprobe.ChiptoolsActivator;
 import chiptools.jprobe.data.MutationProfile;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
+import chiptools.jprobe.function.args.OutputNameArgument;
 
 public class MutationProfiler extends AbstractChiptoolsFunction<MutationProfilerParams>{
 
@@ -33,6 +34,7 @@ public class MutationProfiler extends AbstractChiptoolsFunction<MutationProfiler
 		args.add(new MinDifferenceArg(this, true));
 		args.add(new BindingSiteArg(this, true));
 		args.add(new RecursiveArg(this));
+//		args.add(new OutputNameArgument(this, false));
 		return args;
 	}
 	

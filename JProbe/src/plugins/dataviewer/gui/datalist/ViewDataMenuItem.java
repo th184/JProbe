@@ -1,6 +1,7 @@
 package plugins.dataviewer.gui.datalist;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import jprobe.services.data.Data;
 import plugins.dataviewer.gui.DataTabPane;
@@ -10,7 +11,7 @@ public class ViewDataMenuItem extends AbstractDataMenuItem{
 
 	private DataTabPane m_TabPane;
 	
-	public ViewDataMenuItem(DataTabPane tabPane, Data data){
+	public ViewDataMenuItem(DataTabPane tabPane, List<Data> data){
 		super("View",  data);
 		m_TabPane = tabPane;
 	}
@@ -21,9 +22,12 @@ public class ViewDataMenuItem extends AbstractDataMenuItem{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if(this.getData() != null){
-			m_TabPane.selectData(this.getData());
-			
+		List<Data> data = this.getData();
+		System.out.println(data.size());
+		if(data != null){
+			for(int i=0; i<data.size();i++) {
+				m_TabPane.selectData(data.get(i));
+			}
 		}
 	}
 	

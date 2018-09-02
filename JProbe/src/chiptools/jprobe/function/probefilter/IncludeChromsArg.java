@@ -31,6 +31,12 @@ public class IncludeChromsArg extends ChromsArg<ProbeFilterParam>{
 		});
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 
 }

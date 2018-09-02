@@ -144,6 +144,7 @@ public class Resources {
 			String argsFile = getArgsFile(clazz);
 			if(argsFile != null){
 				argsFile = Constants.RESOURCES_PATH + "/" + argsFile;
+//				System.out.println("argsFile: "+argsFile);
 				Map<Class<? extends Argument>, String[]> argMap = readArguments(argsFile);
 				ARGS_MAP.put(clazz, argMap);
 				return argMap;

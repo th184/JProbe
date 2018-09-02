@@ -31,4 +31,10 @@ public class DoubleArg extends DoubleArgument<FieldParams>{
 		params.DOUBLE = value;
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

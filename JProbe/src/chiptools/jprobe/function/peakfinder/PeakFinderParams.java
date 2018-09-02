@@ -4,14 +4,16 @@ import java.io.File;
 
 import chiptools.jprobe.data.Peaks;
 import chiptools.jprobe.function.params.GenomeParam;
+import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PeaksParam;
 import chiptools.jprobe.function.params.SummitParam;
 
-public class PeakFinderParams implements GenomeParam, PeaksParam, SummitParam{
+public class PeakFinderParams implements GenomeParam, PeaksParam, SummitParam {
 	
 	private File m_Genome = null;
 	private Peaks m_Peaks = null;
 	private int m_Summit = -1;
+	//private String m_OutputName = null;
 	
 	@Override
 	public void setGenomeFile(File f) {
@@ -42,5 +44,15 @@ public class PeakFinderParams implements GenomeParam, PeaksParam, SummitParam{
 	public int getSummit() {
 		return m_Summit;
 	}
+
+//	@Override
+//	public void setOutputName(String name) {
+//		m_OutputName = name;
+//	}
+//
+//	@Override
+//	public String getOutputName() {
+//		return m_OutputName;
+//	}
 
 }

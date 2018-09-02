@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import jprobe.services.data.Data;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import util.DNAUtils;
 import util.genome.GenomicCoordinate;
@@ -20,6 +21,7 @@ import util.progress.ProgressListener;
 import chiptools.Constants;
 import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
+import chiptools.jprobe.function.args.OutputNameArgument;
 import chiptools.jprobe.function.args.PrimerArgument;
 import chiptools.jprobe.function.args.ProbesArgument;
 
@@ -34,13 +36,13 @@ public class GCRunMutator extends AbstractChiptoolsFunction<GCRunMutatorParams>{
 		Collection<Argument<? super GCRunMutatorParams>> args = new ArrayList<Argument<? super GCRunMutatorParams>>();
 		args.add(new ProbesArgument(this, false));
 		args.add(new PrimerArgument(this, true));
+		args.add(new OutputNameArgument(this, false));
 		
 		return args;
 	}
 
 	@Override
 	public Data execute(ProgressListener l, GCRunMutatorParams params) throws Exception {
-		
 		List<Probe> probes = new ArrayList<Probe>();
 		String primer = params.getPrimer();
 		String rvsPrimer = primer == null ? null : DNAUtils.reverseCompliment(primer);
@@ -72,7 +74,7 @@ public class GCRunMutator extends AbstractChiptoolsFunction<GCRunMutatorParams>{
 			}
 		}
 		
-		return new Probes(new ProbeGroup(probes));
+		return new Probes(new ProbeGroup(probes), DataType.OUTPUT);
 	}
 	
 	protected GenomicSequence mutate(GenomicSequence seq, Collection<Mutation> mutations, Strand strand){

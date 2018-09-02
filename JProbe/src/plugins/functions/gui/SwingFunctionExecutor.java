@@ -76,14 +76,17 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 		m_Bundle = bundle;
 		m_Thread = new FunctionThread(this.getFunction(), params);
 	}
-	
+	// add output name as a parameter
 	private void done(final Data d){
 		SwingUtilities.invokeLater(new Runnable(){
 
 			@Override
 			public void run() {
 				if(d != null){
-					m_DataManager.addData(d, m_Bundle);
+					// get rid of this
+					String name = d.getOutputName();
+					m_DataManager.addData(d, name, m_Bundle);
+					
 				}
 				if(m_Monitor != null){
 					m_Monitor.dispose();

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import jprobe.services.data.Data;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import util.genome.probe.Probe;
 import util.genome.probe.ProbeGroup;
@@ -54,7 +55,7 @@ public class ProbeFilter extends AbstractChiptoolsFunction<ProbeFilterParam>{
 			}
 			filtered = new ProbeGroup(list);
 		}
-		return new Probes(filtered);
+		return new Probes(filtered, DataType.OUTPUT);
 	}
 
 }

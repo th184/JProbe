@@ -2,6 +2,7 @@
 
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -33,7 +34,7 @@ public interface JProbeGUI {
 	public void save();
 	public void load();
 	
-	public void write(Data d);
+	public void write(List<Data> list);
 	public void read(Class<? extends Data> type);
 	
 	public JProbeCore getJProbeCore();

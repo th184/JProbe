@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import util.ClassLoaderObjectInputStream;
 import util.OSGIUtils;
 import jprobe.services.CoreEvent;
 import jprobe.services.CoreEvent.Type;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
@@ -41,11 +43,23 @@ public class CoreDataManager implements DataManager{
 	
 	private final Collection<CoreListener> m_Listeners = new HashSet<CoreListener>();
 
-	private final Map<Class<? extends Data>, List<Data>> m_Data = new HashMap<Class<? extends Data>, List<Data>>();
+	private Map<Class<? extends Data>, List<Data>> m_Data = new HashMap<Class<? extends Data>, List<Data>>();
+	private Map<String, Data> m_NameToData = new HashMap<String, Data>();
+	private Map<Data, String> m_DataToName = new LinkedHashMap<Data, String>();
+	
+//	private Map<Class<? extends Data>, List<Data>> m_Data = null;
+//	private Map<String, Data> m_NameToData = null;
+//	private Map<Data, String> m_DataToName = null;
+	
+	private final Map<Class<? extends Data>, List<Data>> m_InputData = new HashMap<Class<? extends Data>, List<Data>>();
+	private final Map<Class<? extends Data>, List<Data>> m_OutputData = new HashMap<Class<? extends Data>, List<Data>>();
 	private final Map<Class<? extends Data>, String> m_DataProviders = new HashMap<Class<? extends Data>, String>();
-	private final Map<String, Data> m_NameToData = new HashMap<String, Data>();
-	private final Map<Data, String> m_DataToName = new LinkedHashMap<Data, String>();
-	private final Map<Class<? extends Data>, Integer> m_Counts = new HashMap<Class<? extends Data>, Integer>();
+	private final Map<String, Data> m_InputNameToData = new HashMap<String, Data>();
+	private final Map<String, Data> m_OutputNameToData = new HashMap<String, Data>();
+	private final Map<Data, String> m_InputDataToName = new LinkedHashMap<Data, String>();
+	private final Map<Data, String> m_OutputDataToName = new LinkedHashMap<Data, String>();
+	
+//	private final Map<Class<? extends Data>, Integer> m_Counts = new HashMap<Class<? extends Data>, Integer>();
 	private final Map<Class<? extends Data>, DataReader> m_TypeToReader = new HashMap<Class<? extends Data>, DataReader>();
 	private final Map<DataReader, Class<? extends Data>> m_ReaderToType = new HashMap<DataReader, Class<? extends Data>>();
 	private final Map<Class<? extends Data>, DataWriter> m_TypeToWriter = new HashMap<Class<? extends Data>, DataWriter>();
@@ -65,7 +79,6 @@ public class CoreDataManager implements DataManager{
 		m_Core = core;
 		m_Context = context;
 		m_ReaderListener = new AbstractServiceListener<DataReader>(DataReader.class, context){
-
 			@Override
 			public void register(DataReader service, Bundle provider) {
 				addDataReader(service, provider);
@@ -115,33 +128,69 @@ public class CoreDataManager implements DataManager{
 		}
 	}
 	
-	private String assignName(Data d){
-		int count;
-		if(m_Counts.containsKey(d)){
-			count = m_Counts.get(d.getClass()) + 1;
-		}else{
-			count = 1;
+	private void determineDataType(Data d) {
+		switch(d.getDataType()) {
+		case INPUT:
+			m_Data = m_InputData;
+			m_NameToData = m_InputNameToData;
+			m_DataToName = m_InputDataToName;
+			break;
+		case OUTPUT:
+			m_Data = m_OutputData;
+			m_NameToData = m_OutputNameToData;
+			m_DataToName = m_OutputDataToName;
+			break;
 		}
-		String name = d.getClass().getSimpleName()+String.valueOf(count);
-		while(m_NameToData.containsKey(name)){
-			name = d.getClass().getSimpleName()+String.valueOf(++count);
-		}
-		return name;
 	}
+	private void combineData() {
+		
+		m_Data = new HashMap<Class<? extends Data>, List<Data>>();
+		m_Data.putAll(m_InputData);
+		m_Data.putAll(m_OutputData);
+	}
+	private void combineNameToData() {
+		m_NameToData = new HashMap<String, Data>();
+		m_NameToData.putAll(m_InputNameToData);
+		m_NameToData.putAll(m_OutputNameToData);
+	}
+	private void combineDataToName() {
+		m_DataToName = new LinkedHashMap<Data, String>();
+		m_DataToName.putAll(m_InputDataToName);
+		m_DataToName.putAll(m_OutputDataToName);
+	}
+	
+//	private String assignName(Data d){
+//		// assign name for imported data 
+//		int count;
+//		if(m_Counts.containsKey(d)){
+//			count = m_Counts.get(d.getClass()) + 1;
+//		}else{
+//			count = 1;
+//		}
+//		String name = d.getClass().getSimpleName()+String.valueOf(count);
+//		determineDataType(d);
+//		while(m_NameToData.containsKey(name)){
+//			name = d.getClass().getSimpleName()+String.valueOf(++count);
+//		}
+//		return name;
+//	}
+	
 	
 	private synchronized void addData(Data d, String name, Bundle responsible, boolean notify){
 		Class<? extends Data> clazz = d.getClass();
+		determineDataType(d);
+		
 		if(!m_Data.containsKey(clazz)){
 			List<Data> list = new ArrayList<Data>();
 			list.add(d);
 			m_Data.put(clazz, list);
-			m_Counts.put(clazz, 1);
+//			m_Counts.put(clazz, 1);
 			m_DataProviders.put(clazz, OSGIUtils.getProvider(clazz, m_Context).getSymbolicName());
 		}else{
 			List<Data> list = m_Data.get(clazz);
 			if(!list.contains(d)){
 				list.add(d);
-				m_Counts.put(clazz, m_Counts.get(clazz)+1);
+//				m_Counts.put(clazz, m_Counts.get(clazz)+1);
 			}
 		}
 		if(m_DataToName.containsKey(d)){
@@ -154,17 +203,18 @@ public class CoreDataManager implements DataManager{
 			}
 		}
 	}
-	
+	@Override
 	public synchronized void addData(Data d, String name, Bundle responsible){
 		this.addData(d, name, responsible, true);
 	}
 	
-	@Override
-	public synchronized void addData(Data d, Bundle responsible){
-		addData(d, assignName(d), responsible);
-	}
-	
+//	@Override
+//	public synchronized void addData(Data d, Bundle responsible){
+//		addData(d, assignName(d), responsible); 
+//	}
+
 	private void removeData(String name, Data d, Bundle responsible){
+		determineDataType(d);
 		m_Data.get(d.getClass()).remove(d);
 		m_NameToData.remove(name);
 		m_DataToName.remove(d);
@@ -172,19 +222,31 @@ public class CoreDataManager implements DataManager{
 		notifyListeners(new CoreEvent(m_Core, Type.DATA_REMOVED, responsible, d));
 	}
 	
+	
 	@Override
 	public synchronized void removeData(String name, Bundle responsible){
+		combineNameToData();
 		removeData(name, m_NameToData.get(name), responsible);
 	}
 	
 	@Override
 	public synchronized void removeData(Data d, Bundle responsible){
+		combineDataToName();
 		removeData(m_DataToName.get(d), d, responsible);
+	}
+	@Override
+	public void removeAllData(List<Data> data, Bundle responsible) {
+		combineDataToName();
+		for(int i=data.size()-1;i>=0;i--) {
+			Data d = data.get(i);
+			removeData(m_DataToName.get(d), d, responsible);
+		}
 	}
 	
 	@Override
 	public synchronized List<Data> getAllData(){
 		List<Data> full = new ArrayList<Data>();
+		combineDataToName();
 		for(Data d : m_DataToName.keySet()){
 			full.add(d);
 		}
@@ -192,27 +254,58 @@ public class CoreDataManager implements DataManager{
 	}
 	
 	@Override
+	public List<Data> getInputData() {
+		List<Data> full = new ArrayList<Data>();
+		for(Data d : m_InputDataToName.keySet()){
+			full.add(d);
+		}
+		return full;
+	}
+
+	@Override
+	public List<Data> getOutputData() {
+		List<Data> full = new ArrayList<Data>();
+		combineDataToName();
+		for(Data d : m_OutputDataToName.keySet()){
+			full.add(d);
+		}
+		return full;
+	}
+	
+	@Override
 	public synchronized List<Data> getData(Class<? extends Data> type){
+		combineData();
 		return Collections.unmodifiableList(m_Data.get(type));
 	}
 	
 	@Override
 	public synchronized Data getData(String name){
+		combineNameToData();
 		return m_NameToData.get(name);
 	}
 	
 	@Override
 	public synchronized String getDataName(Data d){
+		combineDataToName();
 		return m_DataToName.get(d);
 	}
 	
 	@Override
 	public synchronized String[] getDataNames(){
+		combineNameToData();
 		return m_NameToData.keySet().toArray(new String[m_NameToData.size()]);
 	}
 	
+//	public synchronized String getOutputName(Data d) {
+//		// perform method only if DataType == OUTPUT --> use if statement or try-catch?
+//		
+//		String name;
+//		return name;
+//	}
+	
 	@Override
 	public synchronized void rename(Data d, String name, Bundle responsible){
+		determineDataType(d);
 		String old = m_DataToName.get(d);
 		if(m_NameToData.containsKey(name)){
 			this.removeData(name, responsible);
@@ -343,9 +436,10 @@ public class CoreDataManager implements DataManager{
 			throw new Exception(type+" reader is null");
 		}
 		try{
+			String fileName = file.getName();
 			FileInputStream in = new FileInputStream(file);
 			Data read = reader.read(format, in);
-			this.addData(read, responsible);
+			this.addData(read, fileName, responsible);
 			in.close();
 			return read;
 		} catch(Exception e){
@@ -373,19 +467,39 @@ public class CoreDataManager implements DataManager{
 
 	@Override
 	public synchronized boolean contains(String name) {
+		combineNameToData();
 		return m_NameToData.containsKey(name);
 	}
-
+	
+	
 	@Override
 	public synchronized boolean contains(Data data) {
+		combineDataToName();
 		return m_DataToName.containsKey(data);
+	}
+	@Override
+	public synchronized boolean containsAll(List<Data> data) {
+		combineDataToName();
+		for(int i=0; i<data.size();i++) {
+			if(!m_DataToName.containsKey(data.get(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public synchronized void clearData(){
-		m_Data.clear();
-		m_NameToData.clear();
-		m_DataToName.clear();
-		m_Counts.clear();
+		m_InputData.clear();
+		m_OutputData.clear();
+		m_InputNameToData.clear();
+		m_OutputNameToData.clear();
+		m_InputDataToName.clear();
+		m_OutputDataToName.clear();
+		
+//		m_Data.clear();
+//		m_NameToData.clear();
+//		m_DataToName.clear();
+//		m_Counts.clear();
 		this.notifyListeners(new CoreEvent(m_Core, Type.WORKSPACE_CLEARED, JProbeActivator.getBundle()));
 		this.m_ChangesSinceLastSave = false;
 	}
@@ -400,6 +514,7 @@ public class CoreDataManager implements DataManager{
 		ByteCounterOutputStream counter = new ByteCounterOutputStream(out);
 		try {
 			ObjectOutputStream oout = new ObjectOutputStream(counter);
+			combineDataToName();
 			for(Data stored : m_DataToName.keySet()){
 				String name = this.getDataName(stored);
 				String bundle = m_DataProviders.get(stored.getClass());
@@ -456,6 +571,10 @@ public class CoreDataManager implements DataManager{
 		m_ReaderListener.unload();
 		m_WriterListener.unload();
 	}
+
+	
+
+	
 	
 	
 	

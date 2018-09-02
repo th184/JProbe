@@ -22,4 +22,10 @@ public class ReverseReplicatesArgument extends ChiptoolsIntArg<AgilentFormatterP
 		params.RVS_REPS = value;
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

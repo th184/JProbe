@@ -15,7 +15,7 @@ public class DataPopupMenu extends JPopupMenu{
 
 	private List<AbstractDataMenuItem> m_MenuItems;
 	
-	public DataPopupMenu(JProbeCore core, JProbeGUI gui, DataTabPane tabPane, Data data){
+	public DataPopupMenu(JProbeCore core, JProbeGUI gui, DataTabPane tabPane, List<Data> data){
 		super();
 		m_MenuItems = new ArrayList<AbstractDataMenuItem>();
 		this.initMenuItems(core, gui, tabPane, data, m_MenuItems);
@@ -28,30 +28,16 @@ public class DataPopupMenu extends JPopupMenu{
 		this(core, gui, tabPane, null);
 	}
 	
-	private void initMenuItems(final JProbeCore core, final JProbeGUI gui, final DataTabPane tabPane, final Data data, List<AbstractDataMenuItem> items){
+	private void initMenuItems(final JProbeCore core, final JProbeGUI gui, final DataTabPane tabPane, final List<Data> data, List<AbstractDataMenuItem> items){
 		items.add(new ViewDataMenuItem(tabPane, data));
-		items.add(new ExportDataMenuItem(core, gui));
+		items.add(new ExportDataMenuItem(core, gui, data));
 		items.add(new DeleteDataMenuItem(core, data));
 	}
 	
-	public void setData(Data data){
+	public void setData(List<Data> data){
 		for(AbstractDataMenuItem item : m_MenuItems){
 			item.setData(data);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 }

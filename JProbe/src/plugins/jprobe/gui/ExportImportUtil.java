@@ -5,12 +5,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.FileChooserUI;
 
 import org.osgi.framework.Bundle;
 
@@ -20,6 +22,7 @@ import plugins.jprobe.gui.notification.ImportEvent.Type;
 import util.Observer;
 import jprobe.services.ErrorHandler;
 import jprobe.services.JProbeCore;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
@@ -107,9 +110,12 @@ public class ExportImportUtil {
 			public void run() {
 				notifyObservers(new ImportEvent(Type.IMPORTING, reader.getReadClass(), f));
 				try{
+					String fileName = f.getName();
+					String varName = fileName.substring(0, fileName.lastIndexOf('.'));
 					FileInputStream stream = new FileInputStream(f);
 					Data in = reader.read(format, stream);
-					core.getDataManager().addData(in, b);
+					in.setInputName(varName);
+					core.getDataManager().addData(in, varName, b);
 					notifyObservers(new ImportEvent(Type.IMPORTED, reader.getReadClass(), f));
 					stream.close();
 				}catch(Exception e){
@@ -144,6 +150,10 @@ public class ExportImportUtil {
 			exportChooser.addChoosableFileFilter(format);
 		}
 		//show the file chooser and write the data to the selected file using the selected file format
+		String fileName = core.getDataManager().getDataName(data);
+		// ADD extension... all .txt?
+		
+		exportChooser.setSelectedFile(new File(fileName+".txt"));
 		int returnVal = exportChooser.showDialog(parent, "Export");
 		if(returnVal == JFileChooser.APPROVE_OPTION){
 			File file = exportChooser.getSelectedFile();

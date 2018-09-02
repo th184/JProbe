@@ -5,11 +5,12 @@ import chiptools.jprobe.data.PWM;
 import chiptools.jprobe.data.PeakSequences;
 import chiptools.jprobe.function.params.EscoreParam;
 import chiptools.jprobe.function.params.KmerParam;
+import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PWMParam;
 import chiptools.jprobe.function.params.PeakSeqsParam;
 import chiptools.jprobe.function.params.ProbeLenParam;
 
-public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam, EscoreParam, ProbeLenParam{
+public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam, EscoreParam, ProbeLenParam {
 	
 	public int BINDINGSITE = 9;
 	public int WINDOWSIZE = 3;
@@ -19,6 +20,7 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 	private PWM m_PWM = null;
 	private double m_Escore = 0.4;
 	private int m_ProbeLen = 36;
+//	private String m_OutputName = null;
 	
 	@Override
 	public void setKmers(Kmer k) {
@@ -69,5 +71,15 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 	public int getProbeLength() {
 		return m_ProbeLen;
 	}
+
+//	@Override
+//	public void setOutputName(String name) {
+//		m_OutputName = name;
+//	}
+//
+//	@Override
+//	public String getOutputName() {
+//		return m_OutputName;
+//	}
 
 }

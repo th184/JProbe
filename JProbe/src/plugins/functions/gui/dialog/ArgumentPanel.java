@@ -40,15 +40,20 @@ public class ArgumentPanel<T> extends JPanel implements Subject<Boolean>, Argume
 	public ArgumentPanel(Argument<? super T> arg){
 		super(new GridBagLayout());
 		m_Arg = arg;
-		m_Arg.addListener(this);
+		m_Arg.addListener(this); 
 		this.add(this.nameComponent(arg), this.nameComponentConstraints());
-		m_Optional = this.optionalButton(arg);
-		m_Optional.addActionListener(this);
-		this.add(m_Optional, this.optionalButtonConstraints());
+		
+		m_Optional = this.optionalButton(arg); // modify to asterisk
+		if(m_Optional != null) {
+			m_Optional.addActionListener(this); 
+			this.add(m_Optional, this.optionalButtonConstraints());
+		}
+		
 		this.add(this.validComponent(arg), this.validLabelConstraints());
 		m_ArgComp = this.argComponent(arg);
 		this.add(m_ArgComp, this.argComponentConstraints());
-		m_ArgComp.setEnabled(m_Optional.isSelected());
+		
+		m_ArgComp.setEnabled(m_Optional==null||m_Optional.isSelected());
 		this.setBorder(this.makeBorder());
 		this.setToolTipText(arg.getTooltip());
 	}
@@ -66,7 +71,7 @@ public class ArgumentPanel<T> extends JPanel implements Subject<Boolean>, Argume
 	}
 	
 	public void process(T params){
-		if(m_Optional.isSelected()){
+		if(m_Optional == null || m_Optional.isSelected()){
 			m_Arg.process(params);
 		}
 	}
@@ -110,18 +115,27 @@ public class ArgumentPanel<T> extends JPanel implements Subject<Boolean>, Argume
 	}
 	
 	protected JComponent nameComponent(Argument<? super T> arg){
-		JLabel name = new JLabel(Constants.ARGS_NAME_PROTOTYPE);
-		Dimension size = name.getPreferredSize();
+		JLabel name = new JLabel(Constants.ARGS_NAME_PROTOTYPE); 
+		// Dimension size = name.getPreferredSize();
 		name.setText(arg.getName());
-		name.setPreferredSize(size);
+		//name.setPreferredSize(name.getPreferredSize());
+		
+		int setWidth = (int) name.getPreferredSize().getWidth()+10;
+		name.setPreferredSize(new Dimension((int) setWidth, 15));
+		// name.setPreferredSize(size);
 		return name;
 	}
 	
 	protected AbstractButton optionalButton(Argument<? super T> arg){
 		AbstractButton button = new JCheckBox();
-		if(!arg.isOptional()){
+		// checks for default param
+		// add getDefault() in Argument 
+		// if it's not optional or if it contains a default
+		if(!arg.isOptional()){ 
 			button.setSelected(true);
 			button.setEnabled(false);
+			
+			//return null;
 		}
 		return button;
 	}
@@ -131,7 +145,7 @@ public class ArgumentPanel<T> extends JPanel implements Subject<Boolean>, Argume
 		return label;
 	}
 	
-	protected JComponent argComponent(Argument<? super T> arg){
+	public JComponent argComponent(Argument<? super T> arg){
 		return arg.getComponent();
 	}
 

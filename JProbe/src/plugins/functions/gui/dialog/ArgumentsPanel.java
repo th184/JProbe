@@ -5,26 +5,33 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import org.osgi.framework.Bundle;
 
+import chiptools.jprobe.function.args.OutputNameArgument;
 import plugins.functions.gui.Constants;
 import plugins.functions.gui.SwingFunctionExecutor;
 import util.Observer;
 import util.Subject;
 import jprobe.services.JProbeCore;
+import jprobe.services.data.Data;
 import jprobe.services.function.Argument;
 import jprobe.services.function.Function;
+import jprobe.services.function.OutputNameListener;
 
-public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Observer<Boolean>{
+public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Observer<Boolean> {
 	private static final long serialVersionUID = 1L;
 	
 	private static <T> Map<String, Collection<Argument<? super T>>> groupByCategory(Collection<Argument<? super T>> args){
@@ -47,30 +54,55 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 	private final Function<T> m_Function;
 	private final Collection<ArgumentPanel<T>> m_ArgPanels = new ArrayList<ArgumentPanel<T>>();
 	private final List<Component> m_CategoryPanels = new ArrayList<Component>();
+	private final Set<String> m_InOutputName = new HashSet<String>() {{	
+		// arguments whose input var name will be used for output var name
+				add("Probes");
+				add("Peaks");
+			}}; 
 	
 	private boolean m_Valid;
-	
 	private boolean m_LayedOut = false;
+//	private static ArgumentPanel m_OutputNamePanel = null;
 	
 	public ArgumentsPanel(Function<T> function){
 		super(new GridBagLayout());
 		m_Function = function;
 		m_Valid = false;
+		// add output panel, listen to args in inputArgList
+//		OutputNamePanel outputName = new OutputNamePanel(new OutputNameArgument(function, false));
+		OutputNameListener ol = new OutputNameListener();
+		
 		Map<String, Collection<Argument<? super T>>> categoryGrouping = groupByCategory(function.getArguments());
 		for(String category : categoryGrouping.keySet()){
 			Collection<Argument<? super T>> args = categoryGrouping.get(category);
 			JPanel panel = this.generatePanel(category, args);
 			for(Argument<? super T> arg : args){
+				
+				if(m_InOutputName.contains(arg.getName())) {
+					//arg.addOutputNameListener((OutputNameListener) outputName);
+					arg.addListener(ol);
+				}
+				
 				ArgumentPanel<T> argPanel = this.generateArgPanel(arg);
 				m_ArgPanels.add(argPanel);
 				argPanel.register(this);
 				panel.add(argPanel,this.argPanelConstraints());
+				
+				if(arg.getName().equals("Output name")) {
+					ol.setOutputNameArg((OutputNameArgument)arg);
+					
+					System.out.println("output name class: "+arg.getClass().toString());
+					
+//					m_OutputNamePanel = argPanel;
+				}
 			}
 			m_CategoryPanels.add(panel);
 		}
+		
+		
 		this.updateValidity();
 	}
-	
+			
 	@Override
 	public Dimension getPreferredSize(){
 		if(!m_LayedOut){
@@ -126,14 +158,26 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 		return gbc;
 	}
 	
+/*
+ * Fit categories into cols
+ * 		panels.size() == num of categories
+ *		layout.size() == num of col in the dialog window
+ * for each col, create a JPanel, add the components of the categories that belong to that col
+ *		layout.size == num col
+ *		comps == cat in that col
+ */
 	protected void layoutColumns(List<Component> panels, double targetAspect){
+		
 		List<Column> layout = getBestLayout(panels, targetAspect);
+		
 		if(layout == null){
 			return;
 		}
+				
 		for(int i=0; i<layout.size(); i++){
 			JPanel panel = new JPanel(new GridBagLayout());
 			List<Component> comps = layout.get(i).getComponents();
+			
 			for(int j=0; j<comps.size(); j++){
 				GridBagConstraints gbc = categoryPanelConstraints(j);
 				panel.add(comps.get(j), gbc);
@@ -148,10 +192,15 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 		}
 	}
 	
+	/*
+	 * input: comps contain all categories
+	 * output: bestLayout groups categories into cols
+	 */
 	private static List<Column> getBestLayout(List<Component> comps, double targetAspect){
 		int height = getHeight(comps);
 		double bestDist = Double.POSITIVE_INFINITY;
 		List<Column> bestLayout = null;
+		
 		for(int cols=1; cols<=comps.size(); cols++){
 			if(bestLayout == null){
 				bestLayout = createColumns(comps, height, cols);
@@ -216,6 +265,8 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 		
 		public void addComponent(Component c){
 			m_Comps.add(c);
+			
+			
 			Dimension pref = c.getPreferredSize();
 			m_Height += pref.height;
 			m_Width = Math.max(m_Width, pref.width);
@@ -239,9 +290,11 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 		if(num < 1){
 			return new ArrayList<Column>();
 		}
+		
 		double colHeight = ((double) height)/((double) num);
 		List<List<Column>> layouts = new ArrayList<List<Column>>();
 		layouts.add(new ArrayList<Column>()); //init first layout
+
 		//generate the possible layouts with the given number of columns and column height
 		for(Component c : panels){
 			int compHeight = c.getPreferredSize().height;
@@ -327,14 +380,6 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 		return cur;
 	}
 	
-	protected static int getWidth(List<Component> panels){
-		int width = 0;
-		for(Component c : panels){
-			int cWidth = c.getPreferredSize().width;
-			if(cWidth > width) width = cWidth;
-		}
-		return width;
-	}
 	
 	protected static int getHeight(List<Component> panels){
 		int height = 0;
@@ -410,7 +455,4 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 	}
 	
 }
-
-
-
 

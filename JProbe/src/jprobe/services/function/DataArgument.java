@@ -1,5 +1,6 @@
 package jprobe.services.function;
 
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import jprobe.services.function.components.DataArgsComponent;
 import jprobe.services.function.components.DataArgsComponent.DataValidFunction;
 import jprobe.services.function.components.ValidListener;
 import jprobe.services.function.components.ValidNotifier;
-
+// implements actionalistener
 public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P> implements ValidListener {
 	
 	public static final String DEFAULT_TAG = "FILE";
@@ -40,6 +41,7 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 	//lazily instantiate the component
 	private DataArgsComponent<D> m_Component = null;
 	private final Class<D> m_DataClass;
+//	private String m_inputName = null;
 	
 	protected DataArgument(
 			JProbeCore core,
@@ -129,7 +131,7 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 
 				}
 				);
-		m_Component.addListener(this);
+		m_Component.addListener(this); // whenever m_Comp changes, update is called
 	}
 
 	@Override
@@ -245,10 +247,15 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 		}
 		return d;
 	}
-
+//	public String getInputName() {
+//		return m_inputName;
+//	}
 	@Override
 	public void update(ValidNotifier notifier, boolean valid) {
 		this.notifyListeners();
+		// notifier is the same as this.getComponent()
+		
+		
 	}
 
 

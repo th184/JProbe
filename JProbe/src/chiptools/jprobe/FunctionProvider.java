@@ -1,5 +1,6 @@
 package chiptools.jprobe;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,10 @@ public class FunctionProvider {
 		List<Function> list = new ArrayList<Function>();
 		for(Class<? extends Function> clazz : Resources.getFunctionClasses()){
 			try {
+//				Constructor<?> constructor = clazz.getConstructor();
+//				constructor.setAccessible(true);
+//				Object o = constructor.newInstance();
+//				list.add((Function) o);
 				list.add(clazz.newInstance());
 			} catch (Exception e){
 				throw new RuntimeException(e);

@@ -26,4 +26,9 @@ public class KmerListArgument extends ChiptoolsDataArg<KmerListParam, Kmer>{
 		params.setKmers(data);
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		return false;
+	}
+
 }

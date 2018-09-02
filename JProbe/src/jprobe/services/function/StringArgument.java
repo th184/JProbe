@@ -3,6 +3,7 @@ package jprobe.services.function;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observer;
 
 import javax.swing.JComponent;
 import javax.swing.JTextField;
@@ -66,6 +67,7 @@ public abstract class StringArgument<P> extends AbstractArgument<P> implements A
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == m_TextField){
 			this.notifyListeners();
+			
 		}
 	}
 

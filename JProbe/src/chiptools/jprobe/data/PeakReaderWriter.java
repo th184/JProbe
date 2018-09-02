@@ -13,6 +13,7 @@ import util.genome.peak.PeakGroup;
 import jprobe.services.data.Data;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
+import jprobe.services.data.AbstractFinalData.DataType;
 
 public class PeakReaderWriter implements DataReader, DataWriter{
 	
@@ -68,7 +69,7 @@ public class PeakReaderWriter implements DataReader, DataWriter{
 	@Override
 	public Data read(FileFilter format, InputStream s) throws Exception {
 		PeakGroup peaks = PeakGroup.parsePeakGroup(s);
-		return new Peaks(peaks);
+		return new Peaks(peaks, DataType.INPUT);
 	}
 
 	@Override

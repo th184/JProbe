@@ -22,4 +22,10 @@ public class MaximumOverlapArgument extends ChiptoolsDoubleArg<ProbeMutatorParam
 		params.MAXIMUM_OVERLAP = value;
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

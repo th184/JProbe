@@ -12,6 +12,7 @@ import jprobe.services.CoreListener;
 import jprobe.services.FunctionManager;
 import jprobe.services.data.AbstractFinalData;
 import jprobe.services.data.Data;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import jprobe.services.function.ArgumentListener;
 import jprobe.services.function.Function;
@@ -73,7 +74,7 @@ public class Test extends junit.framework.TestCase{
 		public final int I;
 		
 		public TestData(String s, int i, double d){
-			super(3, 1);
+			super(3, 1, DataType.OUTPUT);
 			S = s; D = d; I = i;
 		}
 		
@@ -169,6 +170,12 @@ public class Test extends junit.framework.TestCase{
 			}
 			params.VALUE_A = args[0];
 		}
+
+		@Override
+		public boolean nameInOuput() {
+			// TODO Auto-generated method stub
+			return false;
+		}
 		
 	}
 	
@@ -213,6 +220,12 @@ public class Test extends junit.framework.TestCase{
 		public void parse(ProgressListener l, TestParameter params, String[] args) {
 			params.VALUE_B = Integer.parseInt(args[0]);
 		}
+
+		@Override
+		public boolean nameInOuput() {
+			// TODO Auto-generated method stub
+			return false;
+		}
 		
 	}
 	
@@ -256,6 +269,12 @@ public class Test extends junit.framework.TestCase{
 		@Override
 		public void parse(ProgressListener l, TestParameter params, String[] args) {
 			params.VALUE_C = Double.parseDouble(args[0]);
+		}
+
+		@Override
+		public boolean nameInOuput() {
+			// TODO Auto-generated method stub
+			return false;
 		}
 		
 	}

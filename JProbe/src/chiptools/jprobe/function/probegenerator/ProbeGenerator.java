@@ -6,6 +6,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import jprobe.services.data.Data;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import util.genome.peak.PeakSequence;
 import util.genome.peak.PeakSequenceGroup;
@@ -37,6 +38,7 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 		args.add(new BindingSiteArgument(this, true));
 		args.add(new WindowSizeArgument(this, true));
 		args.add(new EscoreArgument(this, true, 0.4));
+//		args.add(new OutputNameArgument(this, false));
 		
 		return args;
 	}
@@ -51,7 +53,6 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 	
 	@Override
 	public Data execute(ProgressListener l, ProbeGeneratorParams params) throws Exception {
-		
 		//check whether bindingSite + 2x window exceeds PWM length and fire an error
 		if(params.BINDINGSITE + 2 * params.WINDOWSIZE < params.getPWM().getPWM().length()){
 			throw new RuntimeException("PWM length must be <= (binding site + 2*window).");
@@ -82,7 +83,7 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 		}
 		ProbeGroup group = new ProbeGroup(probes);
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done generating probes."));
-		return new Probes(group);
+		return new Probes(group, DataType.OUTPUT);
 	}
 
 }

@@ -32,4 +32,10 @@ public class DataArg extends DataArgument<DataParam,TestData>{
 		params.setData(data);
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

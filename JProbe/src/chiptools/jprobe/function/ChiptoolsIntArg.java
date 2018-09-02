@@ -19,7 +19,7 @@ public abstract class ChiptoolsIntArg<P> extends IntArgument<P> {
 			) {
 		super(
 				Resources.getArgumentName(funcClass, clazz),
-				Resources.getArgumentDescription(funcClass, clazz) + (optional ? " Default="+defaultVal : ""),
+				Resources.getArgumentDescription(funcClass, clazz) + (optional ? " [Default = "+defaultVal+"]" : ""),
 				Resources.getArgumentCategory(funcClass, clazz),
 				Resources.getArgumentFlag(funcClass, clazz),
 				Resources.getArgumentPrototype(funcClass, clazz) + (optional ? "{default="+defaultVal+"}" : ""),
@@ -32,7 +32,14 @@ public abstract class ChiptoolsIntArg<P> extends IntArgument<P> {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	protected ChiptoolsIntArg(Class<? extends Function> funcClass, Class<? extends ChiptoolsIntArg> clazz, boolean optional, int startValue, int min, int max, int increment){
+	protected ChiptoolsIntArg(
+			Class<? extends Function> funcClass, 
+			Class<? extends ChiptoolsIntArg> clazz, 
+			boolean optional, 
+			int startValue, 
+			int min, 
+			int max, 
+			int increment){
 		this(funcClass, clazz, String.valueOf(startValue), optional, startValue, min, max, increment);
 	}
 

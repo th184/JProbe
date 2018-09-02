@@ -12,6 +12,8 @@ public class ExcludeChromsArg extends ChromsArg<ProbeFilterParam>{
 
 	protected ExcludeChromsArg(Function<?> parent, boolean optional) {
 		super(parent.getClass(), ExcludeChromsArg.class, "off", optional, "");
+//		super(parent.getClass(), ExcludeChromsArg.class, "off", optional, null);
+		// fix at gui 
 	}
 
 	@Override
@@ -29,6 +31,12 @@ public class ExcludeChromsArg extends ChromsArg<ProbeFilterParam>{
 			}
 			
 		});
+	}
+
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

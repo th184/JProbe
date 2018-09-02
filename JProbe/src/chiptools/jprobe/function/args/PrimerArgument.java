@@ -84,4 +84,9 @@ public class PrimerArgument extends ChiptoolsFileArg<PrimerParam>{
 		params.setPrimer(primer);
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		return false;
+	}
+
 }

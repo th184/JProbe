@@ -11,6 +11,7 @@ import util.genome.probe.ProbeGroup;
 import jprobe.services.data.Data;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
+import jprobe.services.data.AbstractFinalData.DataType;
 
 public class ProbesReaderWriter implements DataReader, DataWriter{
 
@@ -51,7 +52,7 @@ public class ProbesReaderWriter implements DataReader, DataWriter{
 	@Override
 	public Data read(FileFilter format, InputStream in) throws Exception {
 		ProbeGroup probes = ProbeGroup.readProbeGroup(in);
-		return new Probes(probes);
+		return new Probes(probes, DataType.INPUT);
 	}
 
 	@Override

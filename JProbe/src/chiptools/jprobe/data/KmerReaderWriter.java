@@ -15,6 +15,7 @@ import util.genome.kmer.Kmer.Score;
 import jprobe.services.data.Data;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
+import jprobe.services.data.AbstractFinalData.DataType;
 
 public class KmerReaderWriter implements DataReader, DataWriter{
 
@@ -68,7 +69,7 @@ public class KmerReaderWriter implements DataReader, DataWriter{
 	@Override
 	public Data read(FileFilter format, InputStream in) throws Exception {
 		util.genome.kmer.Kmer kmer = util.genome.kmer.Kmers.readKmer(in);
-		return new Kmer(kmer);
+		return new Kmer(kmer, DataType.INPUT);
 	}
 
 	@Override

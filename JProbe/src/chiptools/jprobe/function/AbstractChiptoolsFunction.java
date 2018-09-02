@@ -1,5 +1,7 @@
 package chiptools.jprobe.function;
 
+import java.lang.reflect.Constructor;
+
 import chiptools.Resources;
 import jprobe.services.function.Function;
 
@@ -32,6 +34,12 @@ public abstract class AbstractChiptoolsFunction<P> implements Function<P>{
 	@Override
 	public P newParameters() {
 		try {
+			// attempted to get rid of the illegal-access exception...
+			// some other exceptions need to be taken care of
+//			Constructor<?> constructor = m_ParamsClass.getConstructor();
+//			constructor.setAccessible(true);
+//			Object o = constructor.newInstance();
+//			return (P) o;
 			return m_ParamsClass.newInstance();
 		} catch (Exception e){
 			throw new RuntimeException(e);

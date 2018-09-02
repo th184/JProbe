@@ -21,8 +21,8 @@ public class PeakSequences extends AbstractFinalData{
 	
 	private final PeakSequenceGroup m_PeakSeqs;
 	
-	public PeakSequences(PeakSequenceGroup peakSeqs){
-		super(PEAKSEQ_COLS, peakSeqs.size());
+	public PeakSequences(PeakSequenceGroup peakSeqs, DataType type){
+		super(PEAKSEQ_COLS, peakSeqs.size(), type);
 		m_PeakSeqs = peakSeqs;
 	}
 	

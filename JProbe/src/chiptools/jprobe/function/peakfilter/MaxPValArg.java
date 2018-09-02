@@ -24,4 +24,10 @@ public class MaxPValArg extends ChiptoolsDoubleArg<PeakFilterParams>{
 		});
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

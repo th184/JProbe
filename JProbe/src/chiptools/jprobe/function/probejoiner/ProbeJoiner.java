@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import jprobe.services.data.Data;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import util.genome.probe.ProbeUtils;
 import util.progress.ProgressListener;
 import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
+import chiptools.jprobe.function.args.OutputNameArgument;
 import chiptools.jprobe.function.args.ProbeLengthArgument;
 import chiptools.jprobe.function.args.ProbesArgument;
 
@@ -26,6 +28,7 @@ public class ProbeJoiner extends AbstractChiptoolsFunction<ProbeJoinerParams>{
 		args.add(new MinSiteDistArgument(this, true));
 		args.add(new MaxSiteDistArgument(this, true));
 		args.add(new ProbeLengthArgument(this, true, "unbounded"));
+		args.add(new OutputNameArgument(this, false));
 		return args;
 	}
 
@@ -41,7 +44,7 @@ public class ProbeJoiner extends AbstractChiptoolsFunction<ProbeJoinerParams>{
 					params.MINSITEDIST,
 					params.MAXSITEDIST,
 					params.getProbeLength()
-					));
+					), DataType.OUTPUT);
 		}else{
 			combined = new Probes(ProbeUtils.joinProbes(
 					l,
@@ -49,7 +52,7 @@ public class ProbeJoiner extends AbstractChiptoolsFunction<ProbeJoinerParams>{
 					params.NUMBINDINGSITES,
 					params.MINSITEDIST,
 					params.MAXSITEDIST
-					));
+					), DataType.OUTPUT);
 		}
 		return combined;
 	}

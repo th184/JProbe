@@ -15,6 +15,7 @@ import jprobe.JProbeActivator;
 import jprobe.services.ErrorHandler;
 import util.gui.TableFormatter;
 
+
 public abstract class AbstractFinalData implements Data{
 	private static final long serialVersionUID = 1L;
 	
@@ -22,10 +23,17 @@ public abstract class AbstractFinalData implements Data{
 	
 	private final int m_Cols;
 	private final int m_Rows;
+	public enum DataType {INPUT, OUTPUT}; 
+	private DataType m_Type;
+	private String m_InputName = null; // file/var name for INPUT data
+	private String m_OutputName = null; // file/var name for OUTPUT data
 	
-	protected AbstractFinalData(int cols, int rows){
+	
+	
+	protected AbstractFinalData(int cols, int rows, DataType type){
 		m_Cols = cols;
 		m_Rows = rows;
+		m_Type = type;
 	}
 	
 	//readObject method to init the transient listeners collection after deserialization
@@ -44,6 +52,30 @@ public abstract class AbstractFinalData implements Data{
 		return m_Rows;
 	}
 
+	public void setDataType(DataType type) {
+		m_Type = type;
+	}
+
+	public DataType getDataType() {
+		return m_Type;
+	}
+	
+	public void setInputName(String name) {
+		m_InputName = name;
+	}
+	
+	public String getInputName() {
+		return m_InputName;
+	}
+	
+	public void setOutputName(String name) {
+		m_OutputName = name;
+	}
+	
+	public String getOutputName() {
+		return m_OutputName;
+	}
+	
 	@Override
 	public boolean isCellEditable(int arg0, int arg1) {
 		return false;

@@ -1,6 +1,7 @@
 package plugins.dataviewer.gui.datalist;
 
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JMenuItem;
 
@@ -9,9 +10,9 @@ import jprobe.services.data.Data;
 public abstract class AbstractDataMenuItem extends JMenuItem implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
-	private Data m_Data;
+	private List<Data> m_Data;
 	
-	protected AbstractDataMenuItem(String title, Data data){
+	protected AbstractDataMenuItem(String title, List<Data> data){
 		super(title);
 		m_Data = data;
 		this.addActionListener(this);
@@ -21,11 +22,11 @@ public abstract class AbstractDataMenuItem extends JMenuItem implements ActionLi
 		this(title, null);
 	}
 	
-	public void setData(Data data){
+	public void setData(List<Data> data){
 		m_Data = data;
 	}
 	
-	protected Data getData(){
+	protected List<Data> getData(){
 		return m_Data;
 	}
 	

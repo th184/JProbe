@@ -3,6 +3,8 @@ package jprobe.services.function;
 import java.util.Collection;
 import java.util.HashSet;
 
+import util.Observer;
+
 public abstract class AbstractArgument<P> implements Argument<P> {
 	
 	private final String m_Name;
@@ -12,6 +14,8 @@ public abstract class AbstractArgument<P> implements Argument<P> {
 	private final String m_Prototype;
 	private final boolean m_Optional;
 	private final Collection<ArgumentListener> m_Listeners = new HashSet<ArgumentListener>();
+	private OutputNameListener m_OutputNameListener = null;
+
 	
 	protected AbstractArgument(String name, String tooltip, String category, Character shortFlag, String prototypeValue, boolean optional){
 		m_Name = name;
@@ -46,10 +50,41 @@ public abstract class AbstractArgument<P> implements Argument<P> {
 	@Override
 	public void removeListener(ArgumentListener l) { m_Listeners.remove(l); }
 	
+	@Override
+	public void addOutputNameListener(OutputNameListener l) {
+		m_OutputNameListener = l;
+	}
+	
+//	@Override 
+//	public void addOutputNameListener(boolean value) {
+//		if(value) {
+//			// register(Observer) 
+//			m_OutputNameListener = new OutputNameListener();
+//			
+//			
+//		}
+//	}
+//	public OutputNameListener getOutputNameListener() {
+//		return m_OuputNameListener;
+//	}
+//	
+//	public void register(Observer<Boolean> obs) {
+//		m_Obs.add(obs);
+//	}
+	
+	// un-register? but when to call it?
+	
 	protected void notifyListeners(){
 		for(ArgumentListener l : m_Listeners){
 			l.update(this, this.isValid());
 		}
+//		if(m_OutputNameListener != null) {
+//			m_OutputNameListener.update(arg, valid); // modify
+//		}
+	}
+	
+	protected void notifyOutputNameListener() {
+		
 	}
 
 }

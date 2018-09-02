@@ -5,16 +5,18 @@ import java.util.List;
 import java.util.Random;
 
 import chiptools.jprobe.data.Probes;
+import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.ProbesParam;
 import util.genome.probe.Probe;
 
-public class ProbeFilterParam implements util.genome.probe.ProbeUtils.Filter, ProbesParam{
+public class ProbeFilterParam implements util.genome.probe.ProbeUtils.Filter, ProbesParam {
 	
 	private final List<util.genome.probe.ProbeUtils.Filter> m_Filters = new ArrayList<util.genome.probe.ProbeUtils.Filter>();
 	private Probes m_Probes = null;
 	
 	private Random m_Random = new Random();
 	private int m_Remove = 0;
+//	private String m_OutputName = null;
 	
 	public void addFilter(util.genome.probe.ProbeUtils.Filter f){
 		m_Filters.add(f);
@@ -53,5 +55,15 @@ public class ProbeFilterParam implements util.genome.probe.ProbeUtils.Filter, Pr
 	public Probes getProbes() {
 		return m_Probes;
 	}
+
+//	@Override
+//	public void setOutputName(String name) {
+//		m_OutputName = name;
+//	}
+//
+//	@Override
+//	public String getOutputName() {
+//		return m_OutputName;
+//	}
 
 }

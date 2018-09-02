@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
+import jprobe.services.data.AbstractFinalData.DataType;
+
 
 /**
  * This interface defines Data objects that are stored by the JProbeCore and can be displayed using
@@ -26,5 +28,12 @@ public interface Data extends TableModel, Serializable{
 	 * any dangling references, so that this object can be garbage collected.
 	 */
 	public void dispose();
+	
+	public void setDataType(DataType type);
+	public DataType getDataType();
+	public void setInputName(String name);
+	public String getInputName();
+	public void setOutputName(String name);
+	public String getOutputName();
 	
 }

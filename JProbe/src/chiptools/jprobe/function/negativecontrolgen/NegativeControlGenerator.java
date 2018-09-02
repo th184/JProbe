@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 import jprobe.services.function.Argument;
 import util.genome.Chromosome;
@@ -38,6 +39,7 @@ import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
 import chiptools.jprobe.function.args.EscoreArgument;
 import chiptools.jprobe.function.args.GenomeArgument;
+import chiptools.jprobe.function.args.OutputNameArgument;
 import chiptools.jprobe.function.args.ProbeLengthArgument;
 import chiptools.jprobe.function.args.SummitArgument;
 
@@ -58,6 +60,7 @@ public class NegativeControlGenerator extends AbstractChiptoolsFunction<NegContr
 		args.add(new EscoreArgument(this, true, 0.3));
 		args.add(new ProbeLengthArgument(this, true));
 		args.add(new NumberArg(this, true));
+		//args.add(new OutputNameArgument(this, false));
 		
 		return args;
 	}
@@ -114,7 +117,7 @@ public class NegativeControlGenerator extends AbstractChiptoolsFunction<NegContr
 				);
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done generating probes."));
 		
-		return new Probes(probes);
+		return new Probes(probes, DataType.OUTPUT);
 		
 	}
 	

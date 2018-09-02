@@ -25,4 +25,10 @@ public class ArrayNameArgument extends ChiptoolsTextArg<AgilentFormatterParams> 
 		params.ARRAY_NAME = s;
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

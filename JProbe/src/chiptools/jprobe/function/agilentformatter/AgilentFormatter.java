@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import jprobe.services.data.Data;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import util.DNAUtils;
 import util.genome.probe.Probe;
@@ -16,6 +17,7 @@ import chiptools.jprobe.data.AgilentArray;
 import chiptools.jprobe.data.AgilentProbe;
 import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
+import chiptools.jprobe.function.args.OutputNameArgument;
 import chiptools.jprobe.function.args.PrimerArgument;
 
 public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatterParams>{
@@ -29,6 +31,7 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 		Collection<Argument<? super AgilentFormatterParams>> args = new ArrayList<Argument<? super AgilentFormatterParams>>();
 		args.add(new ProbeCategoriesArgument(this.getClass(), false));
 		args.add(new ArrayNameArgument(this, false));
+		//args.add(new OutputNameArgument(this, false));
 		args.add(new PrimerArgument(this, true));
 		args.add(new ForwardReplicatesArgument(this, true));
 		args.add(new ReverseReplicatesArgument(this, true));
@@ -84,7 +87,7 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 		
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done converting probes to Agilent format."));
 		
-		return new AgilentArray(params.ARRAY_NAME, agilentProbes);
+		return new AgilentArray(params.ARRAY_NAME, agilentProbes, DataType.OUTPUT);
 	}
 	
 	protected static String createInfo(String direction, int replicate, String type){
@@ -101,15 +104,6 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 	protected static AgilentProbe createReverseProbe(Probe p, String primer, String info, String category, int categoryIndex){
 		return new AgilentProbe(DNAUtils.reverseCompliment(p.getSequence()) + primer, category, categoryIndex, info, p.getRegion());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 
 }

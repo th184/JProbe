@@ -133,4 +133,9 @@ public class CompareSeqsArg extends ChiptoolsFileArg<MutationProfilerParams>{
 		}
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		return false;
+	}
+
 }

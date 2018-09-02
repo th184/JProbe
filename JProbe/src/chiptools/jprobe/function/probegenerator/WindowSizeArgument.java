@@ -22,4 +22,10 @@ public class WindowSizeArgument extends ChiptoolsIntArg<ProbeGeneratorParams>{
 		params.WINDOWSIZE = value;
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

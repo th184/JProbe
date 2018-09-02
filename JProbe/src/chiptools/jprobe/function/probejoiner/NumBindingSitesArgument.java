@@ -22,4 +22,10 @@ public class NumBindingSitesArgument extends ChiptoolsIntArg<ProbeJoinerParams>{
 		params.NUMBINDINGSITES = value;
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -14,4 +14,10 @@ public class MinDifferenceArg extends ChiptoolsDoubleArg<MutationProfilerParams>
 		params.minDifference = value;
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -14,7 +14,7 @@ public class TestData extends AbstractFinalData{
 	private final int m_Int;
 	
 	public TestData(String string, int integer, double decimal){
-		super(3, 1);
+		super(3, 1, DataType.INPUT);
 		m_String = string;
 		m_Double = decimal;
 		m_Int = integer;

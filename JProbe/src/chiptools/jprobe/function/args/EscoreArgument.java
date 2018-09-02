@@ -24,4 +24,10 @@ public class EscoreArgument extends ChiptoolsDoubleArg<EscoreParam>{
 		params.setEscore(value);
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

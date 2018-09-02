@@ -22,8 +22,8 @@ public class Peaks extends AbstractFinalData{
 	
 	private final PeakGroup m_Peaks;
 	
-	public Peaks(PeakGroup peaks){
-		super(PEAK_COLS , peaks.size());
+	public Peaks(PeakGroup peaks, DataType type){
+		super(PEAK_COLS , peaks.size(), type);
 		m_Peaks = peaks;
 		
 	}

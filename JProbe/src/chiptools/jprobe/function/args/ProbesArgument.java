@@ -7,9 +7,9 @@ import chiptools.jprobe.function.ChiptoolsDataArg;
 import chiptools.jprobe.function.params.ProbesParam;
 import jprobe.services.function.Function;
 
-public class ProbesArgument extends ChiptoolsDataArg<ProbesParam, Probes> {
+public class ProbesArgument extends ChiptoolsDataArg<ProbesParam, Probes>{
 
-	public ProbesArgument(Function<?> parent, boolean optional) {
+	public ProbesArgument(Function<?> parent, boolean optional ) {
 		super(
 				parent.getClass(),
 				ProbesArgument.class,
@@ -24,6 +24,12 @@ public class ProbesArgument extends ChiptoolsDataArg<ProbesParam, Probes> {
 	@Override
 	protected void process(ProbesParam params, List<Probes> data) {
 		params.setProbes(data.get(0));
+		
+	}
+
+	@Override
+	public boolean nameInOuput() {
+		return true;
 	}
 
 }

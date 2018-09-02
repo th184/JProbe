@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 import jprobe.services.function.Argument;
 import util.genome.probe.Probe;
@@ -94,7 +95,7 @@ public class ProbeMutator extends AbstractChiptoolsFunction<ProbeMutatorParams>{
 			percentComplete = this.fireProgressEvent(l, processed, totalProbes, percentComplete);
 		}
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done mutating probes."));
-		return new Probes(new ProbeGroup(mutated));
+		return new Probes(new ProbeGroup(mutated), DataType.OUTPUT);
 	}
 
 }

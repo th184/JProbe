@@ -131,4 +131,15 @@ public interface Argument<P> {
 	 */
 	public void parse(ProgressListener l, P params, String[] args);
 	
+	/**
+	 * Indicates whether the argument's name will be used to suggest output variable name to the users.
+	 * As of current design, only Probes and Peaks are expected to return True. 
+	 * @return
+	 */
+	public boolean nameInOuput();
+	
+	/**
+	 * whether the arg is being listened to by the output variable panel
+	 */
+	public void addOutputNameListener(OutputNameListener l);
 }

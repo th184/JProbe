@@ -33,4 +33,10 @@ public class MaxBindingDistArgument extends ChiptoolsIntArg<ProbeFilterParam>{
 		});
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -3,6 +3,7 @@ package chiptools.jprobe.function.peakfilter;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 import jprobe.services.function.Argument;
 import util.genome.peak.PeakGroup;
@@ -10,6 +11,7 @@ import util.genome.peak.PeakUtils;
 import util.progress.ProgressListener;
 import chiptools.jprobe.data.Peaks;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
+import chiptools.jprobe.function.args.OutputNameArgument;
 import chiptools.jprobe.function.args.PeaksArgument;
 
 public class PeakFilter extends AbstractChiptoolsFunction<PeakFilterParams>{
@@ -28,6 +30,7 @@ public class PeakFilter extends AbstractChiptoolsFunction<PeakFilterParams>{
 		args.add(new MaxQValArg(this, true));
 		args.add(new MinPValArg(this, true));
 		args.add(new MaxPValArg(this, true));
+//		args.add(new OutputNameArgument(this, false));
 		
 		return args;
 	}
@@ -36,7 +39,7 @@ public class PeakFilter extends AbstractChiptoolsFunction<PeakFilterParams>{
 	public Data execute(ProgressListener l, PeakFilterParams params) throws Exception {
 		PeakGroup peaks = params.getPeaks().getPeaks();
 		PeakGroup filtered = PeakUtils.filter(peaks, params);
-		return new Peaks(filtered);
+		return new Peaks(filtered, DataType.OUTPUT);
 	}
 
 }

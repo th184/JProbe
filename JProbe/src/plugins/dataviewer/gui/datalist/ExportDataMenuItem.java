@@ -1,6 +1,7 @@
 package plugins.dataviewer.gui.datalist;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import plugins.jprobe.gui.services.JProbeGUI;
 import jprobe.services.JProbeCore;
@@ -17,24 +18,25 @@ public class ExportDataMenuItem extends AbstractDataMenuItem{
 		this(core, gui, null);
 	}
 	
-	public ExportDataMenuItem(JProbeCore core, JProbeGUI gui, Data data){
+	public ExportDataMenuItem(JProbeCore core, JProbeGUI gui, List<Data> data){
 		super("Export", data);
 		m_Gui = gui;
 		m_Core = core;
 		if(data == null){
 			this.setVisible(false);
 		}else{
-			this.setVisible(m_Core.getDataManager().isWritable(data.getClass()));
+			//this.setVisible(m_Core.getDataManager().isWritable(data.getClass()));
+			this.setVisible(true);
 		}
 	}
 	
-	@Override
-	public void setData(Data data){
+	public void setData(List<Data> data){
 		super.setData(data);
 		if(data == null){
 			this.setVisible(false);
 		}else{
-			this.setVisible(m_Core.getDataManager().isWritable(data.getClass()));
+			this.setVisible(true);
+			//this.setVisible(m_Core.getDataManager().isWritable(data.getClass()));
 		}
 	}
 

@@ -1,6 +1,8 @@
 package plugins.dataviewer.gui;
 
 import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.AbstractListModel;
 import javax.swing.JLabel;
@@ -35,6 +37,7 @@ public class DataTab extends JScrollPane{
 			setText((value == null) ? "" : value.toString());
 			return this;
 		}
+
 	}
 
 	public class DataHeader extends JList<Integer> {
@@ -88,5 +91,4 @@ public class DataTab extends JScrollPane{
 	public Data getData(){
 		return m_Data;
 	}
-	
 }

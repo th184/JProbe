@@ -33,4 +33,10 @@ public class StringArg extends StringArgument<FieldParams>{
 		params.STRING = s;
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

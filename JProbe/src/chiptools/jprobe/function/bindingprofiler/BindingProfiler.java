@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import jprobe.services.data.Data;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import util.genome.Sequences;
 import util.genome.Sequences.Profile;
@@ -15,6 +16,7 @@ import util.progress.ProgressListener;
 import util.progress.ProgressEvent.Type;
 import chiptools.jprobe.data.BindingProfile;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
+import chiptools.jprobe.function.args.OutputNameArgument;
 import chiptools.jprobe.function.args.ProbesArgument;
 
 public class BindingProfiler extends AbstractChiptoolsFunction<BindingProfileParams>{
@@ -29,6 +31,7 @@ public class BindingProfiler extends AbstractChiptoolsFunction<BindingProfilePar
 		args.add(new ProbesArgument(this, false));
 		args.add(new BindingKmerArgument(this, true));
 		args.add(new BindingPWMArgument(this, true));
+		//args.add(new OutputNameArgument(this, false));
 		return args;
 	}
 	
@@ -61,7 +64,7 @@ public class BindingProfiler extends AbstractChiptoolsFunction<BindingProfilePar
 			percentComplete = this.fireProgressUpdate(l, i+1, group.size(), percentComplete);
 		}
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done profiling binding."));
-		return new BindingProfile(bindingProfiles);
+		return new BindingProfile(bindingProfiles, DataType.OUTPUT);
 	}
 
 }

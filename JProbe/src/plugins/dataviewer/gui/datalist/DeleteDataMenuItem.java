@@ -1,6 +1,7 @@
 package plugins.dataviewer.gui.datalist;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import plugins.dataviewer.gui.DataUtils;
 import plugins.dataviewer.gui.DataviewerActivator;
@@ -12,7 +13,7 @@ public class DeleteDataMenuItem extends AbstractDataMenuItem{
 	
 	private JProbeCore m_Core;
 	
-	public DeleteDataMenuItem(JProbeCore core, Data data){
+	public DeleteDataMenuItem(JProbeCore core, List<Data> data){
 		super("Delete", data);
 		m_Core = core;
 	}

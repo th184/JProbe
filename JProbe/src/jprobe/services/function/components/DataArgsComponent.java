@@ -141,7 +141,7 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 			}
 		});
 		
-		comp.register(this);
+		comp.register(this); //DataArgsComponent listens to comp (data selection panel)
 		
 		for(Data d : m_Core.getDataManager().getAllData()){
 			if(m_DataClass.isAssignableFrom(d.getClass()) && shouldAddData(d)){
@@ -280,6 +280,7 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 		if(index >= 0){
 			this.setData(index, notification);
 			this.updateValidity();
+			this.notifyListeners();//
 		}
 	}
 	
@@ -297,8 +298,11 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 	}
 	
 	protected void setValid(boolean valid){
+//		System.out.println(m_Valid+"  "+valid);
+		
 		if(m_Valid != valid){
 			m_Valid = valid;
+//			System.out.println("set valid");
 			this.notifyListeners();
 		}
 	}
@@ -313,8 +317,9 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 	}
 	
 	protected void notifyListeners(){
+//		System.out.println("notifyLIsteners called");
 		for(ValidListener l : m_Listeners){
-			l.update(this, this.isStateValid());
+			l.update(this, this.isStateValid()); //because of this!
 		}
 	}
 

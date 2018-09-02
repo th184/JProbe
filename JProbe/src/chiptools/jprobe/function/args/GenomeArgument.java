@@ -26,4 +26,9 @@ public class GenomeArgument extends ChiptoolsFileArg<GenomeParam>{
 		params.setGenomeFile(f);
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		return false;
+	}
+
 }

@@ -3,6 +3,8 @@ package plugins.dataviewer.gui;
 import java.awt.AWTKeyStroke;
 import java.awt.GridBagConstraints;
 import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,19 +25,21 @@ public class DataViewerSplitPane extends JSplitPane{
 	private static final long serialVersionUID = 1L;
 	
 	private final DataTabPane m_DataTab;
-	private final DataListPanel m_DataList;
+//	private final DataListPanel m_DataList;
+	private final ViewTabPane m_ViewTab;
 	
 	public DataViewerSplitPane(JProbeCore core, JProbeGUI gui){
 		super(JSplitPane.HORIZONTAL_SPLIT);
-		m_DataTab = new DataTabPane(core.getDataManager());
-		
 		//m_DataTab.addChangeListener((javax.swing.event.ChangeListener) changeListener);
 		
-		m_DataList = new DataListPanel(core, gui, m_DataTab);
+		m_DataTab = new DataTabPane(core.getDataManager());
+//		m_DataList = new DataListPanel(core, gui, m_DataTab);
+		m_ViewTab = new ViewTabPane(core, gui, m_DataTab); 
 		this.setOneTouchExpandable(true);
 		this.setContinuousLayout(true);
 		this.setLeftComponent(m_DataTab);
-		this.setRightComponent(m_DataList);
+//		this.setRightComponent(m_DataList);
+		this.setRightComponent(m_ViewTab);
 		this.setResizeWeight(1.0);
 		
 		setupTabTraversalKeys(m_DataTab);
@@ -43,7 +47,8 @@ public class DataViewerSplitPane extends JSplitPane{
 	
 	public void cleanup(){
 		m_DataTab.cleanup();
-		m_DataList.cleanup();
+//		m_DataList.cleanup();
+		m_ViewTab.cleanup();
 	}
 	
 	public GridBagConstraints getGridBagConstraints(){
@@ -76,4 +81,6 @@ public class DataViewerSplitPane extends JSplitPane{
 	    inputMap.put(ctrlTab, "navigateNext");
 	    inputMap.put(ctrlShiftTab, "navigatePrevious");
 	  }
+	
+	
 }

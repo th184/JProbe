@@ -1,5 +1,7 @@
 package chiptools.jprobe;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.osgi.framework.ServiceRegistration;
 import chiptools.Constants;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
+import jprobe.services.function.Function;
 
 public class ReaderWriterProvider {
 	
@@ -16,16 +19,18 @@ public class ReaderWriterProvider {
 	private final List<DataWriter> m_Writers = this.generateWriters();
 	private final List<ServiceRegistration<?>> m_Regs = new ArrayList<ServiceRegistration<?>>();
 	
-	private List<DataReader> generateReaders(){
+	private List<DataReader> generateReaders() throws SecurityException, IllegalArgumentException{
 		List<DataReader> list = new ArrayList<DataReader>();
 		for(Class<? extends DataReader> clazz : Constants.READER_CLASSES){
 			try {
+//				Constructor<?> constructor = clazz.getConstructor();
+//				constructor.setAccessible(true);
+//				Object o = constructor.newInstance();
+//				list.add((DataReader) o);
 				list.add(clazz.newInstance());
 			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

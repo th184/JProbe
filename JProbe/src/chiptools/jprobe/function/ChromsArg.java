@@ -40,7 +40,8 @@ public abstract class ChromsArg<P> extends ChiptoolsTextArg<P> {
 	};
 
 	@SuppressWarnings("rawtypes")
-	protected ChromsArg(Class<? extends Function> funcClass, Class<? extends ChromsArg> clazz, String defaultVal, boolean optional, String startValue) {
+	protected ChromsArg(Class<? extends Function> funcClass, Class<? extends ChromsArg> clazz, 
+			String defaultVal, boolean optional, String startValue) {
 		super(funcClass, clazz, defaultVal, optional, startValue);
 		m_Panel.setLayout(new BoxLayout(m_Panel, BoxLayout.Y_AXIS));
 	}

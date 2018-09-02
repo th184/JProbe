@@ -9,6 +9,7 @@ import chiptools.jprobe.data.Peaks;
 import chiptools.jprobe.function.params.EscoreParam;
 import chiptools.jprobe.function.params.GenomeParam;
 import chiptools.jprobe.function.params.KmerListParam;
+import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.ProbeLenParam;
 import chiptools.jprobe.function.params.SummitParam;
 
@@ -22,6 +23,7 @@ public class NegControlParams implements GenomeParam, SummitParam, KmerListParam
 	private double m_Escore = 0.3;
 	private int m_Num = -1;
 	private int m_Len = 36;
+	//private String m_OutputName = null;
 	
 	public void setExcludePeaks(List<Peaks> exclude){
 		m_Exclude = exclude;
@@ -96,5 +98,15 @@ public class NegControlParams implements GenomeParam, SummitParam, KmerListParam
 	public int getProbeLength() {
 		return m_Len;
 	}
+
+//	@Override
+//	public void setOutputName(String name) {
+//		m_OutputName = name;
+//	}
+//
+//	@Override
+//	public String getOutputName() {
+//		return m_OutputName;
+//	}
 
 }

@@ -53,6 +53,7 @@ public class DataSelectionPanel<D extends Data> extends JPanel implements ItemLi
 		if(optional){
 			m_DataBox.addData(null);
 		}
+		
 	}
 	
 	protected DataComboBox<D> createdDataComboBox(JProbeCore core){
@@ -135,9 +136,10 @@ public class DataSelectionPanel<D extends Data> extends JPanel implements ItemLi
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if(e.getSource() == m_DataBox){
-			//System.out.println("Item changed");
+//			System.out.println("Item changed");
 			D selected = m_DataBox.getSelectedData();
 			this.notifyObservers(selected);
+			
 		}
 	}
 

@@ -12,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -256,14 +257,11 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 	
 	public void addDropdownMenu(JMenu menu, Bundle responsible){
 		
-		System.out.println("drop down menu added...");
-		
 		m_PluginMenuItems.add(menu);
 		m_MenuBar.removeAll();
 		m_MenuBar.add(m_FileMenu);
 		for(JMenu m : m_PluginMenuItems){
 			m_MenuBar.add(m);
-			System.out.println("plug in menu items");
 		}
 		if(m_PreferencesMenu != null){
 			m_MenuBar.add(m_PreferencesMenu);
@@ -376,5 +374,6 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 			this.setModified(false);
 		}
 	}
+
 	
 }

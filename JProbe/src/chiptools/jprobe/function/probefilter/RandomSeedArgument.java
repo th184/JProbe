@@ -16,4 +16,10 @@ public class RandomSeedArgument extends ChiptoolsIntArg<ProbeFilterParam>{
 		params.setRandom(new Random(value));
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

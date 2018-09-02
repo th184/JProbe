@@ -1,5 +1,8 @@
 package plugins.testDataAndFunction;
 
+import java.lang.reflect.Constructor;
+
+import jprobe.services.data.DataReader;
 import jprobe.services.function.Function;
 
 public abstract class AbstractTestFunction<T> implements Function<T>{
@@ -34,7 +37,11 @@ public abstract class AbstractTestFunction<T> implements Function<T>{
 	@Override
 	public T newParameters() {
 		try {
-			return m_ParamsClass.newInstance();
+			Constructor<?> constructor = m_ParamsClass.getConstructor();
+			constructor.setAccessible(true);
+			Object o = constructor.newInstance();
+			return (T) o;
+			//return m_ParamsClass.newInstance();
 		} catch (Exception e){
 			throw new RuntimeException(e);
 		}

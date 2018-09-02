@@ -40,18 +40,10 @@ public class FunctionMenuItem extends JMenuItem implements ActionListener{
 	}
 	
 	@Override
-    public JToolTip createToolTip()
-    {
+    public JToolTip createToolTip(){
         JMultiLineToolTip multiTool = new JMultiLineToolTip();
 		multiTool.setFixedWidth(300);
 		ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
-		
-//		Font myFont = new Font("TimesRoman", Font.PLAIN, 12);
-//		multiTool.setFont(myFont);
-		
-//		UIManager.put("ToolTip.font",
-//				new FontUIResource("SansSerif", Font.BOLD, 18));
-//		
 		return multiTool; 
     }
 	
@@ -69,7 +61,6 @@ public class FunctionMenuItem extends JMenuItem implements ActionListener{
 			//Data d = function.run(new FunctionParam(null, null, null, null));
 			//dataManager.addData(d, bundle);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

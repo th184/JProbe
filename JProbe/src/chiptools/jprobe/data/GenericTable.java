@@ -26,7 +26,7 @@ public class GenericTable extends AbstractFinalData{
 	private final Map<Integer, Map<Integer, Object>> m_Table = new HashMap<Integer, Map<Integer, Object>>();
 	
 	public GenericTable() {
-		super(0, 0);
+		super(0, 0, DataType.OUTPUT);
 		this.appendCol("Row");
 	}
 	

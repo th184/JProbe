@@ -111,4 +111,9 @@ public class ProbeCategoriesArgument extends ListArgument<AgilentFormatterParams
 		
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		return false;
+	}
+
 }

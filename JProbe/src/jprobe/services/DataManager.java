@@ -37,16 +37,22 @@ public interface DataManager extends Saveable{
 	public boolean isReadable(Class<? extends Data> type);
 	public boolean isWritable(Class<? extends Data> type);
 	
-	public void addData(Data data, Bundle responsible);
+	public void addData(Data data, String name, Bundle responsible); 
 	public void removeData(Data data, Bundle responsible);
+	public void removeAllData(List<Data> data, Bundle bundle);
 	public void removeData(String name, Bundle responsible);
 	public List<Data> getAllData();
+	public List<Data> getInputData();
+	public List<Data> getOutputData();
 	public String[] getDataNames();
 	public void rename(Data data, String name, Bundle responsible);
 	public String getDataName(Data data);
 	public Data getData(String name);
 	public boolean contains(String name);
 	public boolean contains(Data data);
+	public boolean containsAll(List<Data> data);
 	public List<Data> getData(Class<? extends Data> type);
+	
+	
 	
 }

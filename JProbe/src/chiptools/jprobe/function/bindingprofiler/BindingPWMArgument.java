@@ -35,4 +35,9 @@ public class BindingPWMArgument extends ChiptoolsDataArg<BindingProfileParams, P
 		super.parse(l, params, args);
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		return false;
+	}
+
 }

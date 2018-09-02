@@ -1,6 +1,7 @@
 package chiptools.jprobe.data;
 
 import jprobe.services.data.AbstractFinalData;
+import jprobe.services.data.AbstractFinalData.DataType;
 
 public class PWM extends AbstractFinalData{
 	private static final long serialVersionUID = 1L;
@@ -36,8 +37,8 @@ public class PWM extends AbstractFinalData{
 	
 	private final util.genome.pwm.PWM m_PWM;
 	
-	public PWM(util.genome.pwm.PWM pwm){
-		super(pwm.length() + 1, PWM_ROWS);
+	public PWM(util.genome.pwm.PWM pwm, DataType type){
+		super(pwm.length() + 1, PWM_ROWS, type);
 		m_PWM = pwm;
 	}
 	

@@ -10,6 +10,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import jprobe.services.data.Data;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
+import jprobe.services.data.AbstractFinalData.DataType;
 
 public class PWMReaderWriter implements DataReader, DataWriter{
 
@@ -47,7 +48,7 @@ public class PWMReaderWriter implements DataReader, DataWriter{
 	@Override
 	public Data read(FileFilter format, InputStream in) throws Exception {
 		util.genome.pwm.PWM pwm = util.genome.pwm.PWM.readPWM(in);
-		return new PWM(pwm);
+		return new PWM(pwm, DataType.INPUT);
 	}
 
 	@Override

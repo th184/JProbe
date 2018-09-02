@@ -31,4 +31,10 @@ public class IntArg extends IntArgument<FieldParams>{
 		params.INT = value;
 	}
 
+	@Override
+	public boolean nameInOuput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -1,6 +1,9 @@
 package plugins.dataviewer.gui.datalist;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.SwingUtilities;
@@ -13,6 +16,7 @@ import jprobe.services.CoreEvent;
 import jprobe.services.CoreListener;
 import jprobe.services.ErrorHandler;
 import jprobe.services.JProbeCore;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 
 public class DataListModel extends DefaultTableModel implements CoreListener{
@@ -20,11 +24,17 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 	
 	private JProbeCore m_Core;
 	private Map<Data, String> m_Data = new HashMap<Data, String>();
+	private DataType m_Type;
 	
-	public DataListModel(JProbeCore core){
+	
+	public DataListModel(JProbeCore core, DataType type){
+		
 		super(new String[][]{}, Constants.DATALIST_COL_HEADERS);
 		m_Core = core;
 		m_Core.addCoreListener(this);
+		m_Type = type;
+		
+		
 		SwingUtilities.invokeLater(new Runnable(){
 
 			@Override
@@ -33,17 +43,40 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 			}
 			
 		});
+		
+	}
+	private DataType getType() {
+		return this.m_Type;
 	}
 	
 	private void initData(){
-		for(Data d : m_Core.getDataManager().getAllData()){
+		List<Data> data = null;
+		switch(m_Type) {
+		case INPUT:
+			data = m_Core.getDataManager().getInputData();
+			break;
+		case OUTPUT:
+			data = m_Core.getDataManager().getOutputData();
+			break;
+		}
+		for(Data d : data){
 			this.add(d);
 		}
 	}
 	
-	public Data getData(int row){
-		String name = (String) this.getValueAt(row, 0);
-		return m_Core.getDataManager().getData(name);
+//	public Data getData(int row){
+//		String name = (String) this.getValueAt(row, 0);
+//		return m_Core.getDataManager().getData(name);
+//	}
+	
+	public List<Data> getData(int[] rows){
+		List<Data> filled = new ArrayList<>();
+		String name;
+		for(int i = 0; i < rows.length; i++) {
+			name = (String) this.getValueAt(rows[i], 0);
+			filled.add(m_Core.getDataManager().getData(name));
+		}
+		return filled;
 	}
 	
 	public void cleanup(){
@@ -91,7 +124,9 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 	private void add(Data data){
 		String name = m_Core.getDataManager().getDataName(data);
 		m_Data.put(data, name);
-		this.addRow(new String[]{name, data.getClass().getSimpleName()});
+		if(getType() == data.getDataType()) {
+			this.addRow(new String[]{name, data.getClass().getSimpleName()});
+		}
 	}
 	
 	private void remove(Data data){
@@ -120,6 +155,7 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 	private void process(CoreEvent event){
 		switch(event.type()){
 		case DATA_ADDED:
+			
 			this.add(event.getData());
 			break;
 		case DATA_REMOVED:

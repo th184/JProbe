@@ -31,6 +31,7 @@ public class CoreFunctionManager extends AbstractServiceListener<Function> imple
 	private Map<String, List<Function<?>>> m_FunctionsByName;
 	
 	public CoreFunctionManager(JProbeCore core, BundleContext context){
+		
 		super(Function.class, context);
 		this.m_Core = core;
 		m_Listeners = new HashSet<CoreListener>();

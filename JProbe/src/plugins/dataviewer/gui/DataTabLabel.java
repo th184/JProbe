@@ -2,6 +2,8 @@ package plugins.dataviewer.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,6 +24,8 @@ public class DataTabLabel extends JPanel implements ActionListener{
 		m_Label = new JLabel(title);
 		m_Label.setOpaque(false);
 		this.add(m_Label);
+		//test
+//		this.addKeyListener(new CustomKeyListener());
 		
 		JButton close = new IconButton(Constants.getXIcon(), Constants.getXHighlightedIcon(), Constants.getXClickedIcon());
 		close.addActionListener(this);
@@ -34,7 +38,41 @@ public class DataTabLabel extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		
 		m_TabbedPane.closeTab(m_Tab);
+		
 	}
+	
+//	class CustomKeyListener implements KeyListener{
+//		@Override
+//	      public void keyTyped(KeyEvent e) {
+//	      }
+//		@Override
+//	      public void keyPressed(KeyEvent e) {
+//	         if(e.getKeyCode() == KeyEvent.VK_ENTER){
+//	        	 System.out.println("closing the tab");
+//	         }
+//	      }
+//	      public void keyReleased(KeyEvent e) {
+//	      }   
+//	   }
+//
+//	@Override
+//	public void keyPressed(KeyEvent arg0) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void keyReleased(KeyEvent arg0) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void keyTyped(KeyEvent arg0) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 	
 }
