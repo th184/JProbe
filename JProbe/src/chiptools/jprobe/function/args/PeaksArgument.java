@@ -9,8 +9,6 @@ import jprobe.services.function.Function;
 
 public class PeaksArgument extends ChiptoolsDataArg<PeaksParam, Peaks> {
 	
-	private boolean m_enableSubject = false;
-
 	public PeaksArgument(Function<?> parent, boolean optional) {
 		super(
 				parent.getClass(),
@@ -26,18 +24,7 @@ public class PeaksArgument extends ChiptoolsDataArg<PeaksParam, Peaks> {
 	@Override
 	protected void process(PeaksParam params, List<Peaks> data) {
 		params.setPeaks(data.get(0));
-	}
-
-	@Override
-	public boolean nameInOuput() {
-		return true;
-	}
-
-	@Override
-	public void enableSubject(boolean value) {
-		// TODO Auto-generated method stub
-		m_enableSubject = value;
-		
+		params.setOutputName(data.get(0).getOutputName());
 	}
 
 	

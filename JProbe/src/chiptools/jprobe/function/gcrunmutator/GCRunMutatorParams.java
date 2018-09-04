@@ -5,7 +5,7 @@ import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PrimerParam;
 import chiptools.jprobe.function.params.ProbesParam;
 
-public class GCRunMutatorParams implements ProbesParam, PrimerParam, OutputNameParam{
+public class GCRunMutatorParams implements ProbesParam, PrimerParam{
 	
 	private String m_Primer = null;
 	private Probes m_Probes = null;

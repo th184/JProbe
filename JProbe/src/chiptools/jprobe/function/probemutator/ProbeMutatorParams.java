@@ -19,7 +19,7 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 	private double m_Escore = 0.3;
 	private Kmer m_Kmer = null;
 	private Probes m_Probes = null;
-//	private String m_OutputName = null;
+	private String m_OutputName = null;
 	
 	@Override
 	public void setEscore(double escore) {
@@ -61,14 +61,14 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 		return m_Primer;
 	}
 
-//	@Override
-//	public void setOutputName(String name) {
-//		m_OutputName = name;
-//	}
-//
-//	@Override
-//	public String getOutputName() {
-//		return m_OutputName;
-//	}
+	@Override
+	public void setOutputName(String name) {
+		m_OutputName = name;
+	}
+
+	@Override
+	public String getOutputName() {
+		return m_OutputName;
+	}
 
 }

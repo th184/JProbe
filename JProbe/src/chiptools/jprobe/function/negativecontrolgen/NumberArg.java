@@ -23,10 +23,4 @@ public class NumberArg extends ChiptoolsIntArg<NegControlParams>{
 		params.setNumPeaks(value);
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

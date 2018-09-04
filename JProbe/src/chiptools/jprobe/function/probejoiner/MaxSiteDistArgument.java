@@ -22,10 +22,4 @@ public class MaxSiteDistArgument extends ChiptoolsIntArg<ProbeJoinerParams>{
 		params.MAXSITEDIST = value;
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

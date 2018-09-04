@@ -28,10 +28,4 @@ public class IncludeSubseqArgument extends SequencesArg<ProbeFilterParam>{
 		});
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		return false;
-	}
-
-
 }

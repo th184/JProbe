@@ -19,7 +19,7 @@ public class BindingProfileParams implements ProbesParam, KmerListParam, PWMList
 	private Probes m_Probes = null;
 	private List<Kmer> m_Kmers = new ArrayList<Kmer>();
 	private List<PWM> m_PWMs = new ArrayList<PWM>();
-	//private String m_OutputName = null;
+	private String m_OutputName = null;
 	
 	@Override
 	public void setProbes(Probes p) {
@@ -51,14 +51,14 @@ public class BindingProfileParams implements ProbesParam, KmerListParam, PWMList
 		return m_Kmers;
 	}
 
-//	@Override
-//	public void setOutputName(String name) {
-//		m_OutputName = name;
-//	}
-//
-//	@Override
-//	public String getOutputName() {
-//		return m_OutputName;
-//	}
+	@Override
+	public void setOutputName(String name) {
+		m_OutputName = name;
+	}
+
+	@Override
+	public String getOutputName() {
+		return m_OutputName;
+	}
 
 }

@@ -52,7 +52,7 @@ public class ProbesReaderWriter implements DataReader, DataWriter{
 	@Override
 	public Data read(FileFilter format, InputStream in) throws Exception {
 		ProbeGroup probes = ProbeGroup.readProbeGroup(in);
-		return new Probes(probes, DataType.INPUT);
+		return new Probes(probes, DataType.INPUT, null);
 	}
 
 	@Override

@@ -22,10 +22,4 @@ public class BindingBarrierArgument extends ChiptoolsIntArg<ProbeMutatorParams>{
 		params.BINDING_SITE_BARRIER = value;
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

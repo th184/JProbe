@@ -38,7 +38,7 @@ public class PWM extends AbstractFinalData{
 	private final util.genome.pwm.PWM m_PWM;
 	
 	public PWM(util.genome.pwm.PWM pwm, DataType type){
-		super(pwm.length() + 1, PWM_ROWS, type);
+		super(pwm.length() + 1, PWM_ROWS, type, null);
 		m_PWM = pwm;
 	}
 	

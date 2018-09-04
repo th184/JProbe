@@ -29,11 +29,11 @@ public abstract class AbstractFinalData implements Data{
 	private String m_OutputName = null; // file/var name for OUTPUT data
 	
 	
-	
-	protected AbstractFinalData(int cols, int rows, DataType type){
+	protected AbstractFinalData(int cols, int rows, DataType type, String outputName){
 		m_Cols = cols;
 		m_Rows = rows;
 		m_Type = type;
+		m_OutputName = outputName;
 	}
 	
 	//readObject method to init the transient listeners collection after deserialization

@@ -21,11 +21,4 @@ public class ForwardReplicatesArgument extends ChiptoolsIntArg<AgilentFormatterP
 	protected void process(AgilentFormatterParams params, Integer value) {
 		params.FWD_REPS = value;
 	}
-
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

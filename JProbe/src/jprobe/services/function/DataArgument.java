@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.filechooser.FileFilter;
 
+import chiptools.jprobe.function.params.ProbesParam;
 import util.progress.ProgressEvent;
 import util.progress.ProgressListener;
 import util.progress.ProgressEvent.Type;
@@ -152,7 +153,13 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 
 	@Override
 	public void process(P params) {
-		process(params, m_Component.getDataArgs());
+//		System.out.println("DataArgs length: "+m_Component.getDataArgs().size()); // always size 1??
+		process(params, m_Component.getDataArgs()); 
+//		if(params instanceof ProbesParam) {
+//			((ProbesParam) params).setOutputName(m_Component.getDataArgs().get(0).getOutputName());
+//		}
+		// .getDataArgs() returns a list of Data
+		// get the comboBox info from Data.getOutputName()
 	}
 	
 	@Override
@@ -247,9 +254,6 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 		}
 		return d;
 	}
-//	public String getInputName() {
-//		return m_inputName;
-//	}
 	@Override
 	public void update(ValidNotifier notifier, boolean valid) {
 		this.notifyListeners();

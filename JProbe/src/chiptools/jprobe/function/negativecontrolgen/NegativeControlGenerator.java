@@ -116,8 +116,7 @@ public class NegativeControlGenerator extends AbstractChiptoolsFunction<NegContr
 				params.getNumPeaks()
 				);
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done generating probes."));
-		
-		return new Probes(probes, DataType.OUTPUT);
+		return new Probes(probes, DataType.OUTPUT, null);
 		
 	}
 	

@@ -16,9 +16,4 @@ public class MutateBindingSitesArgument extends ChiptoolsFlagArg<ProbeMutatorPar
 		params.MUTATE_BINDING_SITES = flagSet;
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		return false;
-	}
-
 }

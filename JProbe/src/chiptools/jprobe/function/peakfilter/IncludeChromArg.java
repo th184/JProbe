@@ -32,10 +32,4 @@ public class IncludeChromArg extends ChromsArg<PeakFilterParams>{
 		
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

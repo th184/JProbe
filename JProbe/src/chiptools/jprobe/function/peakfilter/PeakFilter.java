@@ -39,7 +39,8 @@ public class PeakFilter extends AbstractChiptoolsFunction<PeakFilterParams>{
 	public Data execute(ProgressListener l, PeakFilterParams params) throws Exception {
 		PeakGroup peaks = params.getPeaks().getPeaks();
 		PeakGroup filtered = PeakUtils.filter(peaks, params);
-		return new Peaks(filtered, DataType.OUTPUT);
+		String outputName = params.getOutputName();
+		return new Peaks(filtered, DataType.OUTPUT, outputName);
 	}
 
 }

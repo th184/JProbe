@@ -64,7 +64,8 @@ public class BindingProfiler extends AbstractChiptoolsFunction<BindingProfilePar
 			percentComplete = this.fireProgressUpdate(l, i+1, group.size(), percentComplete);
 		}
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done profiling binding."));
-		return new BindingProfile(bindingProfiles, DataType.OUTPUT);
+		String outputName = params.getOutputName();
+		return new BindingProfile(bindingProfiles, DataType.OUTPUT, outputName);
 	}
 
 }

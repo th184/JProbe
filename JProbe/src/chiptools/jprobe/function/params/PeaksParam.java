@@ -6,5 +6,7 @@ public interface PeaksParam {
 	
 	public void setPeaks(Peaks p);
 	public Peaks getPeaks();
+	public void setOutputName(String n);
+	public String getOutputName();
 
 }

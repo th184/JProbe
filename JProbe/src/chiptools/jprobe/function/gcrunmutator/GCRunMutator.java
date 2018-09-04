@@ -36,17 +36,20 @@ public class GCRunMutator extends AbstractChiptoolsFunction<GCRunMutatorParams>{
 		Collection<Argument<? super GCRunMutatorParams>> args = new ArrayList<Argument<? super GCRunMutatorParams>>();
 		args.add(new ProbesArgument(this, false));
 		args.add(new PrimerArgument(this, true));
-		args.add(new OutputNameArgument(this, false));
+//		args.add(new OutputNameArgument(this, false));
 		
 		return args;
 	}
 
 	@Override
 	public Data execute(ProgressListener l, GCRunMutatorParams params) throws Exception {
+		
 		List<Probe> probes = new ArrayList<Probe>();
 		String primer = params.getPrimer();
 		String rvsPrimer = primer == null ? null : DNAUtils.reverseCompliment(primer);
+		
 		for(Probe p : params.getProbes().getProbeGroup()){
+			
 			Set<Mutation> mutations = new HashSet<Mutation>();
 			GenomicSequence seq = primer == null ? p.asGenomicSequence() : p.asGenomicSequence().appendSuffix(primer);
 			seq = this.mutate(seq, mutations, p.getStrand());
@@ -73,8 +76,9 @@ public class GCRunMutator extends AbstractChiptoolsFunction<GCRunMutatorParams>{
 				probes.add(p);
 			}
 		}
-		
-		return new Probes(new ProbeGroup(probes), DataType.OUTPUT);
+		System.out.println("GC run mutator...");
+		String outputName = params.getOutputName();
+		return new Probes(new ProbeGroup(probes), DataType.OUTPUT, outputName);
 	}
 	
 	protected GenomicSequence mutate(GenomicSequence seq, Collection<Mutation> mutations, Strand strand){

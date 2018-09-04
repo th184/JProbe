@@ -81,7 +81,7 @@ public class PeakSequenceReaderWriter implements DataReader, DataWriter{
 	@Override
 	public Data read(FileFilter format, InputStream s) throws Exception {
 		PeakSequenceGroup peakSeqs = PeakSequenceGroup.parsePeakSeqGroup(s);
-		return new PeakSequences(peakSeqs, DataType.INPUT);
+		return new PeakSequences(peakSeqs, DataType.INPUT, null);
 	}
 
 	@Override

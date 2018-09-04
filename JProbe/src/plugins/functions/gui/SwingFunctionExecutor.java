@@ -1,5 +1,8 @@
 package plugins.functions.gui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.SwingUtilities;
 
 import org.osgi.framework.Bundle;
@@ -7,6 +10,7 @@ import org.osgi.framework.Bundle;
 import util.gui.OnPress;
 import util.progress.ProgressEvent;
 import util.progress.ProgressListener;
+import jprobe.CoreDataManager;
 import jprobe.services.DataManager;
 import jprobe.services.ErrorHandler;
 import jprobe.services.data.Data;
@@ -14,12 +18,39 @@ import jprobe.services.function.Function;
 import jprobe.services.function.FunctionExecutor;
 
 public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
+	public static Map<String, Integer> m_Counts = new HashMap<String, Integer>()
+	{{	
+		put("ProbeJoiner", 1);
+		put("ProbeGenerator", 1);
+		put("NegativeControlGenerator", 1);
+	}};
+	public static Map<String, String> m_Standard_Num = new HashMap<String, String>()
+	{{	// prefix_n 
+		put("ProbeJoiner", "JoinedProbes");
+		put("ProbeGenerator", "GenProbes");
+		put("NegativeControlGenerator", "NegCtrl");
+	}};
+	public static Map<String, String> m_Standard_Prefix = new HashMap<String, String>()
+	{{
+		// prefix_fileName   
+		put("PeakFinder", "PeakSeqs");
+		put("BindingProfiler", "BindingProfile");
+
+	}};
+	public static Map<String, String> m_Standard_Suffix = new HashMap<String, String>()
+	{{
+		// fileName_suffix 
+		put("ProbeMutator", "mut");
+		put("GCRunMutator", "GRun_mut");  
+		put("PeakFilter", "filtered");
+		put("ProbeFilter", "filtered");	
+	}};
 	
 	private class FunctionThread extends Thread implements ProgressListener{
 		
 		private final Function<T> m_Function;
 		private final T m_Params;
-		
+				
 		private FunctionThread(Function<T> func, T params){
 			m_Function = func;
 			m_Params = params;
@@ -29,11 +60,14 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 		public void run(){
 			try {
 				final Data d = m_Function.execute(this, m_Params);
-				done(d);
+				String func = m_Function.getClass().getSimpleName();
+				done(d, func);
 			} catch (Exception e) {
+				System.out.println("in catch exception");
 				ErrorHandler.getInstance().handleException(e, m_Bundle);
 				done(null);
 			} catch (Throwable t){
+				System.out.println("in throwable t");
 				//don't report this event, as canceling the thread will cause this to notify the user
 				//with java.lang.ThreadDeath
 				//ErrorHandler.getInstance().handleException(new RuntimeException(t), m_Bundle);
@@ -69,6 +103,7 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 	private DataManager m_DataManager;
 	private FunctionThread m_Thread;
 	private ProgressWindow m_Monitor;
+	
 
 	public SwingFunctionExecutor(Function<T> function, T params, DataManager dataManager, Bundle bundle) {
 		super(function);
@@ -77,14 +112,21 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 		m_Thread = new FunctionThread(this.getFunction(), params);
 	}
 	// add output name as a parameter
-	private void done(final Data d){
+	private void done(final Data d, String func){
 		SwingUtilities.invokeLater(new Runnable(){
 
 			@Override
 			public void run() {
+				System.out.println(d==null);
 				if(d != null){
-					// get rid of this
 					String name = d.getOutputName();
+					
+					if(name == null) {
+						System.out.println("name is null");
+						name = assignName(d, func);
+					}else {
+						name = assignName(d, func, name);
+					}
 					m_DataManager.addData(d, name, m_Bundle);
 					
 				}
@@ -93,10 +135,31 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 					m_Monitor = null;
 				}
 			}
+
+			private String assignName(Data d, String func) {
+				String name = null;
+				if(m_Counts.containsKey(func)) {
+					name = m_Standard_Num.get(func) +"_"+ m_Counts.get(func);
+					m_Counts.put(func, m_Counts.get(func)+1);
+				}
+				return name;
+			}
+			private String assignName(Data d, String func, String name) {
+				if(m_Standard_Prefix.containsKey(func)) {
+					name = m_Standard_Prefix.get(func) +"_"+ name;
+				}else {
+					name = name +"_"+ m_Standard_Suffix.get(func);
+				}
+				return name;
+			}
 			
+		
 		});
 	}
-
+	
+	private void done(final Data d) {
+		done(d, "");
+	}
 	@Override
 	public void execute() {
 		//this.monitor = new ProgressMonitor(null, thread.function.getName(), null, 0, PROGRESS_BOUND);

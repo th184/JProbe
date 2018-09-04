@@ -24,10 +24,5 @@ public class SummitArgument extends ChiptoolsIntArg<SummitParam>{
 		params.setSummit(value);
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 }

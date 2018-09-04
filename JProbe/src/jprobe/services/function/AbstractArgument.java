@@ -3,6 +3,7 @@ package jprobe.services.function;
 import java.util.Collection;
 import java.util.HashSet;
 
+import plugins.functions.gui.dialog.OutputNameListener;
 import util.Observer;
 
 public abstract class AbstractArgument<P> implements Argument<P> {
@@ -14,7 +15,7 @@ public abstract class AbstractArgument<P> implements Argument<P> {
 	private final String m_Prototype;
 	private final boolean m_Optional;
 	private final Collection<ArgumentListener> m_Listeners = new HashSet<ArgumentListener>();
-	private OutputNameListener m_OutputNameListener = null;
+//	private OutputNameListener m_OutputNameListener = null;
 
 	
 	protected AbstractArgument(String name, String tooltip, String category, Character shortFlag, String prototypeValue, boolean optional){
@@ -50,10 +51,10 @@ public abstract class AbstractArgument<P> implements Argument<P> {
 	@Override
 	public void removeListener(ArgumentListener l) { m_Listeners.remove(l); }
 	
-	@Override
-	public void addOutputNameListener(OutputNameListener l) {
-		m_OutputNameListener = l;
-	}
+//	@Override
+//	public void addOutputNameListener(OutputNameListener l) {
+//		m_OutputNameListener = l;
+//	}
 	
 //	@Override 
 //	public void addOutputNameListener(boolean value) {
@@ -72,7 +73,6 @@ public abstract class AbstractArgument<P> implements Argument<P> {
 //		m_Obs.add(obs);
 //	}
 	
-	// un-register? but when to call it?
 	
 	protected void notifyListeners(){
 		for(ArgumentListener l : m_Listeners){
@@ -83,8 +83,6 @@ public abstract class AbstractArgument<P> implements Argument<P> {
 //		}
 	}
 	
-	protected void notifyOutputNameListener() {
-		
-	}
+	
 
 }

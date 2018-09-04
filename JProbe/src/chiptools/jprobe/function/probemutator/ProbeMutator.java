@@ -95,7 +95,8 @@ public class ProbeMutator extends AbstractChiptoolsFunction<ProbeMutatorParams>{
 			percentComplete = this.fireProgressEvent(l, processed, totalProbes, percentComplete);
 		}
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done mutating probes."));
-		return new Probes(new ProbeGroup(mutated), DataType.OUTPUT);
+		String outputName = params.getOutputName();
+		return new Probes(new ProbeGroup(mutated), DataType.OUTPUT, outputName);
 	}
 
 }

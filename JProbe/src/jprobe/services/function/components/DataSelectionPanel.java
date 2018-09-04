@@ -136,8 +136,12 @@ public class DataSelectionPanel<D extends Data> extends JPanel implements ItemLi
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if(e.getSource() == m_DataBox){
-//			System.out.println("Item changed");
 			D selected = m_DataBox.getSelectedData();
+			
+			if(selected != null) {
+				selected.setOutputName(String.valueOf(m_DataBox.getSelectedItem())); //added
+			}
+			
 			this.notifyObservers(selected);
 			
 		}

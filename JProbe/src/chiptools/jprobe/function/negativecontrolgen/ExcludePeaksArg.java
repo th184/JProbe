@@ -25,9 +25,4 @@ public class ExcludePeaksArg extends ChiptoolsDataArg<NegControlParams, Peaks>{
 		params.setExcludePeaks(data);
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		return false;
-	}
-
 }

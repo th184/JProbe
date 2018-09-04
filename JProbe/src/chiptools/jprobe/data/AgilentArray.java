@@ -14,7 +14,7 @@ public class AgilentArray extends AbstractFinalData{
 	private final List<AgilentProbe> m_Probes;
 	
 	public AgilentArray(String name, List<AgilentProbe> probes, DataType type) {
-		super(NUM_COLS, probes.size(), type);
+		super(NUM_COLS, probes.size(), type, null);
 		m_Name = name;
 		m_Probes = probes;
 	}

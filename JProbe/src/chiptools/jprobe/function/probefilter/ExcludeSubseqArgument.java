@@ -28,9 +28,4 @@ public class ExcludeSubseqArgument extends SequencesArg<ProbeFilterParam>{
 		});
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		return false;
-	}
-
 }

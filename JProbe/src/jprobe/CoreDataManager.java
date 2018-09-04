@@ -47,6 +47,8 @@ public class CoreDataManager implements DataManager{
 	private Map<String, Data> m_NameToData = new HashMap<String, Data>();
 	private Map<Data, String> m_DataToName = new LinkedHashMap<Data, String>();
 	
+	
+	
 //	private Map<Class<? extends Data>, List<Data>> m_Data = null;
 //	private Map<String, Data> m_NameToData = null;
 //	private Map<Data, String> m_DataToName = null;

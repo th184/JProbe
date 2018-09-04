@@ -68,7 +68,7 @@ public class ArgumentPanel<T> extends JPanel implements Subject<Boolean>, Argume
 	
 	public boolean isArgValid(){
 		return m_Arg.isValid() || !m_Optional.isSelected();
-	}
+	}     
 	
 	public void process(T params){
 		if(m_Optional == null || m_Optional.isSelected()){
@@ -135,7 +135,7 @@ public class ArgumentPanel<T> extends JPanel implements Subject<Boolean>, Argume
 			button.setSelected(true);
 			button.setEnabled(false);
 			
-			//return null;
+//			return null;
 		}
 		return button;
 	}

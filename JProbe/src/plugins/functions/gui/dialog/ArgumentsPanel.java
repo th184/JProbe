@@ -29,7 +29,6 @@ import jprobe.services.JProbeCore;
 import jprobe.services.data.Data;
 import jprobe.services.function.Argument;
 import jprobe.services.function.Function;
-import jprobe.services.function.OutputNameListener;
 
 public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Observer<Boolean> {
 	private static final long serialVersionUID = 1L;
@@ -70,7 +69,7 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 		m_Valid = false;
 		// add output panel, listen to args in inputArgList
 //		OutputNamePanel outputName = new OutputNamePanel(new OutputNameArgument(function, false));
-		OutputNameListener ol = new OutputNameListener();
+//		OutputNameListener ol = new OutputNameListener();
 		
 		Map<String, Collection<Argument<? super T>>> categoryGrouping = groupByCategory(function.getArguments());
 		for(String category : categoryGrouping.keySet()){
@@ -78,23 +77,23 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 			JPanel panel = this.generatePanel(category, args);
 			for(Argument<? super T> arg : args){
 				
-				if(m_InOutputName.contains(arg.getName())) {
-					//arg.addOutputNameListener((OutputNameListener) outputName);
-					arg.addListener(ol);
-				}
+//				if(m_InOutputName.contains(arg.getName())) {
+//					//arg.addOutputNameListener((OutputNameListener) outputName);
+//					arg.addListener(ol);
+//				}
 				
 				ArgumentPanel<T> argPanel = this.generateArgPanel(arg);
 				m_ArgPanels.add(argPanel);
 				argPanel.register(this);
 				panel.add(argPanel,this.argPanelConstraints());
 				
-				if(arg.getName().equals("Output name")) {
-					ol.setOutputNameArg((OutputNameArgument)arg);
-					
-					System.out.println("output name class: "+arg.getClass().toString());
-					
-//					m_OutputNamePanel = argPanel;
-				}
+//				if(arg.getName().equals("Output name")) {
+//					//ol.setOutputNameArg((OutputNameArgument)arg);
+//					
+//					System.out.println("output name class: "+arg.getClass().toString());
+//					
+////					m_OutputNamePanel = argPanel;
+//				}
 			}
 			m_CategoryPanels.add(panel);
 		}

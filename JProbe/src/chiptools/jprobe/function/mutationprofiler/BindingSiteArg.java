@@ -14,10 +14,5 @@ public class BindingSiteArg extends ChiptoolsIntArg<MutationProfilerParams>{
 		params.bindingSite = value;
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }

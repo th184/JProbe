@@ -39,8 +39,8 @@ public class BindingProfile extends AbstractFinalData implements Iterable<Profil
 	private final List<Profile> m_Profiles;
 	private final Map<Integer, Profile> m_ProfileStarts = new HashMap<Integer, Profile>();
 
-	public BindingProfile(List<Profile> bindingProfiles, DataType type) {
-		super(getLongestProfileLength(bindingProfiles) + 1, countRows(bindingProfiles), type);
+	public BindingProfile(List<Profile> bindingProfiles, DataType type, String outputName) {
+		super(getLongestProfileLength(bindingProfiles) + 1, countRows(bindingProfiles), type, outputName);
 		m_Profiles = bindingProfiles;
 		int start = 0;
 		for(Profile p : m_Profiles){

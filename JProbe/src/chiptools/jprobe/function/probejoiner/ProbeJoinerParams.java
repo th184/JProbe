@@ -5,7 +5,7 @@ import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.ProbeLenParam;
 import chiptools.jprobe.function.params.ProbesParam;
 
-public class ProbeJoinerParams implements ProbesParam, ProbeLenParam, OutputNameParam {
+public class ProbeJoinerParams implements ProbesParam, ProbeLenParam {
 	
 	public int NUMBINDINGSITES = -1;
 	public int MINSITEDIST = 2;
@@ -35,6 +35,8 @@ public class ProbeJoinerParams implements ProbesParam, ProbeLenParam, OutputName
 	public int getProbeLength() {
 		return m_ProbeLen;
 	}
+
+	
 
 	@Override
 	public void setOutputName(String name) {

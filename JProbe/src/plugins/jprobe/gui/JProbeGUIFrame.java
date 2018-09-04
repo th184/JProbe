@@ -327,9 +327,16 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 		SaveLoadUtil.load(m_Core, this);
 	}
 
+//	@Override
+//	public void write(Data d) {
+//		ExportImportUtil.exportData(d, m_Core, m_ExportChooser, this);
+//	}
+	
 	@Override
-	public void write(Data d) {
-		ExportImportUtil.exportData(d, m_Core, m_ExportChooser, this);
+	public void write(List<Data> list) {
+		for(Data d: list) {
+			ExportImportUtil.exportData(d, m_Core, m_ExportChooser, this);
+		}
 	}
 
 	@Override
@@ -374,6 +381,8 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 			this.setModified(false);
 		}
 	}
+
+	
 
 	
 }

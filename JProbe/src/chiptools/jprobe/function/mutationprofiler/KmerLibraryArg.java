@@ -23,9 +23,4 @@ public class KmerLibraryArg extends ChiptoolsDirArg<MutationProfilerParams>{
 	}
 
 
-	@Override
-	public boolean nameInOuput() {
-		return false;
-	}
-
 }

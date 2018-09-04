@@ -83,7 +83,7 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 		}
 		ProbeGroup group = new ProbeGroup(probes);
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done generating probes."));
-		return new Probes(group, DataType.OUTPUT);
+		return new Probes(group, DataType.OUTPUT, null);
 	}
 
 }

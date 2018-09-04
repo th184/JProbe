@@ -24,12 +24,9 @@ public class ProbesArgument extends ChiptoolsDataArg<ProbesParam, Probes>{
 	@Override
 	protected void process(ProbesParam params, List<Probes> data) {
 		params.setProbes(data.get(0));
+		params.setOutputName(data.get(0).getOutputName());
 		
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		return true;
-	}
-
+	
 }

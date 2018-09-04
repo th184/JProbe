@@ -12,7 +12,7 @@ import util.genome.peak.PeakUtils.Filter;
 public class PeakFilterParams implements Filter, PeaksParam{
 	
 	private Peaks m_Peaks = null;
-	//private String m_OutputName = null;
+	private String m_OutputName = null;
 	
 	private final List<Filter> m_Filters = new ArrayList<Filter>();
 	
@@ -38,14 +38,14 @@ public class PeakFilterParams implements Filter, PeaksParam{
 		return m_Peaks;
 	}
 
-//	@Override
-//	public void setOutputName(String name) {
-//		m_OutputName = name;
-//	}
-//
-//	@Override
-//	public String getOutputName() {
-//		return m_OutputName;
-//	}
+	@Override
+	public void setOutputName(String name) {
+		m_OutputName = name;
+	}
+
+	@Override
+	public String getOutputName() {
+		return m_OutputName;
+	}
 
 }

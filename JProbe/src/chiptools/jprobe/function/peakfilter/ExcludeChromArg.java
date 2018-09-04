@@ -31,11 +31,4 @@ public class ExcludeChromArg extends ChromsArg<PeakFilterParams>{
 		});
 		
 	}
-
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

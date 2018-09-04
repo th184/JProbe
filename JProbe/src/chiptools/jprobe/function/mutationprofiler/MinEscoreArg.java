@@ -14,10 +14,4 @@ public class MinEscoreArg extends ChiptoolsDoubleArg<MutationProfilerParams>{
 		params.minEscore = value;
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

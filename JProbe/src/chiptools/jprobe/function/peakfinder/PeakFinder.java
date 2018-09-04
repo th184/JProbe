@@ -41,10 +41,11 @@ public class PeakFinder extends AbstractChiptoolsFunction<PeakFinderParams>{
 		listeners.add(l);
 		GenomeReader genomeReader = GenomeReaderFactory.createGenomeReader(params.getGenomeFile(), listeners);
 		int summit = params.getSummit();
+		String outputName = params.getOutputName();
 		if(summit >= 0){
-			return new PeakSequences(PeakSequenceGroup.readFromGenome(genomeReader, peaks, summit), DataType.OUTPUT);
+			return new PeakSequences(PeakSequenceGroup.readFromGenome(genomeReader, peaks, summit), DataType.OUTPUT, outputName);
 		}else{
-			return new PeakSequences(PeakSequenceGroup.readFromGenome(genomeReader, peaks), DataType.OUTPUT);
+			return new PeakSequences(PeakSequenceGroup.readFromGenome(genomeReader, peaks), DataType.OUTPUT, outputName);
 		}
 	}
 

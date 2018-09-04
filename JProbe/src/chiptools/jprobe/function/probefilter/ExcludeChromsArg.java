@@ -33,10 +33,4 @@ public class ExcludeChromsArg extends ChromsArg<ProbeFilterParam>{
 		});
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

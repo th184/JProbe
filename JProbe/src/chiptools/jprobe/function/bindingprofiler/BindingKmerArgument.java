@@ -35,10 +35,6 @@ public class BindingKmerArgument extends ChiptoolsDataArg<BindingProfileParams, 
 		super.parse(l, params, args);
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		return false;
-	}
 
 
 }

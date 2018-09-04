@@ -69,7 +69,7 @@ public class PeakReaderWriter implements DataReader, DataWriter{
 	@Override
 	public Data read(FileFilter format, InputStream s) throws Exception {
 		PeakGroup peaks = PeakGroup.parsePeakGroup(s);
-		return new Peaks(peaks, DataType.INPUT);
+		return new Peaks(peaks, DataType.INPUT, null);
 	}
 
 	@Override

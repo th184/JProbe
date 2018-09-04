@@ -26,9 +26,5 @@ public class PWMArgument extends ChiptoolsDataArg<PWMParam, PWM>{
 		params.setPWM(data.get(0));
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		return false;
-	}
-
+	
 }

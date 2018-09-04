@@ -22,8 +22,8 @@ public class Peaks extends AbstractFinalData{
 	
 	private final PeakGroup m_Peaks;
 	
-	public Peaks(PeakGroup peaks, DataType type){
-		super(PEAK_COLS , peaks.size(), type);
+	public Peaks(PeakGroup peaks, DataType type, String outputName){
+		super(PEAK_COLS , peaks.size(), type, outputName);
 		m_Peaks = peaks;
 		
 	}

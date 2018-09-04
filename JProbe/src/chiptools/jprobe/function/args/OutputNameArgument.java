@@ -14,18 +14,17 @@ import util.Subject;
 public class OutputNameArgument extends ChiptoolsTextArg<OutputNameParam> {
 	public static String m_inputFilename = null;
 	
-	
 	public final static Map<String, String> m_Standard = new HashMap<String, String>()
-	{{	// prefix_n
+	{{	// prefix_n 
 		put("ProbeJoiner", "JoinedProbes");
 		put("ProbeGenerator", "GenProbes");
 		put("NegativeControlGenerator", "NegCtrl");
-		// prefix_fileName
+		// prefix_fileName   
 		put("PeakFinder", "PeakSeqs");
 		put("BindingProfiler", "BindingProfile");
 		// fileName_suffix 
 		put("ProbeMutator", "mut");
-		put("GCRunMutator", "GRun_mut");
+		put("GCRunMutator", "GRun_mut");  
 		put("PeakFilter", "filtered");
 		put("ProbeFilter", "filtered");	
 	}};
@@ -95,7 +94,7 @@ public class OutputNameArgument extends ChiptoolsTextArg<OutputNameParam> {
 		}
 		
 		return name;
-		
+		     
 	}
 	
 	
@@ -118,13 +117,6 @@ public class OutputNameArgument extends ChiptoolsTextArg<OutputNameParam> {
 	@Override
 	protected void process(OutputNameParam params, String s) {
 		params.setOutputName(s);
-	}
-
-	// delete this
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	

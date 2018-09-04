@@ -182,7 +182,13 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 	public List<D> getDataArgs(){
 		List<D> data = new ArrayList<D>();
 		for(D d : m_SelectedData){
-			if(d != null && this.isValid(d)) data.add(d);
+			if(d != null && this.isValid(d)) {
+				data.add(d);
+//				System.out.println("getDataArgs d.getOutput: "+d.getOutputName()); // same as that from combo box
+			}
+				
+				
+			
 		}
 		return data;
 	}
@@ -214,6 +220,7 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 	}
 	
 	private void setData(int index, D data){
+//		System.out.println("data outputname: "+data.getOutputName());
 		D cur = m_SelectedData.get(index);
 		m_SelectedData.set(index, data);
 		if(!m_AllowDuplicates){
@@ -280,7 +287,8 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 		if(index >= 0){
 			this.setData(index, notification);
 			this.updateValidity();
-			this.notifyListeners();//
+			
+//			this.notifyListeners(); //added
 		}
 	}
 	

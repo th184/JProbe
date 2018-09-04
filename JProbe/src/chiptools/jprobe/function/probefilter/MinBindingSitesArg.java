@@ -24,10 +24,4 @@ public class MinBindingSitesArg extends ChiptoolsIntArg<ProbeFilterParam>{
 		});
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

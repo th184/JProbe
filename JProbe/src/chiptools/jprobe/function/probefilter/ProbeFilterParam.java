@@ -16,7 +16,7 @@ public class ProbeFilterParam implements util.genome.probe.ProbeUtils.Filter, Pr
 	
 	private Random m_Random = new Random();
 	private int m_Remove = 0;
-//	private String m_OutputName = null;
+	private String m_OutputName = null;
 	
 	public void addFilter(util.genome.probe.ProbeUtils.Filter f){
 		m_Filters.add(f);
@@ -56,14 +56,14 @@ public class ProbeFilterParam implements util.genome.probe.ProbeUtils.Filter, Pr
 		return m_Probes;
 	}
 
-//	@Override
-//	public void setOutputName(String name) {
-//		m_OutputName = name;
-//	}
-//
-//	@Override
-//	public String getOutputName() {
-//		return m_OutputName;
-//	}
+	@Override
+	public void setOutputName(String name) {
+		m_OutputName = name;
+	}
+
+	@Override
+	public String getOutputName() {
+		return m_OutputName;
+	}
 
 }

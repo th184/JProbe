@@ -33,8 +33,8 @@ public class Probes extends AbstractFinalData implements Observer<Preferences.Up
 	
 	private final ProbeGroup m_Probes;
 	
-	public Probes(ProbeGroup probes, DataType type){
-		super(PROBE_COLS, probes.size(), type);
+	public Probes(ProbeGroup probes, DataType type, String outputName){
+		super(PROBE_COLS, probes.size(), type, outputName);
 		m_Probes = probes;
 		Preferences.getInstance().register(this);
 	}

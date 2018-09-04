@@ -16,7 +16,7 @@ public class Kmer extends AbstractFinalData{
 	private final util.genome.kmer.Kmer m_Kmer;
 	
 	public Kmer(util.genome.kmer.Kmer kmer, DataType type){
-		super(5, kmer.size(), type);
+		super(5, kmer.size(), type, null);
 		m_Kmer = kmer;
 
 	}

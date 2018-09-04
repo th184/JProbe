@@ -14,9 +14,4 @@ public class RecursiveArg extends ChiptoolsFlagArg<MutationProfilerParams>{
 		params.recursive = flagSet;
 	}
 
-	@Override
-	public boolean nameInOuput() {
-		return false;
-	}
-
 }
