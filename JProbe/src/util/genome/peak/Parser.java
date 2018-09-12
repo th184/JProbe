@@ -23,7 +23,7 @@ public class Parser {
 	
 	public static final String WHITESPACE_REGEX = "\\s";
 	public static final String[][] PEAK_FORMATS = new String[][]{
-		{"BED format (.bed)", "bed"},
+		//{"BED format (.bed)", "bed"},
 		{"ENCODE peak (.*)", "*"}
 	};
 	public static final String[][] PEAK_SEQ_FORMATS = new String[][]{
@@ -219,8 +219,6 @@ public class Parser {
 		}
 		return new PeakGroup(peaks);
 	}
-	
-	
 	
 	
 	

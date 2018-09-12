@@ -298,12 +298,12 @@ public class CoreDataManager implements DataManager{
 		return m_NameToData.keySet().toArray(new String[m_NameToData.size()]);
 	}
 	
-//	public synchronized String getOutputName(Data d) {
-//		// perform method only if DataType == OUTPUT --> use if statement or try-catch?
-//		
-//		String name;
-//		return name;
-//	}
+	@Override
+	public boolean varExists(String variable) {
+		// used in JProbeGUIFrame to check if a to-be-import variable is in the system already
+		return m_NameToData.containsKey(variable);
+	}
+	
 	
 	@Override
 	public synchronized void rename(Data d, String name, Bundle responsible){
@@ -549,6 +549,15 @@ public class CoreDataManager implements DataManager{
 					}
 					Data data = (Data) oin.readObject();
 					this.addData(data, name, JProbeActivator.getBundle(), false);
+//					System.out.println("loading data object");
+//					System.out.println(Arrays.toString(data.getMetadata().entrySet().toArray()));
+//					System.out.println("loading: "+data.getVarName());
+//					System.out.println("size of metadata: "+data.getMetadata().size());
+					if(data.getMetadata()!=null) {
+						System.out.println("loaded metadata size: "+data.getMetadata().size());
+					}else {
+						System.out.println("metadata is null");
+					}
 				} catch (ClassNotFoundException e) {
 					//do nothing, this means the plugin that provides the data type is not loaded so simply proceed
 					continue;

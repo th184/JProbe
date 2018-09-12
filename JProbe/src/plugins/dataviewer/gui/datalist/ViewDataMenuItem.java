@@ -23,7 +23,6 @@ public class ViewDataMenuItem extends AbstractDataMenuItem{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		List<Data> data = this.getData();
-		System.out.println(data.size());
 		if(data != null){
 			for(int i=0; i<data.size();i++) {
 				m_TabPane.selectData(data.get(i));

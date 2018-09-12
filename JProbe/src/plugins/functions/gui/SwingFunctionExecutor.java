@@ -1,5 +1,6 @@
 package plugins.functions.gui;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,11 +64,13 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 				String func = m_Function.getClass().getSimpleName();
 				done(d, func);
 			} catch (Exception e) {
-				System.out.println("in catch exception");
+				System.out.println("in catch exception ");
 				ErrorHandler.getInstance().handleException(e, m_Bundle);
+				e.printStackTrace();
 				done(null);
 			} catch (Throwable t){
-				System.out.println("in throwable t");
+				System.out.println("in throwable t...");
+				t.printStackTrace();
 				//don't report this event, as canceling the thread will cause this to notify the user
 				//with java.lang.ThreadDeath
 				//ErrorHandler.getInstance().handleException(new RuntimeException(t), m_Bundle);
@@ -117,12 +120,10 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 
 			@Override
 			public void run() {
-				System.out.println(d==null);
 				if(d != null){
 					String name = d.getOutputName();
 					
 					if(name == null) {
-						System.out.println("name is null");
 						name = assignName(d, func);
 					}else {
 						name = assignName(d, func, name);

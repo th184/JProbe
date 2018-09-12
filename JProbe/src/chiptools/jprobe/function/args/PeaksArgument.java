@@ -25,6 +25,7 @@ public class PeaksArgument extends ChiptoolsDataArg<PeaksParam, Peaks> {
 	protected void process(PeaksParam params, List<Peaks> data) {
 		params.setPeaks(data.get(0));
 		params.setOutputName(data.get(0).getOutputName());
+		params.setPeaksName(data.get(0).getVarName());
 	}
 
 	

@@ -3,6 +3,8 @@ package chiptools.jprobe.data;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.InputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -52,7 +54,7 @@ public class ProbesReaderWriter implements DataReader, DataWriter{
 	@Override
 	public Data read(FileFilter format, InputStream in) throws Exception {
 		ProbeGroup probes = ProbeGroup.readProbeGroup(in);
-		return new Probes(probes, DataType.INPUT, null);
+		return new Probes(probes, DataType.INPUT, null, null);
 	}
 
 	@Override

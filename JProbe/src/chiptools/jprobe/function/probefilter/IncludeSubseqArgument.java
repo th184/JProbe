@@ -14,7 +14,8 @@ public class IncludeSubseqArgument extends SequencesArg<ProbeFilterParam>{
 	}
 
 	@Override
-	protected void process(ProbeFilterParam params, final List<String> seqs) {
+	protected void process(ProbeFilterParam params, final List<String> seqs, String fileName) {
+		params.setIncludedSeqs(fileName);
 		params.addFilter(new Filter(){
 
 			@Override

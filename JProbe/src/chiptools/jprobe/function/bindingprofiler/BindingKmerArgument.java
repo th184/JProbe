@@ -24,6 +24,7 @@ public class BindingKmerArgument extends ChiptoolsDataArg<BindingProfileParams, 
 	@Override
 	protected void process(BindingProfileParams params, List<Kmer> data) {
 		params.setKmers(data);
+		params.setKmerListName(data.get(0).getVarName());
 	}
 	
 	@Override

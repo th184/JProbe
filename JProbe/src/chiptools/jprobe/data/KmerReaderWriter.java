@@ -69,7 +69,7 @@ public class KmerReaderWriter implements DataReader, DataWriter{
 	@Override
 	public Data read(FileFilter format, InputStream in) throws Exception {
 		util.genome.kmer.Kmer kmer = util.genome.kmer.Kmers.readKmer(in);
-		return new Kmer(kmer, DataType.INPUT);
+		return new Kmer(kmer, DataType.INPUT, null);
 	}
 
 	@Override

@@ -38,7 +38,6 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 		args.add(new BindingSiteArgument(this, true));
 		args.add(new WindowSizeArgument(this, true));
 		args.add(new EscoreArgument(this, true, 0.4));
-//		args.add(new OutputNameArgument(this, false));
 		
 		return args;
 	}
@@ -83,7 +82,8 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 		}
 		ProbeGroup group = new ProbeGroup(probes);
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done generating probes."));
-		return new Probes(group, DataType.OUTPUT, null);
+		
+		return new Probes(group, DataType.OUTPUT, null, params.getMetadata());
 	}
 
 }

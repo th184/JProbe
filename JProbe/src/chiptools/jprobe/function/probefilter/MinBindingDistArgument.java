@@ -9,11 +9,20 @@ import chiptools.jprobe.function.ChiptoolsIntArg;
 public class MinBindingDistArgument extends ChiptoolsIntArg<ProbeFilterParam>{
 
 	protected MinBindingDistArgument(Function<?> parent, boolean optional) {
-		super(parent.getClass(), MinBindingDistArgument.class, "off", optional, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
+		super(
+				parent.getClass(), 
+				MinBindingDistArgument.class, 
+				"off", 
+				optional, 
+				0, 
+				Integer.MIN_VALUE, 
+				Integer.MAX_VALUE, 
+				1);
 	}
 
 	@Override
 	protected void process(ProbeFilterParam params, Integer value) {
+		params.MINBINDDIST = value;
 		final int min = value;
 		params.addFilter(new Filter(){
 

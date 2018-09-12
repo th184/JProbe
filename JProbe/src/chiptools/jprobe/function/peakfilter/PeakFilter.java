@@ -30,7 +30,6 @@ public class PeakFilter extends AbstractChiptoolsFunction<PeakFilterParams>{
 		args.add(new MaxQValArg(this, true));
 		args.add(new MinPValArg(this, true));
 		args.add(new MaxPValArg(this, true));
-//		args.add(new OutputNameArgument(this, false));
 		
 		return args;
 	}
@@ -40,7 +39,7 @@ public class PeakFilter extends AbstractChiptoolsFunction<PeakFilterParams>{
 		PeakGroup peaks = params.getPeaks().getPeaks();
 		PeakGroup filtered = PeakUtils.filter(peaks, params);
 		String outputName = params.getOutputName();
-		return new Peaks(filtered, DataType.OUTPUT, outputName);
+		return new Peaks(filtered, DataType.OUTPUT, outputName, params.getMetadata());
 	}
 
 }

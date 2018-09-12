@@ -8,11 +8,20 @@ import chiptools.jprobe.function.ChiptoolsIntArg;
 public class MaxMutationsArgument extends ChiptoolsIntArg<ProbeFilterParam>{
 
 	protected MaxMutationsArgument(Function<?> parent, boolean optional) {
-		super(parent.getClass(), MaxMutationsArgument.class, "off", optional, 0, 0, Integer.MAX_VALUE, 1);
+		super(
+				parent.getClass(), 
+				MaxMutationsArgument.class, 
+				"off", 
+				optional, 
+				60, // start 
+				0, 
+				Integer.MAX_VALUE, 
+				1);
 	}
 
 	@Override
 	protected void process(ProbeFilterParam params, Integer value) {
+		params.MAXMUT = value;
 		final int max = value;
 		params.addFilter(new Filter(){
 

@@ -52,6 +52,7 @@ public interface DataManager extends Saveable{
 	public boolean contains(Data data);
 	public boolean containsAll(List<Data> data);
 	public List<Data> getData(Class<? extends Data> type);
+	public boolean varExists(String variable); 
 	
 	
 	

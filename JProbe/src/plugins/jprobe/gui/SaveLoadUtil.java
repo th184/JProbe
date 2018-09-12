@@ -14,10 +14,39 @@ public class SaveLoadUtil {
 	public static final int CANCEL = 1;
 	
 	private static JFileChooser SAVE_LOAD_CHOOSER = null;
-	private static JFileChooser getSaveLoadChooser(){
-		if(SAVE_LOAD_CHOOSER == null){
+	private static JFileChooser getSaveLoadChooser(boolean forSave){
+		
+//		if(SAVE_LOAD_CHOOSER == null){
+		if(forSave) {
+			SAVE_LOAD_CHOOSER = new JFileChooser(){
+				@Override
+		        public void approveSelection() {
+		            File f = getSelectedFile();
+		            if (f.exists()) {
+		                int result = JOptionPane.showConfirmDialog(this,
+		                        "The workspace already exists. Do you wish overwrite?", 
+		                        "Existing workspace",
+		                        JOptionPane.YES_NO_CANCEL_OPTION, 
+		                        JOptionPane.WARNING_MESSAGE); // "warning message" dictates the icon
+		                switch (result) {
+		                case JOptionPane.YES_OPTION:
+		                    super.approveSelection();
+		                    return;
+		                case JOptionPane.CANCEL_OPTION:
+		                    cancelSelection();
+		                    return;
+		                default:
+		                    return;
+		                }
+		            }
+		            super.approveSelection();
+		        }
+		    };
+		}else{
 			SAVE_LOAD_CHOOSER = new JFileChooser();
 		}
+			
+//		}
 		return SAVE_LOAD_CHOOSER;
 	}
 	
@@ -75,9 +104,9 @@ public class SaveLoadUtil {
 		return PROCEED;
 	}
 	
-	public static void save( final JProbeCore core, final File f){
+	public static void save(final JProbeCore core, final File f){
 		BackgroundThread.getInstance().invokeLater(new Runnable(){
-
+			
 			@Override
 			public void run() {
 				core.save(f);
@@ -88,7 +117,7 @@ public class SaveLoadUtil {
 	}
 	
 	public static int saveAs(JProbeCore core, Frame parent){
-		JFileChooser fileChooser = getSaveLoadChooser();
+		JFileChooser fileChooser = getSaveLoadChooser(true);
 		fileChooser.resetChoosableFileFilters();
 		fileChooser.setFileFilter(Constants.SAVE_FILE_FILTER);
 		int returnVal = fileChooser.showDialog(parent, "Save");
@@ -139,7 +168,7 @@ public class SaveLoadUtil {
 	
 	public static void load(JProbeCore core, Frame parent){
 		if(unsavedWorkspaceCheck(core, parent) == PROCEED){
-			JFileChooser fileChooser = getSaveLoadChooser();
+			JFileChooser fileChooser = getSaveLoadChooser(false);
 			fileChooser.resetChoosableFileFilters();
 			fileChooser.setFileFilter(Constants.SAVE_FILE_FILTER);
 			int returnVal = fileChooser.showDialog(parent, "Open");

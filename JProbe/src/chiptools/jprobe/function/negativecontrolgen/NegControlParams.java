@@ -2,7 +2,9 @@ package chiptools.jprobe.function.negativecontrolgen;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import chiptools.jprobe.data.Kmer;
 import chiptools.jprobe.data.Peaks;
@@ -23,7 +25,13 @@ public class NegControlParams implements GenomeParam, SummitParam, KmerListParam
 	private double m_Escore = 0.3;
 	private int m_Num = -1;
 	private int m_Len = 36;
-	//private String m_OutputName = null;
+	
+	private String m_GenomeName = null;
+	private String m_IncludeName = null; // included peaks & excluded peaks... not sure
+	private String m_ExcludeName = null;
+	private String m_KmerName = null;
+	private Map<String, String> m_Metadata = null;
+	
 	
 	public void setExcludePeaks(List<Peaks> exclude){
 		m_Exclude = exclude;
@@ -40,6 +48,7 @@ public class NegControlParams implements GenomeParam, SummitParam, KmerListParam
 	public List<Peaks> getIncludePeaks(){
 		return m_Include;
 	}
+	
 	
 	@Override
 	public void setGenomeFile(File f) {
@@ -98,15 +107,52 @@ public class NegControlParams implements GenomeParam, SummitParam, KmerListParam
 	public int getProbeLength() {
 		return m_Len;
 	}
+	
+	public void setIncludePeaksName(String name) {
+		m_IncludeName = name;
+	}
+	public String getIncludePeaksName() {
+		return m_IncludeName;
+	}
+	public void setExcludePeaksName(String name) {
+		m_ExcludeName = name;
+	}
+	public String getExcludePeaksName() {
+		return m_ExcludeName;
+	}
+	@Override
+	public void setKmerListName(String name) {
+		m_KmerName = name;
+	}
 
-//	@Override
-//	public void setOutputName(String name) {
-//		m_OutputName = name;
-//	}
-//
-//	@Override
-//	public String getOutputName() {
-//		return m_OutputName;
-//	}
+	@Override
+	public String getKmerListName() {
+		return m_KmerName;
+	}
+
+	@Override
+	public void setGenomeFileName(String name) {
+		m_GenomeName = name;
+	}
+
+	
+	public String getGenomeFileName() {
+		return m_GenomeName;
+	}
+	
+	public Map<String, String> getMetadata(){
+		m_Metadata = new HashMap<>();
+		m_Metadata.put("Genome", m_GenomeName);
+		m_Metadata.put("Included peaks", m_IncludeName);
+		m_Metadata.put("Excluded peaks", m_ExcludeName);
+		m_Metadata.put("Summit", String.valueOf(m_Summit));
+		m_Metadata.put("K-mers", m_KmerName);
+		m_Metadata.put("E-score", String.valueOf(m_Escore));
+		m_Metadata.put("Probe length", String.valueOf(m_Len));
+		m_Metadata.put("Number of probes generated", String.valueOf(m_Num));
+		
+		return m_Metadata;
+	}
+
 
 }

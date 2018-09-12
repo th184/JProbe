@@ -20,6 +20,7 @@ public class KmerLibraryArg extends ChiptoolsDirArg<MutationProfilerParams>{
 	@Override
 	protected void process(MutationProfilerParams params, File f) {
 		params.kmerLibrary = f;
+		
 	}
 
 

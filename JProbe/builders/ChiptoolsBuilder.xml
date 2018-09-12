@@ -2,6 +2,7 @@
 <project name="Chiptools.makejar" default="makejar" basedir=".">
 	<target name="makejar" description="Package the chiptools jar">
 		<jar manifest="${basedir}/../src/chiptools/MANIFEST.MF" destfile="${basedir}/../distributable/plugins/chiptools.jar" includes="chiptools/**" basedir="${basedir}/../../bin">
+			<zipgroupfileset dir="../lib" includes="commons-lang3-3.8.jar" />
 		</jar>
 	</target>
 </project>

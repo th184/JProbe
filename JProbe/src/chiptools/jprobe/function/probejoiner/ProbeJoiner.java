@@ -10,7 +10,6 @@ import util.genome.probe.ProbeUtils;
 import util.progress.ProgressListener;
 import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
-import chiptools.jprobe.function.args.OutputNameArgument;
 import chiptools.jprobe.function.args.ProbeLengthArgument;
 import chiptools.jprobe.function.args.ProbesArgument;
 
@@ -28,7 +27,6 @@ public class ProbeJoiner extends AbstractChiptoolsFunction<ProbeJoinerParams>{
 		args.add(new MinSiteDistArgument(this, true));
 		args.add(new MaxSiteDistArgument(this, true));
 		args.add(new ProbeLengthArgument(this, true, "unbounded"));
-//		args.add(new OutputNameArgument(this, false));
 		return args;
 	}
 
@@ -36,7 +34,6 @@ public class ProbeJoiner extends AbstractChiptoolsFunction<ProbeJoinerParams>{
 	public Data execute(ProgressListener l, ProbeJoinerParams params) throws Exception {
 		Probes p = params.getProbes();
 		Probes combined;
-		String outputName = params.getOutputName();
 		if(params.getProbeLength() > 0){
 			combined = new Probes(ProbeUtils.joinProbes(
 					l,
@@ -45,7 +42,7 @@ public class ProbeJoiner extends AbstractChiptoolsFunction<ProbeJoinerParams>{
 					params.MINSITEDIST,
 					params.MAXSITEDIST,
 					params.getProbeLength()
-					), DataType.OUTPUT, outputName);
+					), DataType.OUTPUT, null, params.getMetadata());
 		}else{
 			combined = new Probes(ProbeUtils.joinProbes(
 					l,
@@ -53,7 +50,7 @@ public class ProbeJoiner extends AbstractChiptoolsFunction<ProbeJoinerParams>{
 					params.NUMBINDINGSITES,
 					params.MINSITEDIST,
 					params.MAXSITEDIST
-					), DataType.OUTPUT, outputName);
+					), DataType.OUTPUT, null, params.getMetadata());
 		}
 		return combined;
 	}

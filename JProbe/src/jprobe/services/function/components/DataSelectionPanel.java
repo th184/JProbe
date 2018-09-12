@@ -28,6 +28,7 @@ public class DataSelectionPanel<D extends Data> extends JPanel implements ItemLi
 	
 	private final Collection<Observer<D>> m_Obs = new HashSet<Observer<D>>();
 	
+	private final String m_ArgName;
 	private final DataComboBox<D> m_DataBox;
 	private final JButton m_CloseButton;
 	private final boolean m_Optional;
@@ -40,8 +41,9 @@ public class DataSelectionPanel<D extends Data> extends JPanel implements ItemLi
 		
 	};
 	
-	public DataSelectionPanel(JProbeCore core, boolean optional){
+	public DataSelectionPanel(String argName, JProbeCore core, boolean optional){
 		super(new GridBagLayout());
+		m_ArgName = argName;
 		m_Optional = optional;
 		m_DataBox = this.createdDataComboBox(core);
 		m_DataBox.addItemListener(this);
@@ -139,6 +141,9 @@ public class DataSelectionPanel<D extends Data> extends JPanel implements ItemLi
 			D selected = m_DataBox.getSelectedData();
 			
 			if(selected != null) {
+//				selected.setMetadata(m_ArgName, String.valueOf(m_DataBox.getSelectedItem()));
+				selected.setVarName(String.valueOf(m_DataBox.getSelectedItem()));
+				// simplify later
 				selected.setOutputName(String.valueOf(m_DataBox.getSelectedItem())); //added
 			}
 			

@@ -25,7 +25,7 @@ public class ProbesArgument extends ChiptoolsDataArg<ProbesParam, Probes>{
 	protected void process(ProbesParam params, List<Probes> data) {
 		params.setProbes(data.get(0));
 		params.setOutputName(data.get(0).getOutputName());
-		
+		params.setProbesName(data.get(0).getVarName());
 	}
 
 	

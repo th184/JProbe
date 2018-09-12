@@ -8,11 +8,20 @@ import chiptools.jprobe.function.ChiptoolsIntArg;
 public class MaxBindingSitesArg extends ChiptoolsIntArg<ProbeFilterParam>{
 
 	public MaxBindingSitesArg(Function<?> parent, boolean optional) {
-		super(parent.getClass(), MaxBindingSitesArg.class, "off", optional, 0, 0, Integer.MAX_VALUE, 1);
+		super(
+				parent.getClass(), 
+				MaxBindingSitesArg.class, 
+				"off", 
+				optional, 
+				10, 
+				0, 
+				Integer.MAX_VALUE, 
+				1);
 	}
 
 	@Override
 	protected void process(ProbeFilterParam params, Integer value) {
+		params.MAXBINDSITE = value;
 		final int max = value;
 		params.addFilter(new Filter(){
 

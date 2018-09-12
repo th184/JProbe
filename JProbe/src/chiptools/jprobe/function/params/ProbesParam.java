@@ -8,4 +8,6 @@ public interface ProbesParam {
 	public Probes getProbes();
 	public void setOutputName(String n);
 	public String getOutputName();
+	public void setProbesName(String n);
+	public String getProbesName();
 }

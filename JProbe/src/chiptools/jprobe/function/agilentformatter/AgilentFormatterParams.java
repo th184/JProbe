@@ -1,6 +1,8 @@
 package chiptools.jprobe.function.agilentformatter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.params.OutputNameParam;
@@ -12,12 +14,11 @@ public class AgilentFormatterParams implements PrimerParam{
 	
 	public String ARRAY_NAME = null;
 	
-	//public String m_OutputName = null;
-	
 	private String m_Primer = "";
+	private String m_PrimerName = null;
+	private Map<String, String> m_Metadata = null;
 	
 	public int FWD_REPS = 3;
-	
 	public int RVS_REPS = 3;
 	
 
@@ -31,14 +32,22 @@ public class AgilentFormatterParams implements PrimerParam{
 		return m_Primer;
 	}
 
-//	@Override
-//	public void setOutputName(String name) {
-//		m_OutputName = name;
-//	}
-//
-//	@Override
-//	public String getOutputName() {
-//		return m_OutputName;
-//	}
+	@Override
+	public void setPrimerName(String name) {
+		m_PrimerName = name;
+	}
+
+	@Override
+	public String getPrimerName() {
+		return m_PrimerName;
+	}
+
+	public Map<String, String> getMetadata(){
+		m_Metadata = new HashMap<>();
+		m_Metadata.put("Primer", m_PrimerName);
+		return m_Metadata;
+	}
+
+
 	
 }

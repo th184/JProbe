@@ -56,7 +56,8 @@ public class ProbeFilter extends AbstractChiptoolsFunction<ProbeFilterParam>{
 			filtered = new ProbeGroup(list);
 		}
 		String outputName = params.getOutputName();
-		return new Probes(filtered, DataType.OUTPUT, outputName);
+		
+		return new Probes(filtered, DataType.OUTPUT, outputName, params.getMetadata());
 	}
 
 }

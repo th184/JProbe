@@ -9,11 +9,20 @@ import chiptools.jprobe.function.ChiptoolsIntArg;
 public class MaxBindingDistArgument extends ChiptoolsIntArg<ProbeFilterParam>{
 
 	protected MaxBindingDistArgument(Function<?> parent, boolean optional) {
-		super(parent.getClass(), MaxBindingDistArgument.class, "off", optional, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
+		super(
+				parent.getClass(), 
+				MaxBindingDistArgument.class, 
+				"off", 
+				optional, 
+				40, 
+				Integer.MIN_VALUE, 
+				Integer.MAX_VALUE, 
+				1);
 	}
 
 	@Override
 	protected void process(ProbeFilterParam params, Integer value) {
+		params.MAXBINDDIST = value;
 		final int max = value;
 		params.addFilter(new Filter(){
 

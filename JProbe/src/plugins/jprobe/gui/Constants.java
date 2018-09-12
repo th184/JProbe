@@ -13,10 +13,13 @@ public class Constants {
 	public static final String CONFIG_FILE_NAME = "jprobe-gui.pref";
 	
 	
-	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public static final int DEFAULT_WIDTH = (int) screenSize.getWidth();
-	public static final int DEFAULT_HEIGHT = (int) screenSize.getHeight();
+//	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//	public static final int DEFAULT_WIDTH = (int) screenSize.getWidth();
+//	public static final int DEFAULT_HEIGHT = (int) screenSize.getHeight();
 	
+	public static final int DEFAULT_WIDTH = 1000;
+	public static final int DEFAULT_HEIGHT = 600; 
+			
 	public static final String BACKGROUND_THREAD_NAME = "BackgroundThread";
 	
 	public static final int CENTER = -1;

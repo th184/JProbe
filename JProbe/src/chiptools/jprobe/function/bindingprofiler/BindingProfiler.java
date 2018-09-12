@@ -65,7 +65,8 @@ public class BindingProfiler extends AbstractChiptoolsFunction<BindingProfilePar
 		}
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done profiling binding."));
 		String outputName = params.getOutputName();
-		return new BindingProfile(bindingProfiles, DataType.OUTPUT, outputName);
+		
+		return new BindingProfile(bindingProfiles, DataType.OUTPUT, outputName, params.getMetadata());
 	}
 
 }

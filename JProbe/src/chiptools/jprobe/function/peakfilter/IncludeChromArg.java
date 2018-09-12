@@ -15,9 +15,10 @@ public class IncludeChromArg extends ChromsArg<PeakFilterParams>{
 	}
 
 	@Override
-	protected void process(PeakFilterParams params, final Collection<Chromosome> chroms) {
+	protected void process(PeakFilterParams params, final Collection<Chromosome> chroms, String userInput) {
+		
+		params.setIncludeChrom(userInput);
 		params.addFilter(new Filter(){
-
 			@Override
 			public boolean keep(Peak p) {
 				for(Chromosome chrom : chroms){

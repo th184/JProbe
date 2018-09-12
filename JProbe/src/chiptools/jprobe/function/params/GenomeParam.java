@@ -6,5 +6,6 @@ public interface GenomeParam {
 	
 	public void setGenomeFile(File f);
 	public File getGenomeFile();
+	public void setGenomeFileName(String n);
 	
 }

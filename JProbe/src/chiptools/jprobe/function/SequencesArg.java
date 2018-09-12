@@ -28,7 +28,7 @@ public abstract class SequencesArg<P> extends ChiptoolsFileArg<P>{
 		m_Panel.setLayout(new BoxLayout(m_Panel, BoxLayout.Y_AXIS));
 	}
 	
-	abstract protected void process(P params, List<String> seqs);
+	abstract protected void process(P params, List<String> seqs, String fileName);
 	
 	@Override
 	protected void setFile(File f){
@@ -86,7 +86,9 @@ public abstract class SequencesArg<P> extends ChiptoolsFileArg<P>{
 	@Override
 	protected void process(P params, File f) {
 		List<String> seqs = this.readFile(f);
-		this.process(params, seqs);
+		String fileName = f.getName();
+		String name = fileName.substring(0, fileName.lastIndexOf('.'));
+		this.process(params, seqs, name);
 	}
 
 }

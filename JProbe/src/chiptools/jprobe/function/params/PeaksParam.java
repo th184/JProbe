@@ -8,5 +8,8 @@ public interface PeaksParam {
 	public Peaks getPeaks();
 	public void setOutputName(String n);
 	public String getOutputName();
+	public void setPeaksName(String n);
+	public String getPeaksName();
+	
 
 }

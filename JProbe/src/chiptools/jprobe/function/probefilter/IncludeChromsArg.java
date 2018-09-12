@@ -15,7 +15,8 @@ public class IncludeChromsArg extends ChromsArg<ProbeFilterParam>{
 	}
 
 	@Override
-	protected void process(ProbeFilterParam params, final Collection<Chromosome> chroms) {
+	protected void process(ProbeFilterParam params, final Collection<Chromosome> chroms, String userInput) {
+		params.setIncludedChroms(userInput);
 		params.addFilter(new Filter(){
 
 			@Override

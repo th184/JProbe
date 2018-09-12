@@ -10,7 +10,7 @@ public class MaxSiteDistArgument extends ChiptoolsIntArg<ProbeJoinerParams>{
 				parent.getClass(),
 				MaxSiteDistArgument.class,
 				optional,
-				16,
+				16, // start
 				0,
 				Integer.MAX_VALUE,
 				1

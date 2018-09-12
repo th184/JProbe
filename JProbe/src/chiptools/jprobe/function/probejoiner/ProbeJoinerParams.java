@@ -1,5 +1,8 @@
 package chiptools.jprobe.function.probejoiner;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.ProbeLenParam;
@@ -14,7 +17,11 @@ public class ProbeJoinerParams implements ProbesParam, ProbeLenParam {
 	private Probes m_Probes = null;
 	private int m_ProbeLen = -1;
 	
+	private String m_ProbesName = null;
+	private Map<String, String> m_Metadata = null;
+	
 	public String m_OutputName = null;
+	
 	
 	@Override
 	public void setProbes(Probes p) {
@@ -36,8 +43,6 @@ public class ProbeJoinerParams implements ProbesParam, ProbeLenParam {
 		return m_ProbeLen;
 	}
 
-	
-
 	@Override
 	public void setOutputName(String name) {
 		m_OutputName = name;
@@ -47,5 +52,29 @@ public class ProbeJoinerParams implements ProbesParam, ProbeLenParam {
 	public String getOutputName() {
 		return m_OutputName;
 	}
+
+	
+	@Override
+	public void setProbesName(String name) {
+		m_ProbesName = name;
+	}
+
+	@Override
+	public String getProbesName() {
+		return m_ProbesName;
+	}
+	
+	public Map<String, String> getMetadata(){
+		m_Metadata = new LinkedHashMap<>();
+		m_Metadata.put("Generated data", "");
+		m_Metadata.put("Function used", "probe joiner");
+		m_Metadata.put("Probe set name", m_ProbesName);
+		m_Metadata.put("Length of probe", String.valueOf(m_ProbeLen));
+		m_Metadata.put("Num binding sites", String.valueOf(NUMBINDINGSITES));
+		m_Metadata.put("Min site distance", String.valueOf(MINSITEDIST));
+		m_Metadata.put("Max site distance", String.valueOf(MAXSITEDIST));
+		return m_Metadata;
+	}
+
 
 }

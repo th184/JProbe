@@ -4,5 +4,4 @@ public interface EscoreParam {
 	
 	public void setEscore(double escore);
 	public double getEscore();
-	
 }

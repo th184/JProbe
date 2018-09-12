@@ -2,6 +2,9 @@ package chiptools.jprobe.data;
 
 import util.DNAUtils;
 import util.genome.kmer.Kmer.Score;
+
+import java.util.Map;
+
 import jprobe.services.data.AbstractFinalData;
 
 public class Kmer extends AbstractFinalData{
@@ -15,8 +18,8 @@ public class Kmer extends AbstractFinalData{
 	
 	private final util.genome.kmer.Kmer m_Kmer;
 	
-	public Kmer(util.genome.kmer.Kmer kmer, DataType type){
-		super(5, kmer.size(), type, null);
+	public Kmer(util.genome.kmer.Kmer kmer, DataType type, Map<String, String> metadata){
+		super(5, kmer.size(), type, null, metadata);
 		m_Kmer = kmer;
 
 	}

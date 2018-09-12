@@ -8,5 +8,7 @@ public interface PWMListParam {
 	
 	public void setPWMs(List<PWM> pwms);
 	public List<PWM> getPWMs();
+	public void setPWMListName(String name);
+	public String getPWMListName();
 	
 }

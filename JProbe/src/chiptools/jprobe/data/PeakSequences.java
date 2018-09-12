@@ -2,6 +2,9 @@ package chiptools.jprobe.data;
 
 import util.genome.peak.PeakSequence;
 import util.genome.peak.PeakSequenceGroup;
+
+import java.util.Map;
+
 import jprobe.services.data.AbstractFinalData;
 
 public class PeakSequences extends AbstractFinalData{
@@ -21,8 +24,13 @@ public class PeakSequences extends AbstractFinalData{
 	
 	private final PeakSequenceGroup m_PeakSeqs;
 	
-	public PeakSequences(PeakSequenceGroup peakSeqs, DataType type, String outputName){
-		super(PEAKSEQ_COLS, peakSeqs.size(), type, outputName);
+	public PeakSequences(
+			PeakSequenceGroup peakSeqs,
+			DataType type, 
+			String outputName, 
+			Map<String, String> metadata){
+		
+		super(PEAKSEQ_COLS, peakSeqs.size(), type, outputName, metadata);
 		m_PeakSeqs = peakSeqs;
 	}
 	

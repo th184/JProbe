@@ -21,7 +21,6 @@ import util.progress.ProgressListener;
 import chiptools.Constants;
 import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
-import chiptools.jprobe.function.args.OutputNameArgument;
 import chiptools.jprobe.function.args.PrimerArgument;
 import chiptools.jprobe.function.args.ProbesArgument;
 
@@ -36,7 +35,6 @@ public class GCRunMutator extends AbstractChiptoolsFunction<GCRunMutatorParams>{
 		Collection<Argument<? super GCRunMutatorParams>> args = new ArrayList<Argument<? super GCRunMutatorParams>>();
 		args.add(new ProbesArgument(this, false));
 		args.add(new PrimerArgument(this, true));
-//		args.add(new OutputNameArgument(this, false));
 		
 		return args;
 	}
@@ -78,7 +76,7 @@ public class GCRunMutator extends AbstractChiptoolsFunction<GCRunMutatorParams>{
 		}
 		System.out.println("GC run mutator...");
 		String outputName = params.getOutputName();
-		return new Probes(new ProbeGroup(probes), DataType.OUTPUT, outputName);
+		return new Probes(new ProbeGroup(probes), DataType.OUTPUT, outputName, params.getMetadata());
 	}
 	
 	protected GenomicSequence mutate(GenomicSequence seq, Collection<Mutation> mutations, Strand strand){

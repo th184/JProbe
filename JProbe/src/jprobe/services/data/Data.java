@@ -1,6 +1,7 @@
 package jprobe.services.data;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
@@ -36,4 +37,8 @@ public interface Data extends TableModel, Serializable{
 	public void setOutputName(String name);
 	public String getOutputName();
 	
+	public Map<String, String> getMetadata();
+	
+	public void setVarName(String name);
+	public String getVarName();
 }

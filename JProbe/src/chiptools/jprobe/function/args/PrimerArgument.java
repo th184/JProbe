@@ -82,6 +82,10 @@ public class PrimerArgument extends ChiptoolsFileArg<PrimerParam>{
 	protected void process(PrimerParam params, File f) {
 		String primer = this.parsePrimer(f);
 		params.setPrimer(primer);
+		String fileName = f.getName();
+		params.setPrimerName(fileName.substring(0, fileName.lastIndexOf('.')));
+		
+
 	}
 
 	

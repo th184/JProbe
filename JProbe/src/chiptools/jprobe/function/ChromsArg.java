@@ -46,7 +46,7 @@ public abstract class ChromsArg<P> extends ChiptoolsTextArg<P> {
 		m_Panel.setLayout(new BoxLayout(m_Panel, BoxLayout.Y_AXIS));
 	}
 	
-	abstract protected void process(P params, Collection<Chromosome> chroms);
+	abstract protected void process(P params, Collection<Chromosome> chroms, String userInput);
 	
 	@Override
 	public JComponent getComponent(){
@@ -107,7 +107,7 @@ public abstract class ChromsArg<P> extends ChiptoolsTextArg<P> {
 
 	@Override
 	protected void process(P params, String s) {
-		this.process(params, this.parse(s));
+		this.process(params, this.parse(s), s);
 	}
 
 }

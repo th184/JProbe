@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -73,8 +74,51 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 	public JProbeGUIFrame(JProbeCore core, String name, Bundle bundle, GUIConfig config){
 		super();
 		m_Name = name;
-		m_ImportChooser = new JFileChooser();
-		m_ExportChooser = new JFileChooser();
+		m_ImportChooser = new JFileChooser() {
+			@Override
+	        public void approveSelection() {
+	            File f = getSelectedFile();
+	            String fileName = f.getName();
+	            String name = fileName.substring(0, fileName.lastIndexOf('.'));
+	            if(core.getDataManager().varExists(name)) {
+	            	int result = JOptionPane.showConfirmDialog(this,
+	            			"The variable name already exists in the system.\nPlease import a file with an unused variable name. ",
+	            			"Existing variable",
+	            			JOptionPane.DEFAULT_OPTION,  // with one OK button
+	            			JOptionPane.WARNING_MESSAGE);
+	            	switch(result) {
+	            	default: 
+	            		return;
+	            	}
+	            }
+	            super.approveSelection();
+			}
+		};
+		
+		m_ExportChooser = new JFileChooser(){
+			@Override
+	        public void approveSelection() {
+	            File f = getSelectedFile();
+	            if (f.exists()) {
+	                int result = JOptionPane.showConfirmDialog(this,
+	                        "The file already exists. Do you wish overwrite?", 
+	                        "Existing file",
+	                        JOptionPane.YES_NO_CANCEL_OPTION, 
+	                        JOptionPane.WARNING_MESSAGE); // "warning message" dictates the icon
+	                switch (result) {
+	                case JOptionPane.YES_OPTION:
+	                    super.approveSelection();
+	                    return;
+	                case JOptionPane.CANCEL_OPTION:
+	                    cancelSelection();
+	                    return;
+	                default:
+	                    return;
+	                }
+	            }
+	            super.approveSelection();
+	        }
+	    };
 		m_Bundle = bundle;
 		m_Core = core;
 		m_Core.registerSave(this);

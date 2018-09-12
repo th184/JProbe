@@ -1,5 +1,8 @@
 package chiptools.jprobe.function.probemutator;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import chiptools.jprobe.data.Kmer;
 import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.params.EscoreParam;
@@ -20,6 +23,12 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 	private Kmer m_Kmer = null;
 	private Probes m_Probes = null;
 	private String m_OutputName = null;
+	
+	private String m_ProbesName = null;
+	private String m_PrimerName = null;
+	private String m_KmerName = null;
+	private Map<String, String> m_Metadata = null;
+	
 	
 	@Override
 	public void setEscore(double escore) {
@@ -69,6 +78,34 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 	@Override
 	public String getOutputName() {
 		return m_OutputName;
+	}
+
+	@Override
+	public void setPrimerName(String name) { m_PrimerName = name; }
+
+	@Override
+	public void setKmersName(String name) { m_KmerName = name; }
+
+	@Override
+	public void setProbesName(String n) { m_ProbesName = n; }
+
+	@Override
+	public String getProbesName() { return m_ProbesName; }
+	
+	public Map<String, String> getMetadata(){
+		m_Metadata = new LinkedHashMap<>();
+		m_Metadata.put("Generated data", "");
+		m_Metadata.put("Function", "probe mutator");
+		m_Metadata.put("Probes", m_ProbesName);
+		m_Metadata.put("K-mer", m_KmerName);
+		m_Metadata.put("E-score", String.valueOf(m_Escore));
+		m_Metadata.put("Primer", m_PrimerName);
+		m_Metadata.put("Overlap", String.valueOf(MAXIMUM_OVERLAP));
+		m_Metadata.put("Binding site barrier", String.valueOf(BINDING_SITE_BARRIER));
+		m_Metadata.put("Mutate binding site", String.valueOf(MUTATE_BINDING_SITES));
+		
+		return m_Metadata;
+		
 	}
 
 }

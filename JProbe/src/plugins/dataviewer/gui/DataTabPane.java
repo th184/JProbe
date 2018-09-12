@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import plugins.dataviewer.gui.services.DataViewer;
 import jprobe.services.CoreEvent;
@@ -26,8 +28,8 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	private Map<Data, DataTab> m_Tabs;
 	private Map<Data, DataTabLabel> m_TabLables;
 	private GridBagConstraints m_Constraints;
-	//private DraggableTabbedPane m_tabPane; 
 	
+	private Map<Integer, Data> m_IndexData = new HashMap<>();
 	
 	public DataTabPane(DataManager dataManager){
 		super();
@@ -35,7 +37,6 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 		m_DataManager = dataManager;
 		m_DataManager.addListener(this);  
 		m_Constraints = new GridBagConstraints();
-		//m_tabPane = new DraggableTabbedPane(); // added
 		m_Constraints.fill = GridBagConstraints.BOTH;
 		m_Constraints.weightx = 0.7;
 		m_Constraints.weighty = 0.7;
@@ -56,7 +57,11 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 		});
 	}
 	
-		
+	public Data getIndexData(int index) {
+		return m_IndexData.get(index);
+	}
+	
+	
 	public void initTabs(){
 		for(Data d : m_DataManager.getAllData()){
 			DataTab tab = new DataTab(d);
@@ -66,10 +71,11 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 			DataTabLabel lable = new DataTabLabel(this, tab, m_DataManager.getDataName(d));
 			m_TabLables.put(d, lable);
 			this.setTabComponentAt(index, lable);
+			// need to add data to m_IndexData
+			m_IndexData.put(index, d);
+			
 		}
 	}
-	
-
 	public GridBagConstraints getGridBagConstraints(){
 		return m_Constraints;
 	}
@@ -104,6 +110,11 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 			m_TabLables.put(data, lable);
 			this.setTabComponentAt(index, lable);
 			this.setSelectedIndex(index);
+			
+			m_IndexData.put(index, data);
+			if(data.getMetadata() != null) {
+				MetadataPane.displayMetadata(data.getMetadata());
+			}
 		}
 	}
 
@@ -163,7 +174,6 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 		}	
 	}
 	
-	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.isControlDown() && e.getKeyCode() == KeyEvent.VK_W) {
@@ -177,39 +187,21 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		}
-
+	public void keyReleased(KeyEvent arg0) {}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void keyTyped(KeyEvent arg0) {}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
+	public void mouseClicked(MouseEvent arg0) {}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
+	public void mouseEntered(MouseEvent arg0) {}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
+	public void mouseExited(MouseEvent arg0) {}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
+	public void mouseReleased(MouseEvent arg0) {}
 
 }

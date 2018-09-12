@@ -24,6 +24,8 @@ public class GenomeArgument extends ChiptoolsFileArg<GenomeParam>{
 	@Override
 	protected void process(GenomeParam params, File f) {
 		params.setGenomeFile(f);
+		String fileName = f.getName();
+		params.setGenomeFileName(fileName.substring(0, fileName.lastIndexOf('.')));
 	}
 
 }

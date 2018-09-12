@@ -10,6 +10,10 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.FileChooserUI;
@@ -131,7 +135,7 @@ public class ExportImportUtil {
 	}
 
 	public static void exportData(Data data, JProbeCore core, JFileChooser exportChooser, Frame parent){
-		//retreive file formats for this data object
+		// retrieve file formats for this data object
 		DataWriter writer = core.getDataManager().getDataWriter(data.getClass());
 		if(writer == null){
 			ErrorHandler.getInstance().handleWarning("Data type \""+data.getClass()+"\" not writable.", GUIActivator.getBundle());

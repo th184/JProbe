@@ -10,16 +10,18 @@ import java.util.Set;
 
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import plugins.dataviewer.gui.datalist.DataListPanel;
 import plugins.jprobe.gui.services.JProbeGUI;
 import jprobe.services.JProbeCore;
+import jprobe.services.data.Data;
 
 public class DataViewerSplitPane extends JSplitPane{
 	private static final long serialVersionUID = 1L;
@@ -27,28 +29,48 @@ public class DataViewerSplitPane extends JSplitPane{
 	private final DataTabPane m_DataTab;
 //	private final DataListPanel m_DataList;
 	private final ViewTabPane m_ViewTab;
+	private final MetadataPane m_MetadataPane;
+	private final JSplitPane m_splitPane;
 	
 	public DataViewerSplitPane(JProbeCore core, JProbeGUI gui){
 		super(JSplitPane.HORIZONTAL_SPLIT);
-		//m_DataTab.addChangeListener((javax.swing.event.ChangeListener) changeListener);
 		
 		m_DataTab = new DataTabPane(core.getDataManager());
+		
 //		m_DataList = new DataListPanel(core, gui, m_DataTab);
 		m_ViewTab = new ViewTabPane(core, gui, m_DataTab); 
+		m_MetadataPane = new MetadataPane();
+		m_splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, m_ViewTab, m_MetadataPane);
+		m_splitPane.setOneTouchExpandable(true);
+		m_splitPane.setContinuousLayout(true);
+		m_splitPane.setResizeWeight(1.0);
+		
 		this.setOneTouchExpandable(true);
 		this.setContinuousLayout(true);
 		this.setLeftComponent(m_DataTab);
 //		this.setRightComponent(m_DataList);
-		this.setRightComponent(m_ViewTab);
+		this.setRightComponent(m_splitPane);
 		this.setResizeWeight(1.0);
 		
 		setupTabTraversalKeys(m_DataTab);
+		
+		m_DataTab.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				Data selectedData = m_DataTab.getIndexData(m_DataTab.getSelectedIndex());
+				if(selectedData != null && selectedData.getMetadata() != null) {
+					MetadataPane.displayMetadata(selectedData.getMetadata());
+				}
+			}
+		});
+		
 	}
 	
 	public void cleanup(){
 		m_DataTab.cleanup();
 //		m_DataList.cleanup();
 		m_ViewTab.cleanup();
+		
 	}
 	
 	public GridBagConstraints getGridBagConstraints(){

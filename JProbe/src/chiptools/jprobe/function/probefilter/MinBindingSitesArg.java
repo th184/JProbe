@@ -13,6 +13,7 @@ public class MinBindingSitesArg extends ChiptoolsIntArg<ProbeFilterParam>{
 
 	@Override
 	protected void process(ProbeFilterParam params, Integer value) {
+		params.MINBINDSITE = value;
 		final int min = value;
 		params.addFilter(new Filter(){
 

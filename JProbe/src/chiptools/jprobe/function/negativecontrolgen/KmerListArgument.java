@@ -24,6 +24,7 @@ public class KmerListArgument extends ChiptoolsDataArg<KmerListParam, Kmer>{
 	@Override
 	protected void process(KmerListParam params, List<Kmer> data) {
 		params.setKmers(data);
+		params.setKmerListName(data.get(0).getVarName());
 	}
 
 

@@ -34,7 +34,7 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 		}
 		return tag + "{"+min+"-"+max+"}";
 	}
-	
+	private final String m_ArgName; //added
 	private final JProbeCore m_Core;
 	private final int m_Min;
 	private final int m_Max;
@@ -42,7 +42,6 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 	//lazily instantiate the component
 	private DataArgsComponent<D> m_Component = null;
 	private final Class<D> m_DataClass;
-//	private String m_inputName = null;
 	
 	protected DataArgument(
 			JProbeCore core,
@@ -58,6 +57,7 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 			boolean allowDuplicates
 			){
 		super(name, tooltip, category, shortFlag, generatePrototype(prototypeVal, minArgs, maxArgs), optional);
+		m_ArgName = name;
 		m_DataClass = dataClass;
 		m_Core = core;
 		m_Min = minArgs;
@@ -92,6 +92,7 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 	 * @return the DataArgsComponent that will be displayed for this argument
 	 */
 	protected DataArgsComponent<D> createDataArgsComponent(
+			String argName,
 			JProbeCore core,
 			int minArgs,
 			int maxArgs,
@@ -100,6 +101,7 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 			DataValidFunction validFunction
 			){
 		return new DataArgsComponent<D>(
+				argName,
 				core,
 				minArgs,
 				maxArgs,
@@ -118,6 +120,7 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 
 	private void initComponent(){
 		m_Component = this.createDataArgsComponent(
+				m_ArgName,
 				m_Core,
 				m_Min,
 				m_Max,

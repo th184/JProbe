@@ -23,6 +23,7 @@ public class MinMutationsArgument extends ChiptoolsIntArg<ProbeFilterParam>{
 
 	@Override
 	protected void process(ProbeFilterParam params, Integer value) {
+		params.MINMUT = value;
 		final int min = value;
 		params.addFilter(new Filter(){
 

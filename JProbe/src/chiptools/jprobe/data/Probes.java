@@ -2,6 +2,7 @@ package chiptools.jprobe.data;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
 import javax.swing.event.TableModelEvent;
 
@@ -33,8 +34,13 @@ public class Probes extends AbstractFinalData implements Observer<Preferences.Up
 	
 	private final ProbeGroup m_Probes;
 	
-	public Probes(ProbeGroup probes, DataType type, String outputName){
-		super(PROBE_COLS, probes.size(), type, outputName);
+	public Probes(
+			ProbeGroup probes, 
+			DataType type, 
+			String outputName, 
+			Map<String, String> metadata){
+		
+		super(PROBE_COLS, probes.size(), type, outputName, metadata);
 		m_Probes = probes;
 		Preferences.getInstance().register(this);
 	}
@@ -206,7 +212,6 @@ public class Probes extends AbstractFinalData implements Observer<Preferences.Up
 	public void dispose() {
 		Preferences.getInstance().unregister(this);
 	}
-	
-	
+
 
 }

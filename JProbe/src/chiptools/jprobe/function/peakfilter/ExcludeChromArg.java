@@ -15,9 +15,10 @@ public class ExcludeChromArg extends ChromsArg<PeakFilterParams>{
 	}
 
 	@Override
-	protected void process(PeakFilterParams params, final Collection<Chromosome> chroms) {
+	protected void process(PeakFilterParams params, final Collection<Chromosome> chroms, String userInput) {
+		
+		params.setExcludeChrom(userInput);
 		params.addFilter(new Filter(){
-
 			@Override
 			public boolean keep(Peak p) {
 				for(Chromosome chrom : chroms){

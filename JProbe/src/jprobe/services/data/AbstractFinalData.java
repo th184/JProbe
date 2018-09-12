@@ -2,7 +2,11 @@ package jprobe.services.data;
 
 import java.awt.Font;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -27,13 +31,23 @@ public abstract class AbstractFinalData implements Data{
 	private DataType m_Type;
 	private String m_InputName = null; // file/var name for INPUT data
 	private String m_OutputName = null; // file/var name for OUTPUT data
+	private Map<String, String> m_Metadata;
+	private String m_VarName = null;
 	
-	
-	protected AbstractFinalData(int cols, int rows, DataType type, String outputName){
+	protected AbstractFinalData(int cols, int rows, DataType type, String outputName, Map<String, String> metadata){
 		m_Cols = cols;
 		m_Rows = rows;
 		m_Type = type;
 		m_OutputName = outputName;
+		if(type==DataType.INPUT && metadata==null) {
+			Map<String, String> inputMetadata = new LinkedHashMap<>() {{
+				put("Imported data","");
+			}};
+			m_Metadata = inputMetadata;
+		}else {
+			m_Metadata = metadata;
+		}
+		
 	}
 	
 	//readObject method to init the transient listeners collection after deserialization
@@ -74,6 +88,18 @@ public abstract class AbstractFinalData implements Data{
 	
 	public String getOutputName() {
 		return m_OutputName;
+	}
+	
+	public void setVarName(String name) {
+		m_VarName = name;
+	}
+	
+	public String getVarName() {
+		return m_VarName;
+	}
+	
+	public Map<String, String> getMetadata(){
+		return m_Metadata;
 	}
 	
 	@Override

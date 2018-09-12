@@ -1,5 +1,7 @@
 package chiptools.jprobe.data;
 
+import java.util.Map;
+
 import jprobe.services.data.AbstractFinalData;
 import jprobe.services.data.AbstractFinalData.DataType;
 
@@ -37,8 +39,8 @@ public class PWM extends AbstractFinalData{
 	
 	private final util.genome.pwm.PWM m_PWM;
 	
-	public PWM(util.genome.pwm.PWM pwm, DataType type){
-		super(pwm.length() + 1, PWM_ROWS, type, null);
+	public PWM(util.genome.pwm.PWM pwm, DataType type, Map<String, String> metadata){
+		super(pwm.length() + 1, PWM_ROWS, type, null, metadata);
 		m_PWM = pwm;
 	}
 	

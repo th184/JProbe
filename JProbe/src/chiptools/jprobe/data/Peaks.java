@@ -2,6 +2,9 @@ package chiptools.jprobe.data;
 
 import util.genome.peak.Peak;
 import util.genome.peak.PeakGroup;
+
+import java.util.Map;
+
 import jprobe.services.data.AbstractFinalData;
 
 public class Peaks extends AbstractFinalData{
@@ -22,8 +25,8 @@ public class Peaks extends AbstractFinalData{
 	
 	private final PeakGroup m_Peaks;
 	
-	public Peaks(PeakGroup peaks, DataType type, String outputName){
-		super(PEAK_COLS , peaks.size(), type, outputName);
+	public Peaks(PeakGroup peaks, DataType type, String outputName, Map<String, String> metadata){
+		super(PEAK_COLS , peaks.size(), type, outputName, metadata);
 		m_Peaks = peaks;
 		
 	}

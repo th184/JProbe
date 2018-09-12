@@ -8,11 +8,12 @@ import chiptools.jprobe.function.ChiptoolsDoubleArg;
 public class MinQValArg extends ChiptoolsDoubleArg<PeakFilterParams>{
 
 	public MinQValArg(Function<?> parent, boolean optional) {
-		super(parent.getClass(), MinQValArg.class, "off", optional, 0, 0, Double.POSITIVE_INFINITY, 1.0);
+		super(parent.getClass(), MinQValArg.class, "off", optional, 0, 0, Double.POSITIVE_INFINITY, 0.1);
 	}
 
 	@Override
 	protected void process(PeakFilterParams params, Double value) {
+		params.MINQVAL = value;
 		final double min = value;
 		params.addFilter(new Filter(){
 

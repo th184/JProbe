@@ -23,6 +23,7 @@ public class IncludePeaksArg extends ChiptoolsDataArg<NegControlParams, Peaks>{
 	@Override
 	protected void process(NegControlParams params, List<Peaks> data) {
 		params.setIncludePeaks(data);
+		params.setIncludePeaksName(data.get(0).getVarName());
 	}
 
 

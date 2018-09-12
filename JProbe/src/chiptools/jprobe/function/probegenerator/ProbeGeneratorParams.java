@@ -1,5 +1,8 @@
 package chiptools.jprobe.function.probegenerator;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import chiptools.jprobe.data.Kmer;
 import chiptools.jprobe.data.PWM;
 import chiptools.jprobe.data.PeakSequences;
@@ -20,7 +23,11 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 	private PWM m_PWM = null;
 	private double m_Escore = 0.4;
 	private int m_ProbeLen = 36;
-//	private String m_OutputName = null;
+	
+	private String m_PeakSeqsName = null;
+	private String m_KmerName = null;
+	private String m_PWMName = null;
+	private Map<String, String> m_Metadata = null;
 	
 	@Override
 	public void setKmers(Kmer k) {
@@ -72,14 +79,28 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 		return m_ProbeLen;
 	}
 
-//	@Override
-//	public void setOutputName(String name) {
-//		m_OutputName = name;
-//	}
-//
-//	@Override
-//	public String getOutputName() {
-//		return m_OutputName;
-//	}
+	@Override
+	public void setPWMName(String name) { m_PWMName = name; }
+
+	@Override
+	public void setKmersName(String name) { m_KmerName = name; }
+
+	@Override
+	public void setPeakSeqsName(String n) { m_PeakSeqsName = n; }
+	
+	public Map<String, String> getMetadata(){
+		m_Metadata = new LinkedHashMap<>();
+		m_Metadata.put("Generated data", "");
+		m_Metadata.put("Function", "probe generator");
+		m_Metadata.put("Peak seqs", m_PeakSeqsName);
+		m_Metadata.put("Kmer", m_KmerName);
+		m_Metadata.put("PWM", m_PWMName);
+		m_Metadata.put("Probe length", String.valueOf(m_ProbeLen));
+		m_Metadata.put("Binding site size", String.valueOf(BINDINGSITE));
+		m_Metadata.put("Window size", String.valueOf(WINDOWSIZE));
+		m_Metadata.put("E-score", String.valueOf(m_Escore));
+				
+		return m_Metadata;
+	}
 
 }

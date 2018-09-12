@@ -12,14 +12,13 @@ public class ExcludeChromsArg extends ChromsArg<ProbeFilterParam>{
 
 	protected ExcludeChromsArg(Function<?> parent, boolean optional) {
 		super(parent.getClass(), ExcludeChromsArg.class, "off", optional, "");
-//		super(parent.getClass(), ExcludeChromsArg.class, "off", optional, null);
-		// fix at gui 
 	}
 
 	@Override
-	protected void process(ProbeFilterParam params, final Collection<Chromosome> chroms) {
+	protected void process(ProbeFilterParam params, final Collection<Chromosome> chroms, String userInput) {
+		params.setExcludedChroms(userInput);
 		params.addFilter(new Filter(){
-
+		
 			@Override
 			public boolean keep(Probe p) {
 				for(Chromosome chrom : chroms){

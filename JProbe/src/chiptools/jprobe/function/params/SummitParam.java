@@ -4,5 +4,5 @@ public interface SummitParam {
 	
 	public void setSummit(int summit);
 	public int getSummit();
-	
+		
 }
