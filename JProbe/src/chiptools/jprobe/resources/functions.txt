@@ -1,4 +1,4 @@
-chiptools.jprobe.function.peakfinder.PeakFinder	arguments/peakfinder.txt	Peak Retriever	Genome	This function extracts ChIP-seq peak sequences from the genome. 
+chiptools.jprobe.function.peakfinder.PeakFinder	arguments/peakfinder.txt	Get Peak Sequences	Genome	This function extracts ChIP-seq peak sequences from the genome. 
 
 chiptools.jprobe.function.negativecontrolgen.NegativeControlGenerator	arguments/negctrlgenerator.txt	Negative Control Generator	Genome	This function generates negative control probes from given genomic regions with the option of excluding specific peak regions. The probes generated will contain no k-mers with e-scores above the specified threshold.
 

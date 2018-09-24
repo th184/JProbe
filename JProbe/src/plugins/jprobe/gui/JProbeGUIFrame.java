@@ -81,15 +81,12 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 	            String fileName = f.getName();
 	            String name = fileName.substring(0, fileName.lastIndexOf('.'));
 	            if(core.getDataManager().varExists(name)) {
-	            	int result = JOptionPane.showConfirmDialog(this,
-	            			"The variable name already exists in the system.\nPlease import a file with an unused variable name. ",
-	            			"Existing variable",
-	            			JOptionPane.DEFAULT_OPTION,  // with one OK button
-	            			JOptionPane.WARNING_MESSAGE);
-	            	switch(result) {
-	            	default: 
-	            		return;
-	            	}
+	            	JOptionPane.showConfirmDialog(this,
+            			"The variable name already exists in the system.\nPlease import a file with an unused variable name. ",
+            			"Existing variable",
+            			JOptionPane.DEFAULT_OPTION,  // with one OK button
+            			JOptionPane.WARNING_MESSAGE);
+	            	return;
 	            }
 	            super.approveSelection();
 			}

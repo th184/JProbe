@@ -1,12 +1,12 @@
 chiptools.jprobe.function.args.PeaksArgument	Peaks	p	FILE	Peaks	ChIP-seq peaks to be filtered.
 
-chiptools.jprobe.function.peakfilter.IncludeChromArg	IncludeChroms		CHROMS	Chromosomes	Takes a comma separated list of chromosomes and keeps only peaks positioned on an OR of those chromosomes.
+chiptools.jprobe.function.peakfilter.IncludeChromArg	Include chroms		CHROMS	Chromosomes	Takes a comma separated list of chromosomes and keeps only peaks positioned on an OR of those chromosomes.
 
-chiptools.jprobe.function.peakfilter.ExcludeChromArg	ExcludeChroms		CHROMS	Chromosomes	Takes a comma separated list of chromosomes and removes all peaks positioned on an OR of those chromsomes.
+chiptools.jprobe.function.peakfilter.ExcludeChromArg	Exclude chroms		CHROMS	Chromosomes	Takes a comma separated list of chromosomes and removes all peaks positioned on an OR of those chromsomes.
 
-chiptools.jprobe.function.peakfilter.MinQValArg	Min Q-Value		QVAL	Q-value	This argument specifies the minimum q-value of peaks to be kept. All peaks with q-value below this value will be removed.
-chiptools.jprobe.function.peakfilter.MaxQValArg	Max Q-Value		QVAL	Q-value	This argument specifies the maximum q-value of peaks to be kept. All peaks with q-value above this value will be removed.
+chiptools.jprobe.function.peakfilter.MinQValArg	Min Q-value		QVAL	Q-value	This argument specifies the minimum q-value of peaks to be kept. All peaks with q-value below this value will be removed.
+chiptools.jprobe.function.peakfilter.MaxQValArg	Max Q-value		QVAL	Q-value	This argument specifies the maximum q-value of peaks to be kept. All peaks with q-value above this value will be removed.
 
-chiptools.jprobe.function.peakfilter.MinPValArg	Min P-Value		PVAL	P-value	This argument specifies the minimum p-value of peaks to be kept. All peaks with p-value below this value will be removed.
-chiptools.jprobe.function.peakfilter.MaxPValArg	Max P-Value		PVAL	P-value	This argument specifies the maximum p-value of peaks to be kept. All peaks with p-value above this value will be removed.
+chiptools.jprobe.function.peakfilter.MinPValArg	Min P-value		PVAL	P-value	This argument specifies the minimum p-value of peaks to be kept. All peaks with p-value below this value will be removed.
+chiptools.jprobe.function.peakfilter.MaxPValArg	Max P-value		PVAL	P-value	This argument specifies the maximum p-value of peaks to be kept. All peaks with p-value above this value will be removed.
 

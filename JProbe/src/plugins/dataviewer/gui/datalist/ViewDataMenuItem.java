@@ -5,7 +5,7 @@ import java.util.List;
 
 import jprobe.services.data.Data;
 import plugins.dataviewer.gui.DataTabPane;
-
+// WILL NOT USE
 public class ViewDataMenuItem extends AbstractDataMenuItem{
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +22,7 @@ public class ViewDataMenuItem extends AbstractDataMenuItem{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		List<Data> data = this.getData();
+		List<Data> data = this.getDataList();
 		if(data != null){
 			for(int i=0; i<data.size();i++) {
 				m_TabPane.selectData(data.get(i));

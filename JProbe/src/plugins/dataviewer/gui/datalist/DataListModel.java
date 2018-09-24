@@ -25,7 +25,7 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 	private JProbeCore m_Core;
 	private Map<Data, String> m_Data = new HashMap<Data, String>();
 	private DataType m_Type;
-	
+	private int[] m_SelectedCell = new int[2];;
 	
 	public DataListModel(JProbeCore core, DataType type){
 		
@@ -64,10 +64,10 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 		}
 	}
 	
-//	public Data getData(int row){
-//		String name = (String) this.getValueAt(row, 0);
-//		return m_Core.getDataManager().getData(name);
-//	}
+	public Data getData(int row){
+		String name = (String) this.getValueAt(row, 0);
+		return m_Core.getDataManager().getData(name);
+	}
 	
 	public List<Data> getData(int[] rows){
 		List<Data> filled = new ArrayList<>();
@@ -79,13 +79,22 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 		return filled;
 	}
 	
+	public void setSelectedCell(int row, int col) {
+		m_SelectedCell[0] = row;
+		m_SelectedCell[1] = col;
+	}
+	public int[] getSelectedCell() {
+		return m_SelectedCell;
+	}
+
 	public void cleanup(){
 		m_Core.removeCoreListener(this);
 	}
 	
 	@Override
 	public boolean isCellEditable(int row, int col){
-		return col == 0;
+//		return col == 0;
+		return false;
 	}
 	
 	@Override
@@ -103,6 +112,7 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 				//This means that the name change needs to be push to the core
 				Data change = m_Core.getDataManager().getData(oldName);
 				DataUtils.rename(change, newName, m_Core, DataviewerActivator.getGUIFrame());
+				super.setValueAt(newName, row, col); //added
 			}else{
 				//This means that the name change is received from the core and the field should be updated accordingly
 				Data changed = m_Core.getDataManager().getData(newName);
@@ -140,30 +150,32 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 		}
 	}
 	
-	private void rename(Data data, String oldName, String newName){
-		if(oldName.equals(newName)){
-			return;
-		}
-		for(int i=0; i<this.getRowCount(); i++){
-			if(this.getValueAt(i, 0).equals(oldName)){
-				this.setValueAt(newName, i, 0);
-				break;
-			}
-		}
-	}
+//	private void rename(Data data, String oldName, String newName){
+//		System.out.println("In DataListModel rename");
+//		if(oldName.equals(newName)){
+//			return;
+//		}
+//		for(int i=0; i<this.getRowCount(); i++){
+//			if(this.getValueAt(i, 0).equals(oldName)){
+//				this.setValueAt(newName, i, 0);
+//				break;
+//			}
+//		}
+//	}
 	
 	private void process(CoreEvent event){
 		switch(event.type()){
 		case DATA_ADDED:
-			
 			this.add(event.getData());
 			break;
 		case DATA_REMOVED:
 			this.remove(event.getData());
 			break;
-		case DATA_NAME_CHANGE:
-			this.rename(event.getData(), event.getOldName(), event.getNewName());
-			break;
+		// remove this
+//		case DATA_NAME_CHANGE:
+//			this.rename(event.getData(), event.getOldName(), event.getNewName());
+//			break;
+	
 		case WORKSPACE_CLEARED:
 			this.clear();
 			break;

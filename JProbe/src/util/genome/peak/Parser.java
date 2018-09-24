@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import util.genome.GenomicRegion;
 import util.genome.GenomicSequence;
 import util.genome.ParsingException;
@@ -44,8 +46,13 @@ public class Parser {
 			queries.add(new PeakQuery(p, peakSeqs));
 		}
 		reader.read(queries, new ArrayList<SequenceQuery>(), new ArrayList<LocationBoundedSequenceQuery>());
-		Collections.sort(peakSeqs);
-		return new PeakSequenceGroup(peakSeqs);
+		if(peakSeqs.size()==0) {
+    		return null;
+		}else {
+			Collections.sort(peakSeqs);
+			return new PeakSequenceGroup(peakSeqs);
+		}
+		
 	}
 	
 	/**

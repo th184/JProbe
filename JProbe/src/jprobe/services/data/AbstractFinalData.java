@@ -39,13 +39,12 @@ public abstract class AbstractFinalData implements Data{
 		m_Rows = rows;
 		m_Type = type;
 		m_OutputName = outputName;
+		m_Metadata = metadata;
 		if(type==DataType.INPUT && metadata==null) {
 			Map<String, String> inputMetadata = new LinkedHashMap<>() {{
 				put("Imported data","");
 			}};
 			m_Metadata = inputMetadata;
-		}else {
-			m_Metadata = metadata;
 		}
 		
 	}

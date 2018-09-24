@@ -86,6 +86,7 @@ public class DataTab extends JScrollPane{
 		this.setViewportView(table);
 		m_Data = data;
 		this.setRowHeaderView(new DataHeader(data, table));
+		
 	}
 	
 	public Data getData(){

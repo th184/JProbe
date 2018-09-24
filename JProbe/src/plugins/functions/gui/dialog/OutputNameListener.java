@@ -20,7 +20,6 @@ public class OutputNameListener implements ArgumentListener{
 	//arg = probes or peaks
 	@Override
 	public void update(Argument<?> arg, boolean valid) {
-		System.out.println("arg changes");
 //		ArgumentPanel outputNamePanel = ArgumentsPanel.getOutputNamePanel();
 //		outputNamePanel.argComp
 		if(arg instanceof DataArgument) {

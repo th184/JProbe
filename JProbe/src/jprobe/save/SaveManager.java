@@ -29,7 +29,6 @@ public class SaveManager{
 	public void addSaveable(Saveable s, String tag){
 		m_SaveablesLock.writeLock().lock();
 		try{
-			System.out.println("adding saveables...");
 			m_Saveables.put(tag, s);
 			
 		}finally{

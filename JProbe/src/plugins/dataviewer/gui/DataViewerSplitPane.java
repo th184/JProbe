@@ -1,11 +1,13 @@
 package plugins.dataviewer.gui;
 
 import java.awt.AWTKeyStroke;
+import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.InputMap;
@@ -14,8 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+//import com.sun.java.swing.plaf.windows.WindowsTabbedPaneUI;
+//import com.sun.java.swing.plaf.windows.*;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
+import javax.swing.plaf.metal.MetalTabbedPaneUI;
 
 import javafx.beans.value.ObservableValue;
 import plugins.dataviewer.gui.datalist.DataListPanel;
@@ -35,7 +43,28 @@ public class DataViewerSplitPane extends JSplitPane{
 	public DataViewerSplitPane(JProbeCore core, JProbeGUI gui){
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		
+	
+		BasicTabbedPaneUI jtpui = new BasicTabbedPaneUI() {
+		    @Override 
+		    protected boolean shouldRotateTabRuns(int i) {
+		        return false;
+		    }
+		};
 		m_DataTab = new DataTabPane(core.getDataManager());
+		m_DataTab.setUI(jtpui);
+//		UIManager.getDefaults().put("TabbedPane.tabRunOverlay", 0);  
+//		m_DataTab.setUI(new MetalTabbedPaneUI()
+//	    {
+//	      @Override
+//	      protected int calculateTabWidth(int tabPlacement, int tabIndex,
+//	                                      FontMetrics metrics)
+//	      {
+//	        int width = super.calculateTabWidth(tabPlacement, tabIndex, metrics);
+//	        int extra = tabIndex * 50;
+//	        return width + extra;
+//	      }
+//	    });
+		
 		
 //		m_DataList = new DataListPanel(core, gui, m_DataTab);
 		m_ViewTab = new ViewTabPane(core, gui, m_DataTab); 

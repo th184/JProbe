@@ -3,6 +3,8 @@ package chiptools.jprobe.function.probejoiner;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.swing.JOptionPane;
+
 import jprobe.services.data.Data;
 import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
@@ -52,6 +54,7 @@ public class ProbeJoiner extends AbstractChiptoolsFunction<ProbeJoinerParams>{
 					params.MAXSITEDIST
 					), DataType.OUTPUT, null, params.getMetadata());
 		}
+		
 		return combined;
 	}
 

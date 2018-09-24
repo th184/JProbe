@@ -1,5 +1,6 @@
 package plugins.dataviewer.gui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -22,10 +23,11 @@ public class DataTabLabel extends JPanel implements ActionListener{
 		m_TabbedPane = tabbedPane;
 		m_Tab = tab;
 		m_Label = new JLabel(title);
+//		m_Label.setPreferredSize(new Dimension(90, 15)); // added; adjust this to make it dynamic
+//		m_Label.setPreferredSize(getPreferredSize());
+		m_Label.setPreferredSize(null);
 		m_Label.setOpaque(false);
 		this.add(m_Label);
-		//test
-//		this.addKeyListener(new CustomKeyListener());
 		
 		JButton close = new IconButton(Constants.getXIcon(), Constants.getXHighlightedIcon(), Constants.getXClickedIcon());
 		close.addActionListener(this);
@@ -43,36 +45,5 @@ public class DataTabLabel extends JPanel implements ActionListener{
 		
 	}
 	
-//	class CustomKeyListener implements KeyListener{
-//		@Override
-//	      public void keyTyped(KeyEvent e) {
-//	      }
-//		@Override
-//	      public void keyPressed(KeyEvent e) {
-//	         if(e.getKeyCode() == KeyEvent.VK_ENTER){
-//	        	 System.out.println("closing the tab");
-//	         }
-//	      }
-//	      public void keyReleased(KeyEvent e) {
-//	      }   
-//	   }
-//
-//	@Override
-//	public void keyPressed(KeyEvent arg0) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void keyReleased(KeyEvent arg0) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void keyTyped(KeyEvent arg0) {
-//		// TODO Auto-generated method stub
-//		
-//	}
 	
 }

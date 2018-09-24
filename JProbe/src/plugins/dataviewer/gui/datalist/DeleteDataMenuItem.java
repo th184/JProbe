@@ -24,8 +24,8 @@ public class DeleteDataMenuItem extends AbstractDataMenuItem{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(this.getData()!=null){
-			DataUtils.delete(this.getData(), m_Core, DataviewerActivator.getGUIFrame());
+		if(this.getDataList()!=null){
+			DataUtils.delete(this.getDataList(), m_Core, DataviewerActivator.getGUIFrame());
 		}
 	}
 

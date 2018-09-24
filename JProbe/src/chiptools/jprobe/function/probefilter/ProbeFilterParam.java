@@ -98,7 +98,6 @@ public class ProbeFilterParam implements util.genome.probe.ProbeUtils.Filter, Pr
 		m_Metadata.put("Excluded chromosomes", check(m_ExcludedChroms));
 		m_Metadata.put("Num probes removed", check(m_Remove));
 		m_Metadata.put("Random seed", check(RANDOMSEED));
-		System.out.println("random seed: "+RANDOMSEED);
 		return m_Metadata;
 		
 	}

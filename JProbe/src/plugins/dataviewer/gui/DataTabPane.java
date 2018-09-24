@@ -10,10 +10,12 @@ import java.util.Map;
 
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import plugins.dataviewer.gui.services.DataViewer;
+import jprobe.CoreDataManager;
 import jprobe.services.CoreEvent;
 import jprobe.services.CoreListener;
 import jprobe.services.DataManager;
@@ -48,7 +50,7 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 		this.addMouseListener(this); 
 		this.addKeyListener(this);
 		this.setFocusable(true);
-		
+		 
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run() {
@@ -65,12 +67,15 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	public void initTabs(){
 		for(Data d : m_DataManager.getAllData()){
 			DataTab tab = new DataTab(d);
+			String label = m_DataManager.getDataName(d);
 			m_Tabs.put(d, tab);
-			this.addTab("", tab);
+//			this.addTab("", tab);
+			this.addTab("", null, tab, label); // tooltip on tab label
 			int index = this.indexOfComponent(tab);
-			DataTabLabel lable = new DataTabLabel(this, tab, m_DataManager.getDataName(d));
-			m_TabLables.put(d, lable);
-			this.setTabComponentAt(index, lable);
+			DataTabLabel tabLabel = new DataTabLabel(this, tab, label);
+			m_DataManager.initAssignName(m_DataManager.getDataName(d), true);
+			m_TabLables.put(d, tabLabel);
+			this.setTabComponentAt(index, tabLabel);
 			// need to add data to m_IndexData
 			m_IndexData.put(index, d);
 			

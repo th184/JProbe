@@ -37,7 +37,8 @@ public interface DataManager extends Saveable{
 	public boolean isReadable(Class<? extends Data> type);
 	public boolean isWritable(Class<? extends Data> type);
 	
-	public void addData(Data data, String name, Bundle responsible); 
+	public void addData(Data data, String name, Bundle responsible);
+	public void addData(Data data, String name, String func, Bundle responsible); 
 	public void removeData(Data data, Bundle responsible);
 	public void removeAllData(List<Data> data, Bundle bundle);
 	public void removeData(String name, Bundle responsible);
@@ -54,6 +55,6 @@ public interface DataManager extends Saveable{
 	public List<Data> getData(Class<? extends Data> type);
 	public boolean varExists(String variable); 
 	
-	
+	public void initAssignName(String label, boolean init); // clean up if init=false
 	
 }

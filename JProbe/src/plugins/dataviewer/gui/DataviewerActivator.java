@@ -31,8 +31,6 @@ public class DataviewerActivator implements BundleActivator{
 		@Override
 		public void serviceChanged(ServiceEvent ev) {
 			
-			
-			
 			ServiceReference<?> sr = ev.getServiceReference();
 			switch(ev.getType()) {
 				case ServiceEvent.REGISTERED:

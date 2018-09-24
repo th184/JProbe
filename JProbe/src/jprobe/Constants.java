@@ -92,7 +92,6 @@ public class Constants {
 			reader.close();
 			return msg;
 		} catch (Exception e){
-			System.out.println("Error on help file");
 			e.printStackTrace();
 			return "";
 		}

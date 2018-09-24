@@ -10,11 +10,12 @@ import jprobe.services.data.Data;
 public abstract class AbstractDataMenuItem extends JMenuItem implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
-	private List<Data> m_Data;
+	private List<Data> m_DataList;
+	private Data m_Data;
 	
 	protected AbstractDataMenuItem(String title, List<Data> data){
 		super(title);
-		m_Data = data;
+		m_DataList = data;
 		this.addActionListener(this);
 	}
 	
@@ -22,13 +23,17 @@ public abstract class AbstractDataMenuItem extends JMenuItem implements ActionLi
 		this(title, null);
 	}
 	
-	public void setData(List<Data> data){
+	public void setDataList(List<Data> data){
+		m_DataList = data;
+	}
+	
+	protected List<Data> getDataList(){
+		
+		return m_DataList;
+	}
+	
+	public void setData(Data data) {
 		m_Data = data;
 	}
-	
-	protected List<Data> getData(){
-		return m_Data;
-	}
-	
 	
 }

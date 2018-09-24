@@ -22,16 +22,18 @@ public class ExportDataMenuItem extends AbstractDataMenuItem{
 		super("Export", data);
 		m_Gui = gui;
 		m_Core = core;
-		if(data == null){
-			this.setVisible(false);
-		}else{
-			//this.setVisible(m_Core.getDataManager().isWritable(data.getClass()));
-			this.setVisible(true);
-		}
+		
+//		if(data == null){
+//			System.out.println("data is null");
+//			this.setVisible(false);
+//		}else{
+//			this.setVisible(m_Core.getDataManager().isWritable(data.getClass()));
+//			this.setVisible(true);
+//		}
 	}
 	
 	public void setData(List<Data> data){
-		super.setData(data);
+		super.setDataList(data);
 		if(data == null){
 			this.setVisible(false);
 		}else{
@@ -42,8 +44,8 @@ public class ExportDataMenuItem extends AbstractDataMenuItem{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if(this.getData() != null){
-			m_Gui.write(this.getData());
+		if(this.getDataList() != null){
+			m_Gui.write(this.getDataList());
 		}
 	}
 	

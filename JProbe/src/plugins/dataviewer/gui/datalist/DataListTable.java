@@ -28,12 +28,17 @@ public class DataListTable extends JTable implements MouseListener{
 	
 	DataListModel m_Model;
 	DataPopupMenu m_PopupMenu;
+	DataTabPane m_TabPane; //added 
+	DataPopupMenuWithRename m_PopupMenuRename; //added
 
 	
 	public DataListTable(JProbeCore core, JProbeGUI gui, DataTabPane tabPane, DataType type){
 		super();
-		m_PopupMenu = new DataPopupMenu(core, gui, tabPane);
+		
 		m_Model = new DataListModel(core, type);
+		m_PopupMenu = new DataPopupMenu(core, gui, tabPane);
+		m_PopupMenuRename = new DataPopupMenuWithRename(core, gui, tabPane, m_Model);
+		m_TabPane = tabPane;//added
 		
 		this.setModel(m_Model);
 		this.setDragEnabled(false);
@@ -43,7 +48,6 @@ public class DataListTable extends JTable implements MouseListener{
 //		}
 //		this.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		
-//		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 //		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 //		TableColumn col = columnModel.getColumn(1);
 //		TableCellRenderer renderer = col.getHeaderRenderer();
@@ -56,13 +60,13 @@ public class DataListTable extends JTable implements MouseListener{
 		col_0.setPreferredWidth(120);
 		TableColumn col_1 = this.getColumnModel().getColumn(1);
 		col_1.setPreferredWidth(80);
+		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		this.addMouseListener(this);
 		this.setAutoCreateRowSorter(true);
 		
 		this.setRowSelectionAllowed(true);
 		this.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		
 	}
 	
 	public void cleanup(){
@@ -71,35 +75,55 @@ public class DataListTable extends JTable implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//do nothing
+		if (e.getClickCount() == 2){
+	        int row = this.rowAtPoint(e.getPoint());
+	        Data selected = m_Model.getData(row);
+	        m_TabPane.selectData(selected);
+       }
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		//do nothing
-	}
+	public void mouseEntered(MouseEvent arg0) {}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		//do nothing
-	}
+	public void mouseExited(MouseEvent arg0) {}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		//do nothing
-	}
+	public void mousePressed(MouseEvent arg0) {}
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		if(event.getButton() == MouseEvent.BUTTON3){
+		if(event.getButton() == MouseEvent.BUTTON3){ //right click
 			
-			int[] rows = this.getSelectedRows();
-			List<Data> selected = m_Model.getData(rows);
-			if(selected != null) {
-				m_PopupMenu.setData(selected);
-				m_PopupMenu.show(this, event.getX(), event.getY());
+			if(this.getSelectedRowCount()==1) {
+				int viewRow = this.getSelectedRow();
+				int viewCol = this.getSelectedColumn();
+				int[] viewRows = new int[] {viewRow};
+				int[] rows = convertRows(viewRows);
+				List<Data> selected = m_Model.getData(rows);
+				m_Model.setSelectedCell(viewRow, viewCol);
+				m_PopupMenuRename.setData(selected);
+				m_PopupMenuRename.show(this, event.getX(), event.getY());
+				
+			} else {
+				int[] viewRows = this.getSelectedRows();
+				int[] rows = convertRows(viewRows);
+				List<Data> selected = m_Model.getData(rows);
+				
+				if(selected != null) {
+					m_PopupMenu.setData(selected);
+					m_PopupMenu.show(this, event.getX(), event.getY());
+				}
 			}
 		}
+	}
+
+	private int[] convertRows(int[] viewRows) {
+		int[] rows = new int[viewRows.length];
+		for(int i=0; i<viewRows.length; i++) {
+			rows[i] = this.convertRowIndexToModel(viewRows[i]);
+		}
+		return rows;
 	}
 
 }

@@ -93,6 +93,9 @@ public class NegativeControlGenerator extends AbstractChiptoolsFunction<NegContr
 		l.update(new ProgressEvent(this, Type.UPDATE, "Extracting genomic sequences..."));
 		GenomeReader reader = GenomeReaderFactory.createGenomeReader(params.getGenomeFile(), l);
 		PeakSequenceGroup peakSeqs = PeakSequenceGroup.readFromGenome(reader, include);
+		if(peakSeqs==null) {
+			return null;
+		}
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done extracting sequences."));
 		
 		Kmer kmer;
@@ -105,7 +108,6 @@ public class NegativeControlGenerator extends AbstractChiptoolsFunction<NegContr
 		}else{
 			kmer = null;
 		}
-		
 		//generate probes
 		ProbeGroup probes = generateProbes(
 				l,

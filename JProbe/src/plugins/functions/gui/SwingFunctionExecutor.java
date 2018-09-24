@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.osgi.framework.Bundle;
@@ -19,33 +20,6 @@ import jprobe.services.function.Function;
 import jprobe.services.function.FunctionExecutor;
 
 public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
-	public static Map<String, Integer> m_Counts = new HashMap<String, Integer>()
-	{{	
-		put("ProbeJoiner", 1);
-		put("ProbeGenerator", 1);
-		put("NegativeControlGenerator", 1);
-	}};
-	public static Map<String, String> m_Standard_Num = new HashMap<String, String>()
-	{{	// prefix_n 
-		put("ProbeJoiner", "JoinedProbes");
-		put("ProbeGenerator", "GenProbes");
-		put("NegativeControlGenerator", "NegCtrl");
-	}};
-	public static Map<String, String> m_Standard_Prefix = new HashMap<String, String>()
-	{{
-		// prefix_fileName   
-		put("PeakFinder", "PeakSeqs");
-		put("BindingProfiler", "BindingProfile");
-
-	}};
-	public static Map<String, String> m_Standard_Suffix = new HashMap<String, String>()
-	{{
-		// fileName_suffix 
-		put("ProbeMutator", "mut");
-		put("GCRunMutator", "GRun_mut");  
-		put("PeakFilter", "filtered");
-		put("ProbeFilter", "filtered");	
-	}};
 	
 	private class FunctionThread extends Thread implements ProgressListener{
 		
@@ -62,19 +36,34 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 			try {
 				final Data d = m_Function.execute(this, m_Params);
 				String func = m_Function.getClass().getSimpleName();
-				done(d, func);
+				if(d == null) {
+					// func can return null when there's no output (e.g. input files don't match) 
+					m_Monitor.dispose();
+					JOptionPane.showConfirmDialog(null,
+			    			"No peak could be found in the genome.\nPlease ensure the coordinates are within the genome.",
+			    			"Input files mismatch",
+			    			JOptionPane.DEFAULT_OPTION,  // with one OK button
+			    			JOptionPane.WARNING_MESSAGE);
+//				}else if(d.getRowCount()==0) {
+//					m_Monitor.dispose();
+//					JOptionPane.showMessageDialog(null,
+//						    "No output was generated.",
+//						    "Empty output object",
+//						    JOptionPane.PLAIN_MESSAGE);
+				}else {
+					done(d, func);
+				}
+				
 			} catch (Exception e) {
-				System.out.println("in catch exception ");
 				ErrorHandler.getInstance().handleException(e, m_Bundle);
 				e.printStackTrace();
-				done(null);
+//				done(null);
 			} catch (Throwable t){
-				System.out.println("in throwable t...");
 				t.printStackTrace();
 				//don't report this event, as canceling the thread will cause this to notify the user
 				//with java.lang.ThreadDeath
 				//ErrorHandler.getInstance().handleException(new RuntimeException(t), m_Bundle);
-				done(null);
+//				done(null);
 			}
 		}
 
@@ -122,13 +111,7 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 			public void run() {
 				if(d != null){
 					String name = d.getOutputName();
-					
-					if(name == null) {
-						name = assignName(d, func);
-					}else {
-						name = assignName(d, func, name);
-					}
-					m_DataManager.addData(d, name, m_Bundle);
+					m_DataManager.addData(d, name, func, m_Bundle);
 					
 				}
 				if(m_Monitor != null){
@@ -137,24 +120,6 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 				}
 			}
 
-			private String assignName(Data d, String func) {
-				String name = null;
-				if(m_Counts.containsKey(func)) {
-					name = m_Standard_Num.get(func) +"_"+ m_Counts.get(func);
-					m_Counts.put(func, m_Counts.get(func)+1);
-				}
-				return name;
-			}
-			private String assignName(Data d, String func, String name) {
-				if(m_Standard_Prefix.containsKey(func)) {
-					name = m_Standard_Prefix.get(func) +"_"+ name;
-				}else {
-					name = name +"_"+ m_Standard_Suffix.get(func);
-				}
-				return name;
-			}
-			
-		
 		});
 	}
 	

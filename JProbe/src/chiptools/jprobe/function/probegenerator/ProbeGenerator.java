@@ -81,6 +81,7 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 			prevPercent = this.fireProgressEvent(l, ++count, peakSeqs.size(), prevPercent);
 		}
 		ProbeGroup group = new ProbeGroup(probes);
+		
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done generating probes."));
 		
 		return new Probes(group, DataType.OUTPUT, null, params.getMetadata());

@@ -66,9 +66,15 @@ public class GCRunMutatorParams implements ProbesParam, PrimerParam{
 	
 	public Map<String, String> getMetadata(){
 		m_Metadata = new HashMap<>();
+		m_Metadata.put("Generated data", "");
+		m_Metadata.put("Function", "G-Runs mutator");
 		m_Metadata.put("Probes", m_ProbesName);
-		m_Metadata.put("Primer", m_PrimerName);
+		m_Metadata.put("Primer", check(m_PrimerName));
 		return m_Metadata;
+	}
+	public String check(String arg) {
+		if(arg==null) return "N/A";
+		return arg;
 	}
 
 

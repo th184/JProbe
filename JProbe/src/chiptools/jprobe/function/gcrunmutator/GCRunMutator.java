@@ -74,7 +74,6 @@ public class GCRunMutator extends AbstractChiptoolsFunction<GCRunMutatorParams>{
 				probes.add(p);
 			}
 		}
-		System.out.println("GC run mutator...");
 		String outputName = params.getOutputName();
 		return new Probes(new ProbeGroup(probes), DataType.OUTPUT, outputName, params.getMetadata());
 	}

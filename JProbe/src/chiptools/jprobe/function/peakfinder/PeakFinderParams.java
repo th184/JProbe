@@ -13,8 +13,8 @@ public class PeakFinderParams implements GenomeParam, PeaksParam, SummitParam {
 	
 	private File m_Genome = null;
 	private Peaks m_Peaks = null;
-//	private int m_Summit = -1;
-	private Integer m_Summit = null;
+	private int m_Summit = -1;
+//	private Integer m_Summit = null;
 	private String m_OutputName = null;
 	private String m_PeaksName = null;
 	private String m_GenomeName = null;
@@ -82,11 +82,12 @@ public class PeakFinderParams implements GenomeParam, PeaksParam, SummitParam {
 		m_Metadata.put("Peaks", m_PeaksName);
 		m_Metadata.put("Genome",m_GenomeName);
 		m_Metadata.put("Summit", check(m_Summit));
+//		m_Metadata.put("Summit", String.valueOf((m_Summit)));
 		return m_Metadata;
 		
 	}
 	private String check(Integer arg) {
-		if(arg==null) return "N/A";
+		if(arg == -1) return "N/A";
 		return String.valueOf(arg);
 	}
 }
