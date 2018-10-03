@@ -22,7 +22,6 @@ public class DataCategoriesComponent<D extends Data> extends DataArgsComponent<D
 		super(core, minArgs, maxArgs, allowDuplicates, dataClass, validFunction);
 	}
 	
-	@Override
 	protected DataSelectionPanel<D> newDataSelectionPanel(JProbeCore core, boolean optional){
 		return new DataCategoriesSelectionComponent<D>(core, optional);
 	}

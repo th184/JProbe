@@ -35,6 +35,7 @@ import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
+import plugins.dataviewer.gui.DataViewerSplitPane;
 import jprobe.services.AbstractServiceListener;
 import jprobe.services.CoreListener;
 import jprobe.services.DataManager;
@@ -49,13 +50,7 @@ public class CoreDataManager implements DataManager{
 	private Map<String, Data> m_NameToData = new HashMap<String, Data>();
 	private Map<Data, String> m_DataToName = new LinkedHashMap<Data, String>();
 	
-//	public Map<String, Integer> m_Counts = new HashMap<String, Integer>()
-//	{{	
-//		put("JoinedProbes", 1);
-//		put("GenProbes", 1);
-//		put("NegCtrl", 1);
-//	}};
-	private final int OCCUPANCY_ARRAY_SIZE = 5;
+	private final int OCCUPANCY_ARRAY_SIZE = 5; // change this later!!!
 	
 	public Map<String, boolean[]> m_Index = new HashMap<>()
 	{{	// boolean array = "occupied?"; initialize to all false
@@ -263,6 +258,9 @@ public class CoreDataManager implements DataManager{
 			}else {
 				varName = assignName(d, func, filename);
 			}
+			d.getMetadata().addListener(DataViewerSplitPane.getMetadataPane());
+			d.getMetadata().put("Data",varName); //fill in the variable name
+			d.getMetadata().put("Type", d.getClass().getSimpleName()+" (generated)");
 			this.addData(d, varName, responsible, true);
 	}
 	@Override
@@ -290,8 +288,8 @@ public class CoreDataManager implements DataManager{
 		return -1; // array all full - need to handle this later (get a bigger array)
 	}
 	private void updateArray(String name, int num, boolean group_num) {
-		System.out.println("NAME: "+name);
-		System.out.println("group_num: "+group_num);
+//		System.out.println("NAME: "+name);
+//		System.out.println("group_num: "+group_num);
 		int i;
 		if(group_num) {
 			i = num-1;
@@ -299,13 +297,13 @@ public class CoreDataManager implements DataManager{
 			i = num;
 		}
 		if(!m_Index.containsKey(name)) {
-			System.out.println("adding name to m_Index");
+//			System.out.println("adding name to m_Index");
 			m_Index.put(name, new boolean[OCCUPANCY_ARRAY_SIZE]);
 		}
-		System.out.println("updating index: "+i);
+//		System.out.println("updating index: "+i);
 		boolean[] array = m_Index.get(name);
 		array[i] = !array[i];
-		System.out.println(Arrays.toString(array));
+//		System.out.println(Arrays.toString(array));
 	}
 	
 	private String assignName(Data d, String func) {
@@ -357,13 +355,12 @@ public class CoreDataManager implements DataManager{
 		return m_Standard.get(suff);
 	}
 	@Override
-	public void initAssignName(String label, boolean init) {
+	public void checkIfDefaultName(String label) {
 		List<String> list = new LinkedList<String>(Arrays.asList(label.split("_",-1)));
 		String pre = list.get(0);
 		String suff;
 		String name;
 		if(isNumeric(list.get(list.size()-1))) {
-			
 			int num = Integer.parseInt(list.get(list.size()-1));
 			suff = list.get(list.size()-2);
 			if(m_Standard.containsKey(pre)||m_Standard.containsKey(suff)) {
@@ -371,7 +368,6 @@ public class CoreDataManager implements DataManager{
 				name = String.join("_", list);
 //				System.out.println("num = "+ num);
 				updateArray(name, num, getTag(pre, suff));
-				
 //				m_Counts.put(name, num+1);
 			}
 			
@@ -380,24 +376,24 @@ public class CoreDataManager implements DataManager{
 			if(m_Standard.containsKey(pre)||m_Standard.containsKey(suff)) {
 				name = String.join("_", list);
 				updateArray(name, 0, getTag(pre, suff));
-					
 //				m_Counts.put(name, 1);
 			}
-			
 		}
-		
-		
 	}
+	
 	private boolean isNumeric(String str)
 	{
 	  return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
 	}
 	private void removeData(String name, Data d, Bundle responsible){
 		determineDataType(d);
-		initAssignName(name, false);
+		checkIfDefaultName(name);
 		m_Data.get(d.getClass()).remove(d);
+//		System.out.println("name: "+name);
+//		System.out.println("m_NameToData contains name: "+m_NameToData.containsKey(name));
 		m_NameToData.remove(name);
 		m_DataToName.remove(d);
+//		System.out.println("m_NameToData contains name: "+m_NameToData.containsKey(name));
 		d.dispose();
 		notifyListeners(new CoreEvent(m_Core, Type.DATA_REMOVED, responsible, d));
 	}
@@ -493,6 +489,14 @@ public class CoreDataManager implements DataManager{
 		m_NameToData.remove(old);
 		m_NameToData.put(name, d);
 		m_DataToName.put(d, name);
+		// update default name
+		checkIfDefaultName(old);
+		checkIfDefaultName(name);
+		// update metadata
+		System.out.println("CoreDataManager");
+		d.getMetadata().put("Data", name);
+		d.getMetadata().updateMetadata();
+		
 		notifyListeners(new CoreEvent(m_Core, Type.DATA_NAME_CHANGE, responsible, d, old, name));
 	}
 	
@@ -608,6 +612,7 @@ public class CoreDataManager implements DataManager{
 
 	@Override
 	public synchronized Data readData(File file, Class<? extends Data> type, FileFilter format, Bundle responsible) throws Exception {
+		System.out.println("reading data");
 		if(!this.isReadable(type)){
 			throw new Exception(type+" not readable");
 		}
@@ -619,6 +624,8 @@ public class CoreDataManager implements DataManager{
 			String fileName = file.getName();
 			FileInputStream in = new FileInputStream(file);
 			Data read = reader.read(format, in);
+//			System.out.println("trying to test()...");
+//			read.getMetadata().test(); // testing 
 			this.addData(read, fileName, "", responsible);
 			in.close();
 			return read;

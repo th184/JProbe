@@ -67,18 +67,21 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 			for(Probe p : probes){
 				percent = this.fireProgressUpdate(l, count, maxProgress, percent, category);
 				String type = p.getType();
-				int replicate = 1;
+				int fwdReplicate = 1;
+				int revReplicate = 1;
 				for(int i=0; i<fwdReps; ++i){
-					String info = createInfo("fwd", replicate, type);
+					String info = createInfo("o1", fwdReplicate, type);
+//					String info = createInfo("fwd", replicate, type);
 					AgilentProbe fwd = createForwardProbe(p, primer, info, category, categoryIndex);
 					agilentProbes.add(fwd);
-					++replicate;
+					++fwdReplicate;
 				}
 				for(int i=0; i<rvsReps; ++i){
-					String info = createInfo("rvs", replicate, type);
+					String info = createInfo("o2", revReplicate, type);
+//					String info = createInfo("rvs", replicate, type);
 					AgilentProbe rvs = createReverseProbe(p, primer, info, category, categoryIndex);
 					agilentProbes.add(rvs);
-					++replicate;
+					++revReplicate;
 				}
 				++categoryIndex;
 				++count;
@@ -87,7 +90,7 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 		
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done converting probes to Agilent format."));
 		
-		return new AgilentArray(params.ARRAY_NAME, agilentProbes, DataType.OUTPUT);
+		return new AgilentArray(params.ARRAY_NAME, agilentProbes, DataType.EXPORT);
 	}
 	
 	protected static String createInfo(String direction, int replicate, String type){

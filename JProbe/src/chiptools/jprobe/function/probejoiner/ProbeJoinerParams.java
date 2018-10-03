@@ -7,6 +7,7 @@ import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.ProbeLenParam;
 import chiptools.jprobe.function.params.ProbesParam;
+import jprobe.services.data.Metadata;
 
 public class ProbeJoinerParams implements ProbesParam, ProbeLenParam {
 	
@@ -18,7 +19,7 @@ public class ProbeJoinerParams implements ProbesParam, ProbeLenParam {
 	private int m_ProbeLen = -1;
 	
 	private String m_ProbesName = null;
-	private Map<String, String> m_Metadata = null;
+	private Metadata m_Metadata = null;
 	
 	public String m_OutputName = null;
 	
@@ -64,9 +65,10 @@ public class ProbeJoinerParams implements ProbesParam, ProbeLenParam {
 		return m_ProbesName;
 	}
 	
-	public Map<String, String> getMetadata(){
-		m_Metadata = new LinkedHashMap<>();
-		m_Metadata.put("Generated data", "");
+	public Metadata getMetadata(){
+		m_Metadata = new Metadata();
+		m_Metadata.put("Data", "output name");
+		m_Metadata.put("Type", "data type");
 		m_Metadata.put("Function used", "probe joiner");
 		m_Metadata.put("Probe set name", m_ProbesName);
 		m_Metadata.put("Length of probe", String.valueOf(m_ProbeLen));

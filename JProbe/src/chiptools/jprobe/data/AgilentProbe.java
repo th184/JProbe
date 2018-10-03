@@ -40,7 +40,7 @@ public class AgilentProbe implements Serializable{
 	}
 
 	private final String m_Seq;
-	private final String m_Category;
+	private final String m_Category; // same as "probe name ID"
 	private final int m_CategoryNum;
 	private final String m_Info;
 	private final GenomicRegion m_Region;
@@ -96,7 +96,10 @@ public class AgilentProbe implements Serializable{
 	}
 	
 	public String getCategoryAndInfo(int numPlaces){
-		String format = "%s_%0" + numPlaces + "d_%s";
+		
+		String format = "%s_%s_%s";
+		String seqNum = "seq"+m_CategoryNum;
+		
 		return String.format( format , m_Category, m_CategoryNum, m_Info );
 	}
 	

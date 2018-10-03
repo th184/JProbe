@@ -18,6 +18,7 @@ import util.genome.probe.Probe;
 import util.genome.probe.ProbeGroup;
 import jprobe.services.data.AbstractFinalData;
 import jprobe.services.data.AbstractFinalData.DataType;
+import jprobe.services.data.Metadata;
 
 public class Probes extends AbstractFinalData implements Observer<Preferences.Update>{
 	private static final long serialVersionUID = 1L;
@@ -38,7 +39,7 @@ public class Probes extends AbstractFinalData implements Observer<Preferences.Up
 			ProbeGroup probes, 
 			DataType type, 
 			String outputName, 
-			Map<String, String> metadata){
+			Metadata metadata){
 		
 		super(PROBE_COLS, probes.size(), type, outputName, metadata);
 		m_Probes = probes;

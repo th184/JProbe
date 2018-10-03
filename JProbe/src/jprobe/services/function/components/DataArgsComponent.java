@@ -31,7 +31,7 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 	private final List<DataSelectionPanel<D>> m_DataComps = new ArrayList<DataSelectionPanel<D>>();
 	private final List<D> m_SelectedData = new ArrayList<D>();
 	
-	private final String m_ArgName;
+//	private final String m_ArgName;
 	private final JProbeCore m_Core;
 	private final int m_MinArgs;
 	private final int m_MaxArgs;
@@ -41,10 +41,12 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 	
 	private boolean m_Valid;
 	
-	public DataArgsComponent(String argName, JProbeCore core, int minArgs, 
-			int maxArgs, boolean allowDuplicates, Class<D> dataClass, DataValidFunction validFunction){
+//	public DataArgsComponent(String argName, JProbeCore core, int minArgs, 
+//			int maxArgs, boolean allowDuplicates, Class<D> dataClass, DataValidFunction validFunction){
+	public DataArgsComponent(JProbeCore core, int minArgs, 
+			int maxArgs, boolean allowDuplicates, Class<D> dataClass, DataValidFunction validFunction){	
 		super(new GridBagLayout());
-		m_ArgName = argName;
+//		m_ArgName = argName;
 		m_Core = core;
 		m_Core.addCoreListener(this);
 		m_MinArgs = minArgs;
@@ -61,11 +63,11 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 			
 		});
 	}
-	public DataArgsComponent(JProbeCore core, int minArgs, int maxArgs, 
-			boolean allowDuplicates, Class<D> dataClass, DataValidFunction validFunction) {
-		this("ARGUMENT", core, minArgs, maxArgs, 
-				allowDuplicates, dataClass, validFunction);
-	}
+//	public DataArgsComponent(JProbeCore core, int minArgs, int maxArgs, 
+//			boolean allowDuplicates, Class<D> dataClass, DataValidFunction validFunction) {
+//		this("ARGUMENT", core, minArgs, maxArgs, 
+//				allowDuplicates, dataClass, validFunction);
+//	}
 	
 	@Override
 	public void setEnabled(boolean enabled){
@@ -137,8 +139,11 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 		this.updateValidity();
 	}
 	
-	protected DataSelectionPanel<D> newDataSelectionPanel(String argName, JProbeCore core, boolean optional){
-		return new DataSelectionPanel<D>(argName, core, optional);
+//	protected DataSelectionPanel<D> newDataSelectionPanel(String argName, JProbeCore core, boolean optional){
+//		return new DataSelectionPanel<D>(argName, core, optional);
+//	}
+	protected DataSelectionPanel<D> newDataSelectionPanel(JProbeCore core, boolean optional){
+		return new DataSelectionPanel<D>(core, optional);
 	}
 	
 	protected void initSelectionPanel(final DataSelectionPanel<D> comp){
@@ -165,7 +170,8 @@ public class DataArgsComponent<D extends Data> extends JPanel implements ValidNo
 		if(!this.canAddComponent(index)){
 			return;
 		}
-		DataSelectionPanel<D> comp = this.newDataSelectionPanel(m_ArgName, m_Core, this.componentIsOptional(index));
+//		DataSelectionPanel<D> comp = this.newDataSelectionPanel(m_ArgName, m_Core, this.componentIsOptional(index));
+		DataSelectionPanel<D> comp = this.newDataSelectionPanel(m_Core, this.componentIsOptional(index));
 		this.initSelectionPanel(comp);
 		
 		m_DataComps.add(index, comp);

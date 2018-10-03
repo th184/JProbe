@@ -11,6 +11,7 @@ import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.params.KmerListParam;
 import chiptools.jprobe.function.params.PWMListParam;
 import chiptools.jprobe.function.params.ProbesParam;
+import jprobe.services.data.Metadata;
 
 public class BindingProfileParams implements ProbesParam, KmerListParam, PWMListParam{
 	
@@ -25,7 +26,7 @@ public class BindingProfileParams implements ProbesParam, KmerListParam, PWMList
 	private String m_ProbesName = null;
 	private String m_KmerListName = null;
 	private String m_PWMListName = null;
-	private Map<String, String> m_Metadata = null;
+	private Metadata m_Metadata = null;
 	
 	@Override
 	public void setProbes(Probes p) {
@@ -97,9 +98,10 @@ public class BindingProfileParams implements ProbesParam, KmerListParam, PWMList
 		return m_KmerListName;
 	}
 	
-	public Map<String, String> getMetadata(){
-		m_Metadata = new LinkedHashMap<>();
-		m_Metadata.put("Generated data", "");
+	public Metadata getMetadata(){
+		m_Metadata = new Metadata();
+		m_Metadata.put("Data", "output name");
+		m_Metadata.put("Type", "data type");
 		m_Metadata.put("Function", "binding profiler");
 		m_Metadata.put("Probe", m_ProbesName);
 		m_Metadata.put("Kmer", check(m_KmerListName));

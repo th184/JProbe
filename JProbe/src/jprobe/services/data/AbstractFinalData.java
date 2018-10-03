@@ -1,6 +1,7 @@
 package jprobe.services.data;
 
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import jprobe.Constants;
 import jprobe.JProbeActivator;
 import jprobe.services.ErrorHandler;
+import plugins.dataviewer.gui.DataViewerSplitPane;
 import util.gui.TableFormatter;
 
 
@@ -27,26 +29,22 @@ public abstract class AbstractFinalData implements Data{
 	
 	private final int m_Cols;
 	private final int m_Rows;
-	public enum DataType {INPUT, OUTPUT}; 
+	public enum DataType {INPUT, OUTPUT, EXPORT}; // EXPORT = export .txt file directly
 	private DataType m_Type;
 	private String m_InputName = null; // file/var name for INPUT data
 	private String m_OutputName = null; // file/var name for OUTPUT data
-	private Map<String, String> m_Metadata;
+//	private Map<String, String> m_Metadata;
+	// ADDED
+	private Metadata m_Metadata;
+	
 	private String m_VarName = null;
 	
-	protected AbstractFinalData(int cols, int rows, DataType type, String outputName, Map<String, String> metadata){
+	protected AbstractFinalData(int cols, int rows, DataType type, String outputName, Metadata metadata){
 		m_Cols = cols;
 		m_Rows = rows;
 		m_Type = type;
 		m_OutputName = outputName;
 		m_Metadata = metadata;
-		if(type==DataType.INPUT && metadata==null) {
-			Map<String, String> inputMetadata = new LinkedHashMap<>() {{
-				put("Imported data","");
-			}};
-			m_Metadata = inputMetadata;
-		}
-		
 	}
 	
 	//readObject method to init the transient listeners collection after deserialization
@@ -96,8 +94,23 @@ public abstract class AbstractFinalData implements Data{
 	public String getVarName() {
 		return m_VarName;
 	}
-	
-	public Map<String, String> getMetadata(){
+
+	@Override
+	public void setImportMetadata(String dataType) {
+		if(m_Type==DataType.INPUT && m_Metadata==null) {
+			Metadata inputMD= new Metadata();
+			inputMD.put("Data", m_VarName);
+			inputMD.put("Type", dataType+" (imported)");
+			
+//			Map<String, String> inputMetadata = new LinkedHashMap<>() {{
+//				put("Data", m_VarName);
+//				put("Type", dataType+" (imported)"); 
+//			}};
+			m_Metadata = inputMD;
+		}
+	}
+
+	public Metadata getMetadata(){
 		return m_Metadata;
 	}
 	

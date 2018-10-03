@@ -12,6 +12,7 @@ import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PWMParam;
 import chiptools.jprobe.function.params.PeakSeqsParam;
 import chiptools.jprobe.function.params.ProbeLenParam;
+import jprobe.services.data.Metadata;
 
 public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam, EscoreParam, ProbeLenParam {
 	
@@ -27,7 +28,7 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 	private String m_PeakSeqsName = null;
 	private String m_KmerName = null;
 	private String m_PWMName = null;
-	private Map<String, String> m_Metadata = null;
+	private Metadata m_Metadata = null;
 	
 	@Override
 	public void setKmers(Kmer k) {
@@ -88,9 +89,10 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 	@Override
 	public void setPeakSeqsName(String n) { m_PeakSeqsName = n; }
 	
-	public Map<String, String> getMetadata(){
-		m_Metadata = new LinkedHashMap<>();
-		m_Metadata.put("Generated data", "");
+	public Metadata getMetadata(){
+		m_Metadata = new Metadata();
+		m_Metadata.put("Data", "output name");
+		m_Metadata.put("Type", "data type");
 		m_Metadata.put("Function", "probe generator");
 		m_Metadata.put("Peak seqs", m_PeakSeqsName);
 		m_Metadata.put("Kmer", m_KmerName);

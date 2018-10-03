@@ -2,7 +2,7 @@
 <project name="Distributable.makejar" default="makejar" basedir=".">
 	<target name="makejar" description="Package the core distro into a runnable jar">
 		<jar destfile="${basedir}/../distributable/jprobe.jar"
-			 includes="jprobe/**,util/**" 
+			 includes="jprobe/**,util/**,plugins/**"   
 			 basedir="${basedir}/../../bin">
 			<manifest>
 				<attribute name="Main-Class" value="jprobe.Launcher"/>

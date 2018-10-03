@@ -8,6 +8,7 @@ import chiptools.jprobe.data.Peaks;
 import chiptools.jprobe.function.params.GenomeParam;
 import chiptools.jprobe.function.params.PeaksParam;
 import chiptools.jprobe.function.params.SummitParam;
+import jprobe.services.data.Metadata;
 
 public class PeakFinderParams implements GenomeParam, PeaksParam, SummitParam {
 	
@@ -18,7 +19,7 @@ public class PeakFinderParams implements GenomeParam, PeaksParam, SummitParam {
 	private String m_OutputName = null;
 	private String m_PeaksName = null;
 	private String m_GenomeName = null;
-	private Map<String, String> m_Metadata = null;
+	private Metadata m_Metadata = null;
 	
 	@Override
 	public void setGenomeFile(File f) {
@@ -75,9 +76,10 @@ public class PeakFinderParams implements GenomeParam, PeaksParam, SummitParam {
 		m_GenomeName = n;
 	}
 
-	public Map<String, String> getMetadata(){
-		m_Metadata = new LinkedHashMap<>();
-		m_Metadata.put("Generated data", "");
+	public Metadata getMetadata(){
+		m_Metadata = new Metadata();
+		m_Metadata.put("Data", "output name");
+		m_Metadata.put("Type", "data type");
 		m_Metadata.put("Function", "probe filter");
 		m_Metadata.put("Peaks", m_PeaksName);
 		m_Metadata.put("Genome",m_GenomeName);

@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import plugins.dataviewer.gui.Constants;
 import plugins.dataviewer.gui.DataUtils;
 import plugins.dataviewer.gui.DataviewerActivator;
+import plugins.dataviewer.gui.ViewTabPane;
 import jprobe.services.CoreEvent;
 import jprobe.services.CoreListener;
 import jprobe.services.ErrorHandler;
@@ -25,15 +26,15 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 	private JProbeCore m_Core;
 	private Map<Data, String> m_Data = new HashMap<Data, String>();
 	private DataType m_Type;
-	private int[] m_SelectedCell = new int[2];;
+	private int[] m_SelectedCell = new int[2];
+	private ViewTabPane m_ViewTabPane; // added
 	
-	public DataListModel(JProbeCore core, DataType type){
-		
+	public DataListModel(JProbeCore core, DataType type, ViewTabPane viewTabPane){
 		super(new String[][]{}, Constants.DATALIST_COL_HEADERS);
 		m_Core = core;
 		m_Core.addCoreListener(this);
 		m_Type = type;
-		
+		m_ViewTabPane = viewTabPane;
 		
 		SwingUtilities.invokeLater(new Runnable(){
 
@@ -109,11 +110,13 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 				return;
 			}
 			if(m_Core.getDataManager().contains(oldName)){
+				System.out.println("DataListModel: core contains oldName");
 				//This means that the name change needs to be push to the core
 				Data change = m_Core.getDataManager().getData(oldName);
 				DataUtils.rename(change, newName, m_Core, DataviewerActivator.getGUIFrame());
-				super.setValueAt(newName, row, col); //added
+				super.setValueAt(newName, row, col); // added to reflect name change in table
 			}else{
+				System.out.println("DataListModel: core does not contain oldName");
 				//This means that the name change is received from the core and the field should be updated accordingly
 				Data changed = m_Core.getDataManager().getData(newName);
 				m_Data.put(changed, newName);
@@ -136,6 +139,7 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 		m_Data.put(data, name);
 		if(getType() == data.getDataType()) {
 			this.addRow(new String[]{name, data.getClass().getSimpleName()});
+			m_ViewTabPane.displayList(data.getDataType());
 		}
 	}
 	
@@ -174,6 +178,7 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 		// remove this
 //		case DATA_NAME_CHANGE:
 //			this.rename(event.getData(), event.getOldName(), event.getNewName());
+//			this.setValueAt(event.getNewName(), row, col);
 //			break;
 	
 		case WORKSPACE_CLEARED:

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import util.genome.Sequences.Profile;
 import jprobe.services.data.AbstractFinalData;
+import jprobe.services.data.Metadata;
 
 public class BindingProfile extends AbstractFinalData implements Iterable<Profile>{
 	private static final long serialVersionUID = 1L;
@@ -39,7 +40,7 @@ public class BindingProfile extends AbstractFinalData implements Iterable<Profil
 	private final List<Profile> m_Profiles;
 	private final Map<Integer, Profile> m_ProfileStarts = new HashMap<Integer, Profile>();
 
-	public BindingProfile(List<Profile> bindingProfiles, DataType type, String outputName, Map<String, String> metadata) {
+	public BindingProfile(List<Profile> bindingProfiles, DataType type, String outputName, Metadata metadata) {
 		super(getLongestProfileLength(bindingProfiles) + 1, countRows(bindingProfiles), type, outputName, metadata);
 		m_Profiles = bindingProfiles;
 		int start = 0;

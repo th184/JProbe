@@ -10,6 +10,7 @@ import chiptools.jprobe.function.params.KmerParam;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PrimerParam;
 import chiptools.jprobe.function.params.ProbesParam;
+import jprobe.services.data.Metadata;
 
 public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, PrimerParam {
 	
@@ -27,7 +28,7 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 	private String m_ProbesName = null;
 	private String m_PrimerName = null;
 	private String m_KmerName = null;
-	private Map<String, String> m_Metadata = null;
+	private Metadata m_Metadata = null;
 	
 	
 	@Override
@@ -92,9 +93,10 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 	@Override
 	public String getProbesName() { return m_ProbesName; }
 	
-	public Map<String, String> getMetadata(){
-		m_Metadata = new LinkedHashMap<>();
-		m_Metadata.put("Generated data", "");
+	public Metadata getMetadata(){
+		m_Metadata = new Metadata();
+		m_Metadata.put("Data", "output name");
+		m_Metadata.put("Type", "data type");
 		m_Metadata.put("Function", "probe mutator");
 		m_Metadata.put("Probes", m_ProbesName);
 		m_Metadata.put("K-mer", m_KmerName);

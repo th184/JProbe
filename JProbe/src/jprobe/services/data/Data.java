@@ -37,7 +37,9 @@ public interface Data extends TableModel, Serializable{
 	public void setOutputName(String name);
 	public String getOutputName();
 	
-	public Map<String, String> getMetadata();
+//	public void setImportMetadata();
+	public void setImportMetadata(String dataType);
+	public Metadata getMetadata();
 	
 	public void setVarName(String name);
 	public String getVarName();

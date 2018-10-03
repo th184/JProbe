@@ -8,6 +8,7 @@ import java.util.Random;
 
 import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.params.ProbesParam;
+import jprobe.services.data.Metadata;
 import util.genome.probe.Probe;
 
 public class ProbeFilterParam implements util.genome.probe.ProbeUtils.Filter, ProbesParam {
@@ -31,7 +32,7 @@ public class ProbeFilterParam implements util.genome.probe.ProbeUtils.Filter, Pr
 	private String m_ExcludedChroms = null;
 	private String m_IncludedSeqs = null;
 	private String m_ExcludedSeqs = null;
-	private Map<String, String> m_Metadata = null;
+	private Metadata m_Metadata = null;
 	
 	
 	public void addFilter(util.genome.probe.ProbeUtils.Filter f){
@@ -81,9 +82,10 @@ public class ProbeFilterParam implements util.genome.probe.ProbeUtils.Filter, Pr
 	
 	public void setExcludedSeqs(String input) { m_ExcludedSeqs = input; }
 	
-	public Map<String, String> getMetadata(){
-		m_Metadata = new LinkedHashMap<>();
-		m_Metadata.put("Generated data", "");
+	public Metadata getMetadata(){
+		m_Metadata = new Metadata();
+		m_Metadata.put("Data", "output name");
+		m_Metadata.put("Type", "data type");
 		m_Metadata.put("Function", "probe filter");
 		m_Metadata.put("Probe set name", m_ProbesName);
 		m_Metadata.put("Min mutations", check(MINMUT));

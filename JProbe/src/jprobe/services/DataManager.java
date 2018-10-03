@@ -55,6 +55,6 @@ public interface DataManager extends Saveable{
 	public List<Data> getData(Class<? extends Data> type);
 	public boolean varExists(String variable); 
 	
-	public void initAssignName(String label, boolean init); // clean up if init=false
+	public void checkIfDefaultName(String label); 
 	
 }

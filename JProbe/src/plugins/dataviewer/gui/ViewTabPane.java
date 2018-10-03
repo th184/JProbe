@@ -25,15 +25,25 @@ public class ViewTabPane extends JTabbedPane{
         this.add(panelOne,"Imported data");
         this.add(panelTwo,"Generated data");
         
-        m_inputList = new DataListPanel(core, gui, tabPane, DataType.INPUT);
+        m_inputList = new DataListPanel(core, gui, tabPane, DataType.INPUT, this);
         JScrollPane scroll_in = new JScrollPane(m_inputList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panelOne.add(scroll_in);
         
-        m_outputList = new DataListPanel(core, gui, tabPane, DataType.OUTPUT);
+        m_outputList = new DataListPanel(core, gui, tabPane, DataType.OUTPUT, this);
         JScrollPane scroll_out = new JScrollPane(m_outputList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panelTwo.add(scroll_out);
         
         this.setVisible(true);
+    }
+    
+    public void displayList(DataType type) {
+    	switch(type) {
+    	case INPUT: 
+    		this.setSelectedIndex(0); break;
+    	case OUTPUT:
+    		this.setSelectedIndex(1); break;
+    	}
+    		
     }
     public void cleanup(){
 		m_inputList.cleanup();

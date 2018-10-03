@@ -3,6 +3,8 @@ package chiptools.jprobe.function.agilentformatter;
 import java.io.File;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import util.progress.ProgressListener;
 import chiptools.Constants;
 import chiptools.Resources;

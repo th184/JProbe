@@ -101,7 +101,7 @@ public abstract class DataArgument<P,D extends Data> extends AbstractArgument<P>
 			DataValidFunction validFunction
 			){
 		return new DataArgsComponent<D>(
-				argName,
+//				argName,
 				core,
 				minArgs,
 				maxArgs,

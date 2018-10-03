@@ -7,6 +7,7 @@ import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PrimerParam;
 import chiptools.jprobe.function.params.ProbesParam;
+import jprobe.services.data.Metadata;
 
 public class GCRunMutatorParams implements ProbesParam, PrimerParam{
 	
@@ -15,7 +16,7 @@ public class GCRunMutatorParams implements ProbesParam, PrimerParam{
 	
 	private String m_PrimerName = null;
 	private String m_ProbesName = null;
-	private Map<String, String> m_Metadata = null;
+	private Metadata m_Metadata = null;
 	
 	public String m_OutputName = null;
 	
@@ -64,9 +65,10 @@ public class GCRunMutatorParams implements ProbesParam, PrimerParam{
 		return m_ProbesName;
 	}
 	
-	public Map<String, String> getMetadata(){
-		m_Metadata = new HashMap<>();
-		m_Metadata.put("Generated data", "");
+	public Metadata getMetadata(){
+		m_Metadata = new Metadata();
+		m_Metadata.put("Data", "output name");
+		m_Metadata.put("Type", "data type");
 		m_Metadata.put("Function", "G-Runs mutator");
 		m_Metadata.put("Probes", m_ProbesName);
 		m_Metadata.put("Primer", check(m_PrimerName));

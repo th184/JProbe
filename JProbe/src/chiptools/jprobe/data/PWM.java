@@ -4,6 +4,7 @@ import java.util.Map;
 
 import jprobe.services.data.AbstractFinalData;
 import jprobe.services.data.AbstractFinalData.DataType;
+import jprobe.services.data.Metadata;
 
 public class PWM extends AbstractFinalData{
 	private static final long serialVersionUID = 1L;
@@ -39,7 +40,7 @@ public class PWM extends AbstractFinalData{
 	
 	private final util.genome.pwm.PWM m_PWM;
 	
-	public PWM(util.genome.pwm.PWM pwm, DataType type, Map<String, String> metadata){
+	public PWM(util.genome.pwm.PWM pwm, DataType type, Metadata metadata){
 		super(pwm.length() + 1, PWM_ROWS, type, null, metadata);
 		m_PWM = pwm;
 	}

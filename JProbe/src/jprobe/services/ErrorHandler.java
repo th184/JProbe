@@ -39,16 +39,18 @@ public class ErrorHandler {
 	
 	public synchronized void handleException(Exception e, Bundle thrower){
 		System.err.println("Error: "+e.getMessage());
+		
 		if(m_ErrorLog != null){
-			if(Debug.getLevel() == Debug.FULL){
+//			if(Debug.getLevel() == Debug.FULL) {
 				String trace = "";
 				for(StackTraceElement elem : e.getStackTrace()){
 					trace += elem + "\n";
 				}
 				m_ErrorLog.write(thrower, " ERROR: "+e.getMessage()+"\n"+trace);
-			}else{
-				m_ErrorLog.write(thrower, " ERROR: "+e.getMessage());
-			}
+				System.out.println(trace);  
+//			}else{
+//				m_ErrorLog.write(thrower, " ERROR: "+e.getMessage());
+//			}  
 		}
 		for(ErrorManager em : m_ErrorManagers){
 			em.handleException(e, thrower);

@@ -8,6 +8,7 @@ import java.util.Map;
 import chiptools.jprobe.data.Peaks;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PeaksParam;
+import jprobe.services.data.Metadata;
 import util.genome.peak.Peak;
 import util.genome.peak.PeakUtils.Filter;
 
@@ -24,7 +25,7 @@ public class PeakFilterParams implements Filter, PeaksParam{
 	private String m_PeaksName = null;
 	private String m_IncludeChrom = null;
 	private String m_ExcludeChrom = null;
-	private Map<String, String> m_Metadata = null;
+	private Metadata m_Metadata = null;
 	
 	private final List<Filter> m_Filters = new ArrayList<Filter>();
 	
@@ -77,9 +78,10 @@ public class PeakFilterParams implements Filter, PeaksParam{
 		m_ExcludeChrom = input;
 	}
 	
-	public Map<String, String> getMetadata(){
-		m_Metadata = new LinkedHashMap<>();
-		m_Metadata.put("Generated data", "");
+	public Metadata getMetadata(){
+		m_Metadata = new Metadata();
+		m_Metadata.put("Data", "output name");
+		m_Metadata.put("Type", "data type");
 		m_Metadata.put("Function", "peak filter");
 		m_Metadata.put("Peak set name", m_PeaksName);
 		m_Metadata.put("Included chroms", check(m_IncludeChrom));

@@ -15,9 +15,14 @@ import util.progress.ProgressListener;
 import jprobe.CoreDataManager;
 import jprobe.services.DataManager;
 import jprobe.services.ErrorHandler;
+import jprobe.services.JProbeCore;
+import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 import jprobe.services.function.Function;
 import jprobe.services.function.FunctionExecutor;
+import plugins.jprobe.gui.ExportImportUtil;
+import plugins.jprobe.gui.GUIActivator;
+import plugins.jprobe.gui.JProbeGUIFrame;
 
 public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 	
@@ -88,18 +93,19 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 			
 			}
 		}
-		
 	}
 	
 	private Bundle m_Bundle;
+	private JProbeCore m_Core; // added
 	private DataManager m_DataManager;
 	private FunctionThread m_Thread;
 	private ProgressWindow m_Monitor;
 	
-
-	public SwingFunctionExecutor(Function<T> function, T params, DataManager dataManager, Bundle bundle) {
+	public SwingFunctionExecutor(Function<T> function, T params, JProbeCore core, Bundle bundle) {
+//	public SwingFunctionExecutor(Function<T> function, T params, DataManager dataManager, Bundle bundle) {
 		super(function);
-		m_DataManager = dataManager;
+		m_Core = core;
+		m_DataManager = core.getDataManager();
 		m_Bundle = bundle;
 		m_Thread = new FunctionThread(this.getFunction(), params);
 	}
@@ -109,11 +115,13 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 
 			@Override
 			public void run() {
-				if(d != null){
+				if(d.getDataType()==DataType.EXPORT) {
+					ExportAgilent.exportData(d, m_Core);
+				}else {
 					String name = d.getOutputName();
 					m_DataManager.addData(d, name, func, m_Bundle);
-					
 				}
+					
 				if(m_Monitor != null){
 					m_Monitor.dispose();
 					m_Monitor = null;
@@ -144,41 +152,21 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 
 	@Override
 	public boolean isComplete() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isCancelled() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void cancel() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void cancel() {}
 
 	@Override
 	public Data getResults() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

@@ -37,10 +37,10 @@ public class AgilentFormatterParams implements PrimerParam{
 		m_PrimerName = name;
 	}
 
-	@Override
-	public String getPrimerName() {
-		return m_PrimerName;
-	}
+//	@Override
+//	public String getPrimerName() {
+//		return m_PrimerName;
+//	}
 
 	public Map<String, String> getMetadata(){
 		m_Metadata = new HashMap<>();

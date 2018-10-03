@@ -19,16 +19,17 @@ public class DataUtils {
 					+ "with the name \""+newName+"\" stored.\nRenaming will overwrite that data."
 							+ "\n\nAre you sure you want to proceed?", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, 
 							null, OPTIONS, OPTIONS[1]);
+			// Yes: result = 0; No: result = 1
 			if(result != 0){
 				return false;
 			}
 		}
+		System.out.println("DataUtils");
 		core.getDataManager().rename(data, newName, DataviewerActivator.getBundle());
 		return true;
 	}
 	
 	public static boolean delete(List<Data> data, JProbeCore core, Frame parent){
-		
 		if(core.getDataManager().containsAll(data)){
 			int result = JOptionPane.showOptionDialog(parent, "Warning:\nThe selected data will be permanently "
 					+ "removed from memory.\n\nAre your sure you want to proceed?", "Warning",

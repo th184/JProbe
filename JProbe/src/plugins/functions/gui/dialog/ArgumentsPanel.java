@@ -402,7 +402,8 @@ public class ArgumentsPanel<T> extends JPanel implements Subject<Boolean>, Obser
 		for(ArgumentPanel<T> argPanel : m_ArgPanels){
 			argPanel.process(params);
 		}
-		SwingFunctionExecutor<T> executor = new SwingFunctionExecutor<T>(m_Function, params, core.getDataManager(), bundle);
+		SwingFunctionExecutor<T> executor = new SwingFunctionExecutor<T>(m_Function, params, core, bundle);
+//		SwingFunctionExecutor<T> executor = new SwingFunctionExecutor<T>(m_Function, params, core.getDataManager(), bundle);
 		executor.execute();
 	}
 	

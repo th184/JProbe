@@ -9,13 +9,14 @@ public class AgilentArray extends AbstractFinalData{
 
 	public static final int NUM_COLS = 1 + AgilentProbe.NUM_ENTRIES;
 	public static final int NAME = 0;
+	private static final String AGILENT_START = "Ctrl_PL";
 	
-	private final String m_Name;
+//	private final String m_Name;
 	private final List<AgilentProbe> m_Probes;
 	
-	public AgilentArray(String name, List<AgilentProbe> probes, DataType type) {
-		super(NUM_COLS, probes.size(), type, null);
-		m_Name = name;
+	public AgilentArray(String arrayName, List<AgilentProbe> probes, DataType type) {
+		super(NUM_COLS, probes.size(), type, arrayName, null); 
+//		m_Name = name;
 		m_Probes = probes;
 	}
 
@@ -49,7 +50,8 @@ public class AgilentArray extends AbstractFinalData{
 
 	protected String getName(int index){
 		String format = "%s_%0"+this.getNumPlaces()+"d";
-		return String.format(format, m_Name, index+1);
+//		return String.format(format, m_Name, index+1);
+		return String.format(format, AGILENT_START, index+1);
 	}
 	
 	public String toString(int index){

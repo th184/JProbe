@@ -1,6 +1,7 @@
 package plugins.dataviewer.gui;
 
 import java.awt.AWTKeyStroke;
+import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.KeyboardFocusManager;
@@ -37,38 +38,17 @@ public class DataViewerSplitPane extends JSplitPane{
 	private final DataTabPane m_DataTab;
 //	private final DataListPanel m_DataList;
 	private final ViewTabPane m_ViewTab;
-	private final MetadataPane m_MetadataPane;
+	private static MetadataPane m_MetadataPane;
 	private final JSplitPane m_splitPane;
 	
 	public DataViewerSplitPane(JProbeCore core, JProbeGUI gui){
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		
-	
-		BasicTabbedPaneUI jtpui = new BasicTabbedPaneUI() {
-		    @Override 
-		    protected boolean shouldRotateTabRuns(int i) {
-		        return false;
-		    }
-		};
 		m_DataTab = new DataTabPane(core.getDataManager());
-		m_DataTab.setUI(jtpui);
-//		UIManager.getDefaults().put("TabbedPane.tabRunOverlay", 0);  
-//		m_DataTab.setUI(new MetalTabbedPaneUI()
-//	    {
-//	      @Override
-//	      protected int calculateTabWidth(int tabPlacement, int tabIndex,
-//	                                      FontMetrics metrics)
-//	      {
-//	        int width = super.calculateTabWidth(tabPlacement, tabIndex, metrics);
-//	        int extra = tabIndex * 50;
-//	        return width + extra;
-//	      }
-//	    });
-		
-		
 //		m_DataList = new DataListPanel(core, gui, m_DataTab);
 		m_ViewTab = new ViewTabPane(core, gui, m_DataTab); 
 		m_MetadataPane = new MetadataPane();
+		
 		m_splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, m_ViewTab, m_MetadataPane);
 		m_splitPane.setOneTouchExpandable(true);
 		m_splitPane.setContinuousLayout(true);
@@ -81,8 +61,17 @@ public class DataViewerSplitPane extends JSplitPane{
 		this.setRightComponent(m_splitPane);
 		this.setResizeWeight(1.0);
 		
-		setupTabTraversalKeys(m_DataTab);
 		
+		setupTabTraversalKeys(m_DataTab);
+		UIManager.put("TabbedPane.selected", Color.white);
+		UIManager.put("TabbedPane.focus", new Color(0, 0, 0, 0)); // make dotted line invisible
+		BasicTabbedPaneUI jtpui = new BasicTabbedPaneUI() {
+		    @Override 
+		    protected boolean shouldRotateTabRuns(int i) {
+		        return false;
+		    }
+		};
+		m_DataTab.setUI(jtpui);
 		m_DataTab.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -92,9 +81,11 @@ public class DataViewerSplitPane extends JSplitPane{
 				}
 			}
 		});
-		
 	}
 	
+	public static MetadataPane getMetadataPane() {
+		return m_MetadataPane;
+	}
 	public void cleanup(){
 		m_DataTab.cleanup();
 //		m_DataList.cleanup();

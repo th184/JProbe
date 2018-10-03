@@ -103,11 +103,11 @@ public class ExportImportUtil {
 		if(returnVal == JFileChooser.APPROVE_OPTION){
 			FileFilter selectedFormat = importChooser.getFileFilter();
 			File f = importChooser.getSelectedFile();
-			importData(core, f, reader, selectedFormat, GUIActivator.getBundle());
+			importData(core, f, reader, selectedFormat, GUIActivator.getBundle(), type);
 		}
 	}
 	
-	public static void importData( final JProbeCore core, final File f, final DataReader reader, final FileFilter format, final Bundle b){
+	public static void importData( final JProbeCore core, final File f, final DataReader reader, final FileFilter format, final Bundle b, Class<? extends Data> type){
 		BackgroundThread.getInstance().invokeLater(new Runnable(){
 
 			@Override
@@ -118,7 +118,9 @@ public class ExportImportUtil {
 					String varName = fileName.substring(0, fileName.lastIndexOf('.'));
 					FileInputStream stream = new FileInputStream(f);
 					Data in = reader.read(format, stream);
-					in.setInputName(varName);
+					in.setInputName(varName);//
+//					in.setVarName(varName);
+					in.setImportMetadata(type.getSimpleName());
 					core.getDataManager().addData(in, varName, b);
 					notifyObservers(new ImportEvent(Type.IMPORTED, reader.getReadClass(), f));
 					stream.close();

@@ -14,6 +14,7 @@ import chiptools.jprobe.function.params.KmerListParam;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.ProbeLenParam;
 import chiptools.jprobe.function.params.SummitParam;
+import jprobe.services.data.Metadata;
 
 public class NegControlParams implements GenomeParam, SummitParam, KmerListParam, EscoreParam, ProbeLenParam{
 	
@@ -30,7 +31,7 @@ public class NegControlParams implements GenomeParam, SummitParam, KmerListParam
 	private String m_IncludeName = null; // included peaks & excluded peaks... not sure
 	private String m_ExcludeName = null;
 	private String m_KmerName = null;
-	private Map<String, String> m_Metadata = null;
+	private Metadata m_Metadata = null;
 	
 	
 	public void setExcludePeaks(List<Peaks> exclude){
@@ -140,8 +141,10 @@ public class NegControlParams implements GenomeParam, SummitParam, KmerListParam
 		return m_GenomeName;
 	}
 	
-	public Map<String, String> getMetadata(){
-		m_Metadata = new HashMap<>();
+	public Metadata getMetadata(){
+		m_Metadata = new Metadata();
+		m_Metadata.put("Data", "output name");
+		m_Metadata.put("Type", "data type");
 		m_Metadata.put("Genome", m_GenomeName);
 		m_Metadata.put("Included peaks", m_IncludeName);
 		m_Metadata.put("Excluded peaks", m_ExcludeName);

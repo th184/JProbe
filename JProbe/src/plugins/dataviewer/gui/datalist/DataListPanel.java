@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
 import plugins.dataviewer.gui.DataTabPane;
+import plugins.dataviewer.gui.ViewTabPane;
 import plugins.jprobe.gui.services.JProbeGUI;
 import jprobe.services.JProbeCore;
 import jprobe.services.data.AbstractFinalData.DataType;
@@ -19,9 +20,9 @@ public class DataListPanel extends JPanel{
 
 	private DataListTable m_Table;
 	
-	public DataListPanel(JProbeCore core, JProbeGUI gui, DataTabPane tabPane, DataType type){
+	public DataListPanel(JProbeCore core, JProbeGUI gui, DataTabPane tabPane, DataType type, ViewTabPane viewTabPane){
 		super(new BorderLayout());
-		m_Table = new DataListTable(core, gui, tabPane, type) { 
+		m_Table = new DataListTable(core, gui, tabPane, type, viewTabPane) { 
 			//Implement table cell tool tips.           
 	        public String getToolTipText(MouseEvent e) {
 	                String tip = null;

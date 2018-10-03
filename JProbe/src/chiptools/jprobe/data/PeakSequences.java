@@ -6,6 +6,7 @@ import util.genome.peak.PeakSequenceGroup;
 import java.util.Map;
 
 import jprobe.services.data.AbstractFinalData;
+import jprobe.services.data.Metadata;
 
 public class PeakSequences extends AbstractFinalData{
 	private static final long serialVersionUID = 1L;
@@ -28,7 +29,7 @@ public class PeakSequences extends AbstractFinalData{
 			PeakSequenceGroup peakSeqs,
 			DataType type, 
 			String outputName, 
-			Map<String, String> metadata){
+			Metadata metadata){
 		
 		super(PEAKSEQ_COLS, peakSeqs.size(), type, outputName, metadata);
 		m_PeakSeqs = peakSeqs;
