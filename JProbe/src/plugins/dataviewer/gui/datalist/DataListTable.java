@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -105,7 +106,7 @@ public class DataListTable extends JTable implements MouseListener, KeyListener{
 				int col = this.getSelectedColumn();
 				Data selected = m_Model.getData(row);
 				m_Model.setSelectedCell(row, col); 
-				m_PopupMenuRename.setData(selected);
+				m_PopupMenuRename.setData(new ArrayList<>(Arrays.asList(selected)));
 				m_PopupMenuRename.show(this, event.getX(), event.getY());
 			} else {
 				int[] rows = convertRows(this.getSelectedRows());

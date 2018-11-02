@@ -24,7 +24,6 @@ public class DataUtils {
 				return false;
 			}
 		}
-		System.out.println("DataUtils");
 		core.getDataManager().rename(data, newName, DataviewerActivator.getBundle());
 		return true;
 	}

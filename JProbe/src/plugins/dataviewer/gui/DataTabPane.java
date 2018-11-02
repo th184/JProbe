@@ -36,6 +36,8 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	private Map<Integer, DataTab> m_IndexToTabs = new HashMap<>();
 	private Map<Data, Integer> m_DataToIndex = new HashMap<>();
 	private Map<DataTab, Integer> m_TabsToIndex = new HashMap<>();
+	private Data m_dataDisplayed;
+	public static boolean last_action_closed_tab = false;
 	
 	public DataTabPane(DataManager dataManager){
 		super();
@@ -73,7 +75,6 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 		for(int i = 0; i < totalTabs; i++) {
 		   DataTab tab = (DataTab) this.getComponentAt(i);
 		   Data data = tab.getData();
-		   
 		   int old_i = m_TabsToIndex.get(tab);
 		   m_TabsToIndex.put(tab, i);
 		   m_IndexToTabs.remove(old_i);
@@ -84,13 +85,30 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 		   
 		}
 	}
-	
+	private void updateMetadataPane() {
+		if(this.getTabCount()==0) {
+			MetadataPane.clearMetadataPane();
+		}else {
+			int j = this.getSelectedIndex();// index of the tab that's in focus
+			MetadataPane.displayMetadata(this.getIndexData(j).getMetadata());
+		}
+		// these cases need the same result
+//		if(focused_data==closed_data) { 
+//		System.out.println("closed data == focused data");
+////		if(tab_count-1==i) {// right-most tab
+//			// next focused tab is on the left
+////		}else {
+////			// next focused tab is on the right
+////		}
+//	}else {
+//		System.out.println("not equal");
+//	}
+	}
 	public void initTabs(){
 		for(Data d : m_DataManager.getAllData()){
 			DataTab tab = new DataTab(d);
 			String label = m_DataManager.getDataName(d);
 			m_DataToTabs.put(d, tab);
-//			this.addTab("", tab);
 			this.addTab("", null, tab, label); // tooltip on tab label
 			int index = this.indexOfComponent(tab);
 			DataTabLabel tabLabel = new DataTabLabel(this, tab, label);
@@ -104,6 +122,9 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 			m_TabsToIndex.put(tab, index);
 			
 		}
+		m_dataDisplayed = this.getIndexData(0); // the default displayed data is the first tab
+		if(m_dataDisplayed !=null)
+		MetadataPane.displayMetadata(m_dataDisplayed.getMetadata());
 	}
 	public GridBagConstraints getGridBagConstraints(){
 		return m_Constraints;
@@ -128,9 +149,10 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	}
 	
 	@Override
-	public void displayData(Data data) {	
+	public void displayData(Data data) {
 		// create new tab for imported data
 		if(!m_DataToTabs.containsKey(data)){
+			m_dataDisplayed = data;
 			DataTab tab = new DataTab(data);
 			m_DataToTabs.put(data, tab);
 			this.addTab("", tab);
@@ -138,8 +160,7 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 			DataTabLabel lable = new DataTabLabel(this, tab, m_DataManager.getDataName(data));
 			m_TabLables.put(data, lable);
 			this.setTabComponentAt(index, lable);
-			this.setSelectedIndex(index); // this line
-			
+			this.setSelectedIndex(index);    
 			m_IndexToData.put(index, data);
 			m_IndexToTabs.put(index, tab);
 			m_DataToIndex.put(data, index);
@@ -151,20 +172,25 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	}
 
 	@Override
-	public void closeData(Data data) {
+	public void closeData(Data data) { // called when deleting data
+		
 		this.remove(m_DataToTabs.get(data));
 		m_DataToTabs.remove(data);
 		m_TabLables.remove(data);
+		updateIndex();
+		updateMetadataPane();
+		
 	}
 	
 	public void closeTab(DataTab tab){
+		last_action_closed_tab = true;
+		
 		this.remove(tab);
 		m_DataToTabs.remove(tab.getData());
-		m_TabLables.remove(tab.getData());
-		
-//		int i = m_TabsToIndex.get(tab);
-//		this.setSelectedIndex(i); --> index out of bound after closing the last tab
+		m_TabLables.remove(tab.getData());	
 		updateIndex();
+		updateMetadataPane();
+		
 	}
 	
 	public void clear(){
@@ -180,7 +206,6 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	@Override
 	public void update(final CoreEvent event) {
 		SwingUtilities.invokeLater(new Runnable(){
-
 			@Override
 			public void run() {
 				process(event);
@@ -195,6 +220,8 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 			break;
 		case DATA_NAME_CHANGE:
 			m_TabLables.get(event.getData()).setTitle(m_DataManager.getDataName(event.getData()));
+			event.getData().getMetadata().put("Data", m_DataManager.getDataName(event.getData()));
+			MetadataPane.displayMetadata(event.getData().getMetadata());
 			break;
 		case DATA_REMOVED:
 			closeData(event.getData());
@@ -213,9 +240,6 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.isControlDown() && e.getKeyCode() == KeyEvent.VK_W) {
-//			this.remove(this.getSelectedIndex());
-			System.out.println("selected index: "+this.getSelectedIndex());
-			System.out.println("num tabs: "+this.getTabCount());  
 			DataTab tab = m_IndexToTabs.get(this.getSelectedIndex());
 			this.closeTab(tab);
 		}
@@ -225,7 +249,6 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	public void mousePressed(MouseEvent arg0) {
 		this.requestFocusInWindow();
 	}
-
 	@Override
 	public void keyReleased(KeyEvent arg0) {}
 	@Override

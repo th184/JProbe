@@ -3,8 +3,11 @@ package chiptools.jprobe.function.agilentformatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import jprobe.services.data.Data;
+import jprobe.services.data.Metadata;
 import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import util.DNAUtils;
@@ -46,13 +49,32 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 		}
 		return percent;
 	}
-
+	
 	@Override
 	public Data execute(ProgressListener l, AgilentFormatterParams params) throws Exception {
 		int maxProgress = 0;
+		List<Pair> AgilentMetadata = new ArrayList<>();
+		int numProbeSet = params.PROBE_CATEGORIES.size();
+		AgilentMetadata.add(new Pair("Number of probe sets included", String.valueOf(numProbeSet)));
+		
+		int counter = 1;
 		for(DataCategory<Probes> cat : params.PROBE_CATEGORIES){
+//			System.out.println("data: "+cat.DATA.getVarName());
 			maxProgress += cat.DATA.getProbeGroup().size();
+			Metadata MD = cat.DATA.getMetadata();
+			for(String key: MD.keySet()) {
+				String val = MD.get(key);
+				if(key.equals("Data")) {
+					AgilentMetadata.add(new Pair("Probe set "+String.valueOf(counter), ""));
+					AgilentMetadata.add(new Pair("Name", val));
+					counter += 1;
+				}else if(!key.equals("Type")) { // omit Type in metadata
+					AgilentMetadata.add(new Pair(key, val));
+				}
+			}
+			AgilentMetadata.add(new Pair("",""));
 		}
+		
 		int percent = -1;
 		int count = 1;
 		
@@ -90,7 +112,7 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 		
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done converting probes to Agilent format."));
 		
-		return new AgilentArray(params.ARRAY_NAME, agilentProbes, DataType.EXPORT);
+		return new AgilentArray(params.ARRAY_NAME, agilentProbes, DataType.EXPORT, AgilentMetadata);
 	}
 	
 	protected static String createInfo(String direction, int replicate, String type){
@@ -108,5 +130,17 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 		return new AgilentProbe(DNAUtils.reverseCompliment(p.getSequence()) + primer, category, categoryIndex, info, p.getRegion());
 	}
 	
+	public class Pair {
+		  private final String key;
+		  private final String val;
 
+		  public Pair(String key, String val) {
+		    this.key = key;
+		    this.val = val;
+		  }
+		  public String getKey() { return key; }
+		  public String getValue() {return val; }
+	}
+		  
+		  
 }

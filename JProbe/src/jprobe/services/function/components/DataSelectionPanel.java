@@ -35,7 +35,7 @@ public class DataSelectionPanel<D extends Data> extends JPanel implements ItemLi
 
 		@Override
 		public void close() {
-			//do nothing
+			// do nothing
 		}
 		
 	};

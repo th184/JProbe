@@ -42,11 +42,14 @@ public class AgilentFormatterParams implements PrimerParam{
 //		return m_PrimerName;
 //	}
 
-	public Map<String, String> getMetadata(){
-		m_Metadata = new HashMap<>();
-		m_Metadata.put("Primer", m_PrimerName);
-		return m_Metadata;
-	}
+//	public Map<String, String> getMetadata(){
+//		m_Metadata = new HashMap<>();
+//		m_Metadata.put("Primer", m_PrimerName);
+//		return m_Metadata;
+//	}
+	
+	// As opposed to creating metadata in the -Param class like other function, 
+	// AgilentFormatter's metadata is created in AgilentFormatter class.
 
 
 	

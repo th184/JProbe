@@ -50,7 +50,7 @@ public class CoreDataManager implements DataManager{
 	private Map<String, Data> m_NameToData = new HashMap<String, Data>();
 	private Map<Data, String> m_DataToName = new LinkedHashMap<Data, String>();
 	
-	private final int OCCUPANCY_ARRAY_SIZE = 5; // change this later!!!
+	private final int OCCUPANCY_ARRAY_SIZE = 50; // change this later!!!
 	
 	public Map<String, boolean[]> m_Index = new HashMap<>()
 	{{	// boolean array = "occupied?"; initialize to all false
@@ -205,24 +205,7 @@ public class CoreDataManager implements DataManager{
 		m_DataToName.putAll(m_InputDataToName);
 		m_DataToName.putAll(m_OutputDataToName);
 	}
-	
-//	private String assignName(Data d){
-//		// assign name for imported data 
-//		int count;
-//		if(m_Counts.containsKey(d)){
-//			count = m_Counts.get(d.getClass()) + 1;
-//		}else{
-//			count = 1;
-//		}
-//		String name = d.getClass().getSimpleName()+String.valueOf(count);
-//		determineDataType(d);
-//		while(m_NameToData.containsKey(name)){
-//			name = d.getClass().getSimpleName()+String.valueOf(++count);
-//		}
-//		return name;
-//	}
-	
-	
+		
 	private synchronized void addData(Data d, String name, Bundle responsible, boolean notify){
 		Class<? extends Data> clazz = d.getClass();
 		determineDataType(d);
@@ -258,7 +241,7 @@ public class CoreDataManager implements DataManager{
 			}else {
 				varName = assignName(d, func, filename);
 			}
-			d.getMetadata().addListener(DataViewerSplitPane.getMetadataPane());
+//			d.getMetadata().addListener(DataViewerSplitPane.getMetadataPane());
 			d.getMetadata().put("Data",varName); //fill in the variable name
 			d.getMetadata().put("Type", d.getClass().getSimpleName()+" (generated)");
 			this.addData(d, varName, responsible, true);
@@ -267,11 +250,6 @@ public class CoreDataManager implements DataManager{
 	public synchronized void addData(Data d, String filename, Bundle responsible){
 		this.addData(d, filename, responsible, true);
 	}
-	
-//	@Override
-//	public synchronized void addData(Data d, Bundle responsible){
-//		addData(d, assignName(d), responsible); 
-//	}
 	
 	/*
 	 * return the next available index from m_Index
@@ -327,9 +305,9 @@ public class CoreDataManager implements DataManager{
 		if(!m_Index.containsKey(name)) {
 			
 			m_Index.put(name, new boolean[OCCUPANCY_ARRAY_SIZE]);
-			System.out.println("putting "+name+" in m_Index");
+//			System.out.println("putting "+name+" in m_Index");
 		}else {
-			System.out.println("m_Index contains name: "+name);
+//			System.out.println("m_Index contains name: "+name);
 			int nextInd = nextIndex(name, false);
 			if(nextInd==0) {
 				name = name;
@@ -349,14 +327,16 @@ public class CoreDataManager implements DataManager{
 		return name;
 	}
 	private boolean getTag(String pre, String suff) {
-		if(m_Standard.get(pre) != null) {
-			return m_Standard.get(pre);
+		
+		if(m_Standard.get(suff) != null) {
+			return m_Standard.get(suff);
 		}
-		return m_Standard.get(suff);
+		return m_Standard.get(pre);
 	}
 	@Override
 	public void checkIfDefaultName(String label) {
 		List<String> list = new LinkedList<String>(Arrays.asList(label.split("_",-1)));
+		
 		String pre = list.get(0);
 		String suff;
 		String name;
@@ -374,6 +354,7 @@ public class CoreDataManager implements DataManager{
 		}else {
 			suff = list.get(list.size()-1);
 			if(m_Standard.containsKey(pre)||m_Standard.containsKey(suff)) {
+				
 				name = String.join("_", list);
 				updateArray(name, 0, getTag(pre, suff));
 //				m_Counts.put(name, 1);
@@ -393,7 +374,7 @@ public class CoreDataManager implements DataManager{
 //		System.out.println("m_NameToData contains name: "+m_NameToData.containsKey(name));
 		m_NameToData.remove(name);
 		m_DataToName.remove(d);
-//		System.out.println("m_NameToData contains name: "+m_NameToData.containsKey(name));
+//		System.out.println("m_NameToData contains name: "+m_NameToData.containsKey(name)); 
 		d.dispose();
 		notifyListeners(new CoreEvent(m_Core, Type.DATA_REMOVED, responsible, d));
 	}
@@ -492,11 +473,7 @@ public class CoreDataManager implements DataManager{
 		// update default name
 		checkIfDefaultName(old);
 		checkIfDefaultName(name);
-		// update metadata
-		System.out.println("CoreDataManager");
-		d.getMetadata().put("Data", name);
-		d.getMetadata().updateMetadata();
-		
+				
 		notifyListeners(new CoreEvent(m_Core, Type.DATA_NAME_CHANGE, responsible, d, old, name));
 	}
 	
@@ -624,8 +601,6 @@ public class CoreDataManager implements DataManager{
 			String fileName = file.getName();
 			FileInputStream in = new FileInputStream(file);
 			Data read = reader.read(format, in);
-//			System.out.println("trying to test()...");
-//			read.getMetadata().test(); // testing 
 			this.addData(read, fileName, "", responsible);
 			in.close();
 			return read;

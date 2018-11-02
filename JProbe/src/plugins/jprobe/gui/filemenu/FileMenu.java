@@ -26,7 +26,7 @@ public class FileMenu extends JMenu{
 		this.add(new SaveAsMenuItem(core));
 		this.addSeparator();
 		this.add(new ImportMenu(core, parentFrame.getImportChooser()));
-		this.add(new ExportMenu(core, parentFrame.getExportChooser()));
+		this.add(new ExportMenu(core, parentFrame.getExportSingleFileChooser(), parentFrame.getExportMultiFileChooser()));
 		//only add the quit menu if not on Mac
 		if(Platform.getInstance().getOperatingSystem() != OS.MAC){
 			this.addSeparator();

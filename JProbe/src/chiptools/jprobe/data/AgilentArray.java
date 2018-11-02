@@ -1,7 +1,9 @@
 package chiptools.jprobe.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import chiptools.jprobe.function.agilentformatter.AgilentFormatter.Pair;
 import jprobe.services.data.AbstractFinalData;
 
 public class AgilentArray extends AbstractFinalData{
@@ -14,12 +16,29 @@ public class AgilentArray extends AbstractFinalData{
 //	private final String m_Name;
 	private final List<AgilentProbe> m_Probes;
 	
-	public AgilentArray(String arrayName, List<AgilentProbe> probes, DataType type) {
+	public AgilentArray(String arrayName, List<AgilentProbe> probes, DataType type, List<Pair> AgilentMetadata) {
 		super(NUM_COLS, probes.size(), type, arrayName, null); 
 //		m_Name = name;
 		m_Probes = probes;
+		this.setAgilentMetadata(parse(AgilentMetadata));
 	}
-
+	private List<String> parse(List<Pair> metadata){
+		List<String> str_metadata = new ArrayList<>();
+		for(int i=0;i<metadata.size();i++) {
+			String k = metadata.get(i).getKey();
+			String v = metadata.get(i).getValue();
+			String line;
+			if(!v.isEmpty()) {
+				line = k+": "+v;
+			}else if(!k.isEmpty()){
+				line = k;
+			}else {
+				line=""; //empty line separates probe set 
+			}
+			str_metadata.add(line);
+		}
+		return str_metadata;
+	}
 	@Override
 	public void dispose() {
 		//do nothing;
@@ -67,5 +86,6 @@ public class AgilentArray extends AbstractFinalData{
 			return m_Probes.get(row).getEntry(col - 1, this.getNumPlaces());
 		}
 	}
+	
 
 }

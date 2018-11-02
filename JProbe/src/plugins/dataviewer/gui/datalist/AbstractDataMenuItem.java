@@ -31,9 +31,5 @@ public abstract class AbstractDataMenuItem extends JMenuItem implements ActionLi
 		
 		return m_DataList;
 	}
-	
-	public void setData(Data data) {
-		m_Data = data;
-	}
-	
+		
 }

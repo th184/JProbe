@@ -6,9 +6,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,6 +22,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.FileChooserUI;
 
+import org.apache.commons.lang3.StringUtils;
 import org.osgi.framework.Bundle;
 
 import plugins.jprobe.gui.notification.ExportEvent;
@@ -98,13 +103,51 @@ public class ExportImportUtil {
 		for(FileFilter format : formats){
 			importChooser.addChoosableFileFilter(format);
 		}
+		
+		// FileListAccessory
+        ImportListAccessory accessory = new ImportListAccessory(importChooser);
+        importChooser.setAccessory(accessory);
+        int open = importChooser.showDialog(importChooser,"Import");
+        if (open == JFileChooser.APPROVE_OPTION) {
+            DefaultListModel model = accessory.getModel();
+            List<String> existed = new ArrayList<String>();
+            for (int i = 0; i < model.getSize(); i++) {
+            	FileFilter selectedFormat = importChooser.getFileFilter();
+            	File f = (File) model.getElementAt(i);
+ 	            String fileName = f.getName();
+ 	            String name = fileName.substring(0, fileName.lastIndexOf('.'));
+ 	            if(core.getDataManager().varExists(name)) {
+ 	            	existed.add(name);
+ 	            }else {
+ 	            	importData(core, f, reader, selectedFormat, GUIActivator.getBundle(),type);
+ 	            }
+            }
+            for(int i =0;i<existed.size();i++) {
+            }
+            if(existed.size()!=0) {
+            	StringBuilder dup = new StringBuilder();
+            	for (String s :existed){
+            	    dup.append(s);
+            	    dup.append("\n");
+            	}
+            	JOptionPane.showConfirmDialog(null,
+             			"The following variable(s) were not imported because they already exist in the system.\n"
+             			+ "Please import file(s) with unused variable names. \n"
+             			+ dup,
+             			"Existing variable",
+             			JOptionPane.DEFAULT_OPTION,  // with one OK button
+             			JOptionPane.WARNING_MESSAGE);
+ 	            	return;
+ 	            }
+            }
+            
 		//show the file chooser and read data from the selected file using the selected file format
-		int returnVal = importChooser.showDialog(parent, "Import");
-		if(returnVal == JFileChooser.APPROVE_OPTION){
-			FileFilter selectedFormat = importChooser.getFileFilter();
-			File f = importChooser.getSelectedFile();
-			importData(core, f, reader, selectedFormat, GUIActivator.getBundle(), type);
-		}
+//		int returnVal = importChooser.showDialog(parent, "Import");
+//		if(returnVal == JFileChooser.APPROVE_OPTION){
+//			FileFilter selectedFormat = importChooser.getFileFilter();
+//			File f = importChooser.getSelectedFile();
+//			importData(core, f, reader, selectedFormat, GUIActivator.getBundle(), type);
+//		}
 	}
 	
 	public static void importData( final JProbeCore core, final File f, final DataReader reader, final FileFilter format, final Bundle b, Class<? extends Data> type){
@@ -118,8 +161,8 @@ public class ExportImportUtil {
 					String varName = fileName.substring(0, fileName.lastIndexOf('.'));
 					FileInputStream stream = new FileInputStream(f);
 					Data in = reader.read(format, stream);
-					in.setInputName(varName);//
-//					in.setVarName(varName);
+//					in.setInputName(varName);//
+					in.setVarName(varName);
 					in.setImportMetadata(type.getSimpleName());
 					core.getDataManager().addData(in, varName, b);
 					notifyObservers(new ImportEvent(Type.IMPORTED, reader.getReadClass(), f));
@@ -136,6 +179,45 @@ public class ExportImportUtil {
 		});
 	}
 
+	public static void exportAllData(List<Data> dataList, JProbeCore core, JFileChooser exportChooser, Frame parent) {
+		ExportListAccessory accessory = new ExportListAccessory(dataList);
+		DefaultListModel list = accessory.getModel();
+        exportChooser.setAccessory(accessory);
+        exportChooser.setMultiSelectionEnabled(true);
+        
+	    int returnVal = exportChooser.showDialog(exportChooser,"Export"); 	    
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        	DefaultListModel model = accessory.getModel();
+            int[] selected = accessory.getSelectedIndices();
+            for(int i=0; i<selected.length; i++) {
+            	
+            	//Data data = core.getDataManager().getData((String)model.getElementAt(i));
+            	System.out.println("inside approve option");
+//            	System.out.println("to export: "+(String)model.getElementAt(i));
+//            	DataWriter writer = core.getDataManager().getDataWriter(data.getClass());
+//        		if(writer == null){
+//        			ErrorHandler.getInstance().handleWarning("Data type \""+data.getClass()+"\" not writable.", GUIActivator.getBundle());
+//        			return;
+//        		}
+//        		FileFilter[] formats = writer.getValidWriteFormats();
+//        		//if there are none, then there is an error in the data writer. warn the user and return
+//        		if(formats.length <= 0){
+//        			ErrorHandler.getInstance().handleWarning("There are no writable formats for the data type: "+data.getClass().getSimpleName(), GUIActivator.getBundle());
+//        			return;
+//        		}
+//            	
+//            	String fileName = core.getDataManager().getDataName(data);
+//            	exportChooser.setSelectedFile(new File(fileName+".txt"));
+//            	File file = exportChooser.getSelectedFile();
+//            	FileNameExtensionFilter format = (FileNameExtensionFilter) exportChooser.getFileFilter();
+//    			if(!fileEndsInValidExtension(file, format)){
+//    				file = new File(file.toString()+"."+format.getExtensions()[0]);
+//    			}
+//    			exportData(core, writer, file, data, format);
+            }
+        }
+	}
+	
 	public static void exportData(Data data, JProbeCore core, JFileChooser exportChooser, Frame parent){
 		// retrieve file formats for this data object
 		DataWriter writer = core.getDataManager().getDataWriter(data.getClass());
@@ -149,7 +231,7 @@ public class ExportImportUtil {
 			ErrorHandler.getInstance().handleWarning("There are no writable formats for the data type: "+data.getClass().getSimpleName(), GUIActivator.getBundle());
 			return;
 		}
-		//set the file chooser's file filters to those retreived above
+		//set the file chooser's file filters to those retrieved above
 		exportChooser.resetChoosableFileFilters();
 		exportChooser.setAcceptAllFileFilterUsed(false);
 		for(FileFilter format : formats){
@@ -158,7 +240,7 @@ public class ExportImportUtil {
 		//show the file chooser and write the data to the selected file using the selected file format
 		String fileName = core.getDataManager().getDataName(data);
 		// ADD extension... all .txt?
-		
+//		exportChooser.setSelectedFile(new File("test.txt"));
 		exportChooser.setSelectedFile(new File(fileName+".txt"));
 		int returnVal = exportChooser.showDialog(parent, "Export");
 		if(returnVal == JFileChooser.APPROVE_OPTION){

@@ -33,9 +33,8 @@ public abstract class AbstractFinalData implements Data{
 	private DataType m_Type;
 	private String m_InputName = null; // file/var name for INPUT data
 	private String m_OutputName = null; // file/var name for OUTPUT data
-//	private Map<String, String> m_Metadata;
-	// ADDED
 	private Metadata m_Metadata;
+	private List<String> m_AgilentMetadata=null;
 	
 	private String m_VarName = null;
 	
@@ -46,7 +45,12 @@ public abstract class AbstractFinalData implements Data{
 		m_OutputName = outputName;
 		m_Metadata = metadata;
 	}
-	
+	public void setAgilentMetadata(List<String> AgilentMetadata) {
+		m_AgilentMetadata = AgilentMetadata;
+	}
+	public List<String> getAgilentMetadata(){
+		return m_AgilentMetadata;
+	}
 	//readObject method to init the transient listeners collection after deserialization
 	private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException{
 		in.defaultReadObject();
@@ -101,11 +105,6 @@ public abstract class AbstractFinalData implements Data{
 			Metadata inputMD= new Metadata();
 			inputMD.put("Data", m_VarName);
 			inputMD.put("Type", dataType+" (imported)");
-			
-//			Map<String, String> inputMetadata = new LinkedHashMap<>() {{
-//				put("Data", m_VarName);
-//				put("Type", dataType+" (imported)"); 
-//			}};
 			m_Metadata = inputMD;
 		}
 	}

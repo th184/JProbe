@@ -66,7 +66,8 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 	private DialogueMenu m_HelpMenu;
 	private FileMenu m_FileMenu;
 	private JFileChooser m_ImportChooser;
-	private JFileChooser m_ExportChooser;
+	private JFileChooser m_ExportSingleFileChooser;
+	private JFileChooser m_ExportMultiFileChooser;
 	private NotificationPanel m_NotePanel;
 	private Collection<GUIListener> m_Listeners;
 	private final String m_Name;
@@ -74,25 +75,27 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 	public JProbeGUIFrame(JProbeCore core, String name, Bundle bundle, GUIConfig config){
 		super();
 		m_Name = name;
-		m_ImportChooser = new JFileChooser() {
-			@Override
-	        public void approveSelection() {
-	            File f = getSelectedFile();
-	            String fileName = f.getName();
-	            String name = fileName.substring(0, fileName.lastIndexOf('.'));
-	            if(core.getDataManager().varExists(name)) {
-	            	JOptionPane.showConfirmDialog(this,
-            			"The variable name already exists in the system.\nPlease import a file with an unused variable name. ",
-            			"Existing variable",
-            			JOptionPane.DEFAULT_OPTION,  // with one OK button
-            			JOptionPane.WARNING_MESSAGE);
-	            	return;
-	            }
-	            super.approveSelection();
-			}
-		};
+		m_ImportChooser = new JFileChooser(); 
+//		{
+//			@Override
+//	        public void approveSelection() {
+//	            File f = getSelectedFile();
+//	            String fileName = f.getName();
+//	            String name = fileName.substring(0, fileName.lastIndexOf('.'));
+//	            if(core.getDataManager().varExists(name)) {
+//	            	JOptionPane.showConfirmDialog(this,
+//            			"The variable name already exists in the system.\nPlease import a file with an unused variable name. ",
+//            			"Existing variable",
+//            			JOptionPane.DEFAULT_OPTION,  // with one OK button
+//            			JOptionPane.WARNING_MESSAGE);
+//	            	return;
+//	            }
+//	            super.approveSelection();
+//			}
+//		};
+		m_ExportMultiFileChooser = new JFileChooser(); //add here
 		
-		m_ExportChooser = new JFileChooser(){
+		m_ExportSingleFileChooser = new JFileChooser(){
 			@Override
 	        public void approveSelection() {
 	            File f = getSelectedFile();
@@ -350,8 +353,11 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 		checkDebugAndLog("Preferences tab "+component.toString()+" removed by plugin: "+responsible.getSymbolicName());
 	}
 	
-	public JFileChooser getExportChooser(){
-		return m_ExportChooser;
+	public JFileChooser getExportSingleFileChooser(){
+		return m_ExportSingleFileChooser;
+	}
+	public JFileChooser getExportMultiFileChooser() {
+		return m_ExportMultiFileChooser;
 	}
 	
 	public JFileChooser getImportChooser(){
@@ -376,7 +382,7 @@ public class JProbeGUIFrame extends JFrame implements JProbeGUI, CoreListener, S
 	@Override
 	public void write(List<Data> list) {
 		for(Data d: list) {
-			ExportImportUtil.exportData(d, m_Core, m_ExportChooser, this);
+			ExportImportUtil.exportData(d, m_Core, m_ExportSingleFileChooser, this);
 		}
 	}
 

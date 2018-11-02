@@ -40,8 +40,8 @@ public class DataTabLabel extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
 		m_TabbedPane.closeTab(m_Tab);
+//		System.out.println("selected i in action performed "+m_TabbedPane.getSelectedIndex());
 		
 	}
 	

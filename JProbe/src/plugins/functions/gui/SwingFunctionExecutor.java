@@ -85,12 +85,10 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 						m_Monitor.setText(event.getMessage());
 						m_Monitor.setValue(event.getProgress());
 					}
-					
 				});
 				break;
 			default:
 				break;
-			
 			}
 		}
 	}

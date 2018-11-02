@@ -1,6 +1,7 @@
 package jprobe.services.data;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JTable;
@@ -40,6 +41,7 @@ public interface Data extends TableModel, Serializable{
 //	public void setImportMetadata();
 	public void setImportMetadata(String dataType);
 	public Metadata getMetadata();
+	public List<String> getAgilentMetadata();
 	
 	public void setVarName(String name);
 	public String getVarName();

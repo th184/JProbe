@@ -110,13 +110,11 @@ public class DataListModel extends DefaultTableModel implements CoreListener{
 				return;
 			}
 			if(m_Core.getDataManager().contains(oldName)){
-				System.out.println("DataListModel: core contains oldName");
 				//This means that the name change needs to be push to the core
 				Data change = m_Core.getDataManager().getData(oldName);
 				DataUtils.rename(change, newName, m_Core, DataviewerActivator.getGUIFrame());
 				super.setValueAt(newName, row, col); // added to reflect name change in table
 			}else{
-				System.out.println("DataListModel: core does not contain oldName");
 				//This means that the name change is received from the core and the field should be updated accordingly
 				Data changed = m_Core.getDataManager().getData(newName);
 				m_Data.put(changed, newName);

@@ -36,7 +36,6 @@ public class DataViewerSplitPane extends JSplitPane{
 	private static final long serialVersionUID = 1L;
 	
 	private final DataTabPane m_DataTab;
-//	private final DataListPanel m_DataList;
 	private final ViewTabPane m_ViewTab;
 	private static MetadataPane m_MetadataPane;
 	private final JSplitPane m_splitPane;
@@ -45,7 +44,6 @@ public class DataViewerSplitPane extends JSplitPane{
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		
 		m_DataTab = new DataTabPane(core.getDataManager());
-//		m_DataList = new DataListPanel(core, gui, m_DataTab);
 		m_ViewTab = new ViewTabPane(core, gui, m_DataTab); 
 		m_MetadataPane = new MetadataPane();
 		
@@ -57,7 +55,6 @@ public class DataViewerSplitPane extends JSplitPane{
 		this.setOneTouchExpandable(true);
 		this.setContinuousLayout(true);
 		this.setLeftComponent(m_DataTab);
-//		this.setRightComponent(m_DataList);
 		this.setRightComponent(m_splitPane);
 		this.setResizeWeight(1.0);
 		
@@ -75,10 +72,15 @@ public class DataViewerSplitPane extends JSplitPane{
 		m_DataTab.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Data selectedData = m_DataTab.getIndexData(m_DataTab.getSelectedIndex());
-				if(selectedData != null && selectedData.getMetadata() != null) {
-					MetadataPane.displayMetadata(selectedData.getMetadata());
+				if(!DataTabPane.last_action_closed_tab) {
+					
+					Data selectedData = m_DataTab.getIndexData(m_DataTab.getSelectedIndex());
+					if(selectedData != null && selectedData.getMetadata() != null) {
+							MetadataPane.displayMetadata(selectedData.getMetadata());
+					}
 				}
+				DataTabPane.last_action_closed_tab = false;
+				
 			}
 		});
 	}

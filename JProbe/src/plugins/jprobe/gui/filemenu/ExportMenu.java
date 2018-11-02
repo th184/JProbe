@@ -1,12 +1,16 @@
 package plugins.jprobe.gui.filemenu;
 
+import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import jprobe.services.CoreEvent;
 import jprobe.services.CoreListener;
@@ -17,14 +21,16 @@ public class ExportMenu extends JMenu implements CoreListener{
 	private static final long serialVersionUID = 1L;
 	
 	private JProbeCore m_Core;
-	private JFileChooser m_FileChooser;
+	private JFileChooser m_SingleFileChooser;
+	private JFileChooser m_MultiFileChooser;
 	private Map<Data, JMenuItem> m_Items;
 	
-	public ExportMenu(JProbeCore core, JFileChooser exportChooser){
+	public ExportMenu(JProbeCore core, JFileChooser exportSingleFileChooser, JFileChooser exportMultiFileChooser){
 		super("Export");
 		m_Core = core;
 		m_Core.addCoreListener(this);
-		m_FileChooser = exportChooser;
+		m_SingleFileChooser = exportSingleFileChooser;
+		m_MultiFileChooser = exportMultiFileChooser;
 		m_Items = new HashMap<Data, JMenuItem>();
 		SwingUtilities.invokeLater(new Runnable(){
 
@@ -39,20 +45,38 @@ public class ExportMenu extends JMenu implements CoreListener{
 	}
 	
 	private void checkAllCoreData(){
+		List<Data> toExport = new ArrayList<>(); //added
 		for(Data data : m_Core.getDataManager().getAllData()){
 			if(m_Core.getDataManager().isWritable(data.getClass())){
-				this.addExportItem(data);
+				toExport.add(data);
 			}else{
 				this.removeExportItem(data);
 			}
 		}
+		if(!toExport.isEmpty()) {
+			if(toExport.size()==1) {
+				this.addExportItem(toExport.get(0));
+			}else {
+				this.addExportAllItem(toExport);
+				for(int i=0 ; i<toExport.size() ;i++) {
+					this.addExportItem(toExport.get(i));
+				}
+			}
+			
+		}
+		
 	}
-	
+	private void addExportAllItem(List<Data> toExport) { 
+		JMenuItem item = new ExportAllMenuItem(toExport, m_Core, m_MultiFileChooser);
+		this.add(item);
+		
+	}
 	private void addExportItem(Data data){
 		if(m_Items.containsKey(data)){
 			this.remove(m_Items.get(data));
 		}
-		JMenuItem item = new ExportMenuItem(data, m_Core, m_FileChooser);
+		JMenuItem item = new ExportMenuItem(data, m_Core, m_SingleFileChooser);
+
 		m_Items.put(data, item);
 		this.add(item);
 		this.revalidate();
