@@ -1,0 +1,45 @@
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.felix.framework.util.SecureAction (file:/C:/Users/th184/Documents/JProbe/JProbe/distributable/lib/felix-framework-4.4.0/felix.jar) to method java.net.URLClassLoader.addURL(java.net.URL)
+WARNING: Please consider reporting this to the maintainers of org.apache.felix.framework.util.SecureAction
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+ERROR: Bundle chiptools.jprobe [1] Error starting file:/C:/Users/th184/Documents/JProbe/JProbe/distributable/plugins/chiptools.jar (org.osgi.framework.BundleException: Unresolved constraint in bundle chiptools.jprobe [1]: Unable to resolve 1.0: missing requirement [1.0] osgi.wiring.package; (osgi.wiring.package=plugins.jprobe.gui.services) [caused by: Unable to resolve 4.0: missing requirement [4.0] osgi.wiring.package; (osgi.wiring.package=javax.swing)])
+org.osgi.framework.BundleException: Unresolved constraint in bundle chiptools.jprobe [1]: Unable to resolve 1.0: missing requirement [1.0] osgi.wiring.package; (osgi.wiring.package=plugins.jprobe.gui.services) [caused by: Unable to resolve 4.0: missing requirement [4.0] osgi.wiring.package; (osgi.wiring.package=javax.swing)]
+	at org.apache.felix.framework.Felix.resolveBundleRevision(Felix.java:3980)
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2043)
+	at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1297)
+	at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:304)
+	at java.base/java.lang.Thread.run(Unknown Source)
+ERROR: Bundle plugins.dataviewer.gui [2] Error starting file:/C:/Users/th184/Documents/JProbe/JProbe/distributable/plugins/jprobe-gui-dataviewer.jar (org.osgi.framework.BundleException: Unresolved constraint in bundle plugins.dataviewer.gui [2]: Unable to resolve 2.0: missing requirement [2.0] osgi.wiring.package; (osgi.wiring.package=plugins.jprobe.gui.services) [caused by: Unable to resolve 4.0: missing requirement [4.0] osgi.wiring.package; (osgi.wiring.package=javax.swing)])
+org.osgi.framework.BundleException: Unresolved constraint in bundle plugins.dataviewer.gui [2]: Unable to resolve 2.0: missing requirement [2.0] osgi.wiring.package; (osgi.wiring.package=plugins.jprobe.gui.services) [caused by: Unable to resolve 4.0: missing requirement [4.0] osgi.wiring.package; (osgi.wiring.package=javax.swing)]
+	at org.apache.felix.framework.Felix.resolveBundleRevision(Felix.java:3980)
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2043)
+	at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1297)
+	at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:304)
+	at java.base/java.lang.Thread.run(Unknown Source)
+ERROR: Bundle plugins.functions.gui [3] Error starting file:/C:/Users/th184/Documents/JProbe/JProbe/distributable/plugins/jprobe-gui-functions.jar (org.osgi.framework.BundleException: Unresolved constraint in bundle plugins.functions.gui [3]: Unable to resolve 3.0: missing requirement [3.0] osgi.wiring.package; (osgi.wiring.package=plugins.jprobe.gui.services) [caused by: Unable to resolve 4.0: missing requirement [4.0] osgi.wiring.package; (osgi.wiring.package=javax.swing)])
+org.osgi.framework.BundleException: Unresolved constraint in bundle plugins.functions.gui [3]: Unable to resolve 3.0: missing requirement [3.0] osgi.wiring.package; (osgi.wiring.package=plugins.jprobe.gui.services) [caused by: Unable to resolve 4.0: missing requirement [4.0] osgi.wiring.package; (osgi.wiring.package=javax.swing)]
+	at org.apache.felix.framework.Felix.resolveBundleRevision(Felix.java:3980)
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2043)
+	at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1297)
+	at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:304)
+	at java.base/java.lang.Thread.run(Unknown Source)
+ERROR: Bundle plugins.jprobe.gui [4] Error starting file:/C:/Users/th184/Documents/JProbe/JProbe/distributable/plugins/jprobe-gui.jar (org.osgi.framework.BundleException: Unresolved constraint in bundle plugins.jprobe.gui [4]: Unable to resolve 4.0: missing requirement [4.0] osgi.wiring.package; (osgi.wiring.package=javax.swing))
+org.osgi.framework.BundleException: Unresolved constraint in bundle plugins.jprobe.gui [4]: Unable to resolve 4.0: missing requirement [4.0] osgi.wiring.package; (osgi.wiring.package=javax.swing)
+	at org.apache.felix.framework.Felix.resolveBundleRevision(Felix.java:3980)
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2043)
+	at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1297)
+	at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:304)
+	at java.base/java.lang.Thread.run(Unknown Source)
+JProbe v0.5.1
+Created by Tristan Bepler
+
+Usage: jprobe [-g] [-h] <function> [<args>]
+
+Options:
+-g	--gui	Launches JProbe in GUI mode
+-h	--help	Displays this help statement
+
+Functions:
+None added
+

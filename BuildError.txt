@@ -1,0 +1,17 @@
+Exception in thread "main" java.lang.NoClassDefFoundError: org/osgi/framework/BundleActivator
+	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+	at java.base/java.lang.ClassLoader.defineClass(Unknown Source)
+	at java.base/java.security.SecureClassLoader.defineClass(Unknown Source)
+	at java.base/jdk.internal.loader.BuiltinClassLoader.defineClass(Unknown Source)
+	at java.base/jdk.internal.loader.BuiltinClassLoader.findClassOnClassPathOrNull(Unknown Source)
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClassOrNull(Unknown Source)
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
+	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
+	at jprobe.JProbe.<init>(JProbe.java:61)
+	at jprobe.Launcher.main(Launcher.java:26)
+Caused by: java.lang.ClassNotFoundException: org.osgi.framework.BundleActivator
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(Unknown Source)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Unknown Source)
+	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
+	... 11 more

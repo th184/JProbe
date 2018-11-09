@@ -1,0 +1,37 @@
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.felix.framework.ext.ClassPathExtenderFactory$DefaultClassLoaderExtender (file:/C:/Users/th184/Documents/JProbe/JProbe/distributable/lib/felix-framework-4.4.0/felix.jar) to method java.net.URLClassLoader.addURL(java.net.URL)
+WARNING: Please consider reporting this to the maintainers of org.apache.felix.framework.ext.ClassPathExtenderFactory$DefaultClassLoaderExtender
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+JProbe v0.5.1
+Created by Tristan Bepler
+
+Usage: jprobe [-g] [-h] <function> [<args>]
+
+Options:
+-g	--gui	Launches JProbe in GUI mode
+-h	--help	Displays this help statement
+
+Functions:
+
+Agilent:
+<agilentformatter>	This function takes one or more probe groups, appends the given prime to them, and combines them into an Agilent formatted probe group with the specified array name, categories, and forward and reverse replicates.
+
+Chiptools:
+<gcmutator>	This function takes probes and an optional primer and mutates 5G or 5C runs on the probes by changing the center C to a G or vice versa.
+<probegenerator>	This function generates probes from peak sequences using Kmer data and a PWM for the factor of interest.
+<probemutator>	This function takes existing probes and mutates them such that no Kmers outside of the binding site regions exceed a provided E-score cutoff.
+<probejoiner>	This function takes existing probes and combines overlapping ones into multiple binding site probes.
+
+Filter:
+<peakfilter>	This function filters peaks based on the set of conditions passed. The returned peaks will be a subset of the given peaks such that each peak in the subset passes all filters specified. 
+<probefilter>	This function filters probes based on the set of conditions passed to this function. The returned probes will be a subset of the given probes such that each probe in the subset passes all filters specified.
+
+Genome:
+<negctrlgenerator>	This function generates negative control probes from given genomic regions with the option of excluding specific peak regions. The probes generated will contain no k-mers with e-scores above the specified threshold.
+<peakfinder>	This function extracts ChIP-seq peak sequences from the genome.
+
+Profile:
+<bindingprofiler>	This function takes existing probes and profiles them using specified KMers and/or PWMs.
+<mutationprofiler>	This function takes two sequences and a library of Kmers. For each Kmer it reports the E-scores of the words with the largest difference at each base that differs between the sequences.
+

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="JProbe/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="JProbe/lib/commons-io-2.4/commons-io-2.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/commons-io-2.4/commons-io-2.4-sources.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/commons-io-2.4/commons-io-2.4-test-sources.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/commons-io-2.4/commons-io-2.4-tests.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/commons-io-2.4/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/commons-lang3-3.2.1/commons-lang3-3.2.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/commons-lang3-3.2.1/commons-lang3-3.2.1-sources.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/commons-lang3-3.2.1/commons-lang3-3.2.1-test-sources.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/commons-lang3-3.2.1/commons-lang3-3.2.1-tests.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/commons-lang3-3.2.1/commons-lang3-3.2.1.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/crossplatform-util.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/felix-framework-4.4.0/bin/felix.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/felix-framework-4.4.0/bundle/org.apache.felix.bundlerepository-1.6.6.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/felix-framework-4.4.0/bundle/org.apache.felix.gogo.command-0.12.0.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/felix-framework-4.4.0/bundle/org.apache.felix.gogo.runtime-0.10.0.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/felix-framework-4.4.0/bundle/org.apache.felix.gogo.shell-0.10.0.jar"/>
+	<classpathentry kind="lib" path="JProbe/lib/Quaqua/quaqua.jar"/>
+	<classpathentry kind="lib" path="JProbe/plugins/chiptools.jar"/>
+	<classpathentry kind="lib" path="JProbe/plugins/jprobe-gui-dataviewer.jar"/>
+	<classpathentry kind="lib" path="JProbe/plugins/jprobe-gui-functions.jar"/>
+	<classpathentry kind="lib" path="JProbe/plugins/jprobe-gui.jar"/>
+	<classpathentry kind="lib" path="JProbe/plugins/org.apache.felix.fileinstall-3.4.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/th184/Documents/JProbe/JProbe/lib/crossplatform-util.jar"/>
+	<classpathentry kind="lib" path="C:/Users/th184/Documents/JProbe/JProbe/lib/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="C:/Users/th184/Documents/JProbe/JProbe/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/th184/Documents/JProbe/JProbe/lib/fife.common-2.6.0.jar"/>
+	<classpathentry kind="lib" path="JProbe/A/test-plugin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/th184/Documents/JProbe/JProbe/lib/commons-lang3-3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/th184/Documents/JProbe/JProbe/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="C:/Users/th184/Documents/JProbe/JProbe/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="C:/Users/th184/Documents/JProbe/JProbe/lib/jtransc-rt-0.5.0-ALPHA4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
