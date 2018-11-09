@@ -24,7 +24,6 @@ public class PeakSeqsArgument extends ChiptoolsDataArg<PeakSeqsParam, PeakSequen
 	@Override
 	protected void process(PeakSeqsParam params, List<PeakSequences> data) {
 		params.setPeakSeqs(data.get(0));
-		params.setPeakSeqsName(data.get(0).getVarName());
 	}
 
 }

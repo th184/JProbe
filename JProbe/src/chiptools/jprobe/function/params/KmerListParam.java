@@ -8,7 +8,5 @@ public interface KmerListParam {
 	
 	public void setKmers(List<Kmer> kmers);
 	public List<Kmer> getKmers();
-	public void setKmerListName(String name);
-	public String getKmerListName();
 	
 }

@@ -41,7 +41,7 @@ public interface Data extends TableModel, Serializable{
 //	public void setImportMetadata();
 	public void setImportMetadata(String dataType);
 	public Metadata getMetadata();
-	public List<String> getAgilentMetadata();
+	public StringBuilder getAgilentMetadata();
 	
 	public void setVarName(String name);
 	public String getVarName();

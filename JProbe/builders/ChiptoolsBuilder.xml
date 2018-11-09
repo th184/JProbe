@@ -3,6 +3,11 @@
 	<target name="makejar" description="Package the chiptools jar">
 		<jar manifest="${basedir}/../src/chiptools/MANIFEST.MF" destfile="${basedir}/../distributable/plugins/chiptools.jar" includes="chiptools/**" basedir="${basedir}/../../bin">
 			<zipgroupfileset dir="../lib" includes="commons-lang3-3.8.jar" />
+			<zipgroupfileset dir="../lib" includes="jfreechart-1.0.19.jar" />
+			<zipgroupfileset dir="../lib" includes="jcommon-1.0.23.jar" />
+			<zipgroupfileset dir="../lib" includes="jtransc-rt-0.5.0-ALPHA4.jar" />
+			
+			
 		</jar>
 	</target>
 </project>

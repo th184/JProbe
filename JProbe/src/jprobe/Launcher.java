@@ -1,7 +1,13 @@
 package jprobe;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+
+import java.net.URLClassLoader;
+
+import javax.imageio.ImageIO;
 
 import jprobe.services.ErrorHandler;
 import jprobe.services.Log;
@@ -21,6 +27,26 @@ public class Launcher {
 		Configuration config = new Configuration(new File(Constants.CONFIG_FILE), args);
 		//System.out.println(JAR_URL);
 		//System.out.println(JAR_DIR);
+		//TESTING
+//		BufferedImage image = null;
+//        try {
+//          
+//            URL url = new URL("http://www.mkyong.com/image/mypic.jpg");
+//            image = ImageIO.read(url);
+//            
+//            ImageIO.write(image, "jpg",new File("C:\\Users\\th184\\Documents\\JProbe\\JProbe\\out.jpg"));
+//        } catch (IOException e) {
+//        	e.printStackTrace();
+//        }
+//        System.out.println("Done");
+		ClassLoader cl = ClassLoader.getSystemClassLoader();
+        URL[] urls = ((URLClassLoader)cl).getURLs();
+        System.out.println("IN LAUNCHER");
+        for(URL url: urls){
+        	System.out.println(url.getFile());
+        }
+        
+        
 		new JProbe(config);
 	}
 

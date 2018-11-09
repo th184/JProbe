@@ -45,7 +45,7 @@ public class DataViewerSplitPane extends JSplitPane{
 		
 		m_DataTab = new DataTabPane(core.getDataManager());
 		m_ViewTab = new ViewTabPane(core, gui, m_DataTab); 
-		m_MetadataPane = new MetadataPane();
+		m_MetadataPane = new MetadataPane(core);
 		
 		m_splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, m_ViewTab, m_MetadataPane);
 		m_splitPane.setOneTouchExpandable(true);
@@ -80,7 +80,6 @@ public class DataViewerSplitPane extends JSplitPane{
 					}
 				}
 				DataTabPane.last_action_closed_tab = false;
-				
 			}
 		});
 	}

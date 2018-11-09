@@ -6,6 +6,5 @@ public interface PeakSeqsParam {
 	
 	public void setPeakSeqs(PeakSequences peakSeqs);
 	public PeakSequences getPeakSeqs();
-	public void setPeakSeqsName(String n);
 	
 }

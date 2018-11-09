@@ -16,6 +16,7 @@ public class Sequences {
 		private final List<double[]> m_Entries = new ArrayList<double[]>();
 		
 		public int size(){
+			
 			return m_Names.size();
 		}
 		
@@ -41,10 +42,11 @@ public class Sequences {
 			m_Entries.add(entry);
 		}
 		
+		
 		@Override
 		public String toString(){
 			String s = "";
-			for(int i=0; i<this.size(); i++){
+			for(int i=0; i<this.size(); i++){ // this.size()==num of metrics used for scoring
 				s += this.getEntryName(i);
 				s += "\t" + this.getWordLen(i);
 				for(double d : this.getEntry(i)){
@@ -55,6 +57,19 @@ public class Sequences {
 			return s;
 		}
 		
+		
+		
+	}
+	public static double[] getKmerScore(String seq, Kmer kmer) {
+		// why is wordLength is list? Isn't it all the same number?
+		int wordLen = kmer.getWordLengths()[0];
+		double[] scores = new double[seq.length() - wordLen + 1];
+		for(int start = 0; start<scores.length; start++){
+			int end = start + wordLen;
+			String subseq = seq.substring(start, end);
+			scores[start] = kmer.escore(subseq);
+		}
+		return scores;
 	}
 	
 	
@@ -65,7 +80,7 @@ public class Sequences {
 			Kmer kmer = kmers[i];
 			if(kmer == null) continue;
 			String name = seqName + "_";
-			name += i < kmerNames.length ? kmerNames[i] : "Kmer"+(i+1);
+			name += i < kmerNames.length ? kmerNames[i] : "Kmer"+(i+1); 
 			//score the sequence with words of each length contained by the kmer
 			for(int wordLen : kmer.getWordLengths()){
 				if(seq.length() < wordLen) continue;

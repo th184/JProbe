@@ -6,6 +6,5 @@ public interface PWMParam {
 	
 	public void setPWM(PWM p);
 	public PWM getPWM();
-	public void setPWMName(String name);
 	
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import chiptools.jprobe.data.Peaks;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PeaksParam;
+import jprobe.services.data.MetaObject;
 import jprobe.services.data.Metadata;
 import util.genome.peak.Peak;
 import util.genome.peak.PeakUtils.Filter;
@@ -22,7 +23,6 @@ public class PeakFilterParams implements Filter, PeaksParam{
 	private Peaks m_Peaks = null;
 	private String m_OutputName = null;
 	
-	private String m_PeaksName = null;
 	private String m_IncludeChrom = null;
 	private String m_ExcludeChrom = null;
 	private Metadata m_Metadata = null;
@@ -61,15 +61,6 @@ public class PeakFilterParams implements Filter, PeaksParam{
 		return m_OutputName;
 	}
 
-	@Override
-	public void setPeaksName(String name) {
-		m_PeaksName = name;
-	}
-
-	public String getPeaksName() {
-		return m_PeaksName;
-	}
-	
 	public void setIncludeChrom(String input) {
 		m_IncludeChrom = input;
 	}
@@ -80,21 +71,17 @@ public class PeakFilterParams implements Filter, PeaksParam{
 	
 	public Metadata getMetadata(){
 		m_Metadata = new Metadata();
-		m_Metadata.put("Data", "output name");
-		m_Metadata.put("Type", "data type");
-		m_Metadata.put("Function", "peak filter");
-		m_Metadata.put("Peak set name", m_PeaksName);
-		m_Metadata.put("Included chroms", check(m_IncludeChrom));
-		m_Metadata.put("Excluded chroms", check(m_ExcludeChrom));
-		m_Metadata.put("Min Q-value", String.valueOf(MINQVAL));
-		m_Metadata.put("Max Q-value", String.valueOf(MAXQVAL));
-		m_Metadata.put("Min P-value", String.valueOf(MINPVAL));
-		m_Metadata.put("Max P-value", String.valueOf(MAXPVAL));
+		m_Metadata.put(Metadata.Field.DATA, null);
+		m_Metadata.put(Metadata.Field.DATA_TYPE, null);
+		m_Metadata.put(Metadata.Field.FUNC, new MetaObject("Peak filter"));
+		m_Metadata.put(Metadata.Field.PEAK_SET, new MetaObject(m_Peaks));
+		m_Metadata.put(Metadata.Field.INC_CHROM, new MetaObject(m_IncludeChrom));
+		m_Metadata.put(Metadata.Field.EXC_CHROM, new MetaObject(m_ExcludeChrom));
+		m_Metadata.put(Metadata.Field.MIN_Q, new MetaObject(MINQVAL));
+		m_Metadata.put(Metadata.Field.MAX_Q, new MetaObject(MAXQVAL));
+		m_Metadata.put(Metadata.Field.MIN_P, new MetaObject(MINPVAL));
+		m_Metadata.put(Metadata.Field.MAX_P, new MetaObject(MAXPVAL));
 		return m_Metadata;
-	}
-	private String check(String arg) {
-		if(arg==null) return "N/A";
-		return arg;
 	}
 
 }

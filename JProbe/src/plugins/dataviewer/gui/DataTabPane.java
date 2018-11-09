@@ -1,6 +1,5 @@
 package plugins.dataviewer.gui;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -11,16 +10,13 @@ import java.util.Map;
 
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import plugins.dataviewer.gui.services.DataViewer;
-import jprobe.CoreDataManager;
 import jprobe.services.CoreEvent;
 import jprobe.services.CoreListener;
 import jprobe.services.DataManager;
 import jprobe.services.data.Data;
+import jprobe.services.data.Metadata;
 
 //import org.fife.ui.TabbedPaneTransferHandler;
 
@@ -219,9 +215,9 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 			displayData(event.getData());
 			break;
 		case DATA_NAME_CHANGE:
+			Metadata currentMeta = MetadataPane.getCurrentlyDisplayed();
 			m_TabLables.get(event.getData()).setTitle(m_DataManager.getDataName(event.getData()));
-			event.getData().getMetadata().put("Data", m_DataManager.getDataName(event.getData()));
-			MetadataPane.displayMetadata(event.getData().getMetadata());
+			MetadataPane.displayMetadata(currentMeta);
 			break;
 		case DATA_REMOVED:
 			closeData(event.getData());

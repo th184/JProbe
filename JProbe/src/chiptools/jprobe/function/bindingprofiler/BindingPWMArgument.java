@@ -24,7 +24,10 @@ public class BindingPWMArgument extends ChiptoolsDataArg<BindingProfileParams, P
 	@Override
 	protected void process(BindingProfileParams params, List<PWM> data) {
 		params.setPWMs(data);
-		params.setPWMListName(data.get(0).getVarName());
+		for(int i=0; i<data.size();i++) {
+			params.addPWMName(data.get(i).getVarName());
+		}
+//		params.setPWMListName(data.get(0).getVarName());
 	}
 	
 	@Override

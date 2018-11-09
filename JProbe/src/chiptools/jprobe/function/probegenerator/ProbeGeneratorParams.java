@@ -12,6 +12,8 @@ import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PWMParam;
 import chiptools.jprobe.function.params.PeakSeqsParam;
 import chiptools.jprobe.function.params.ProbeLenParam;
+import jprobe.services.JProbeCore;
+import jprobe.services.data.MetaObject;
 import jprobe.services.data.Metadata;
 
 public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam, EscoreParam, ProbeLenParam {
@@ -25,9 +27,6 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 	private double m_Escore = 0.4;
 	private int m_ProbeLen = 36;
 	
-	private String m_PeakSeqsName = null;
-	private String m_KmerName = null;
-	private String m_PWMName = null;
 	private Metadata m_Metadata = null;
 	
 	@Override
@@ -80,29 +79,22 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 		return m_ProbeLen;
 	}
 
-	@Override
-	public void setPWMName(String name) { m_PWMName = name; }
-
-	@Override
-	public void setKmersName(String name) { m_KmerName = name; }
-
-	@Override
-	public void setPeakSeqsName(String n) { m_PeakSeqsName = n; }
 	
 	public Metadata getMetadata(){
 		m_Metadata = new Metadata();
-		m_Metadata.put("Data", "output name");
-		m_Metadata.put("Type", "data type");
-		m_Metadata.put("Function", "probe generator");
-		m_Metadata.put("Peak seqs", m_PeakSeqsName);
-		m_Metadata.put("Kmer", m_KmerName);
-		m_Metadata.put("PWM", m_PWMName);
-		m_Metadata.put("Probe length", String.valueOf(m_ProbeLen));
-		m_Metadata.put("Binding site size", String.valueOf(BINDINGSITE));
-		m_Metadata.put("Window size", String.valueOf(WINDOWSIZE));
-		m_Metadata.put("E-score", String.valueOf(m_Escore));
-				
+		m_Metadata.put(Metadata.Field.DATA, null);
+		m_Metadata.put(Metadata.Field.DATA_TYPE, null);
+		m_Metadata.put(Metadata.Field.FUNC, new MetaObject("Probe generator"));
+		m_Metadata.put(Metadata.Field.PEAK_SEQ, new MetaObject(m_PeakSeqs)); 
+		m_Metadata.put(Metadata.Field.KMER, new MetaObject(m_Kmers)); 
+		m_Metadata.put(Metadata.Field.PWM, new MetaObject(m_PWM) ); 
+		m_Metadata.put(Metadata.Field.PROBE_LEN, new MetaObject(m_ProbeLen));
+		m_Metadata.put(Metadata.Field.BINDING_SITE_SIZE, new MetaObject(BINDINGSITE));
+		m_Metadata.put(Metadata.Field.WINDOW_SIZE, new MetaObject(WINDOWSIZE));
+		m_Metadata.put(Metadata.Field.E_SCORE, new MetaObject(m_Escore));
 		return m_Metadata;
 	}
+
+	
 
 }

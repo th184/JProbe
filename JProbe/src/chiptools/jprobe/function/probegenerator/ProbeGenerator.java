@@ -6,6 +6,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import jprobe.services.data.Data;
+import jprobe.services.JProbeCore;
 import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import util.genome.peak.PeakSequence;

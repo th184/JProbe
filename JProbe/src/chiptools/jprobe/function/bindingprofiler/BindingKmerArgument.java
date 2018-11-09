@@ -24,9 +24,14 @@ public class BindingKmerArgument extends ChiptoolsDataArg<BindingProfileParams, 
 	@Override
 	protected void process(BindingProfileParams params, List<Kmer> data) {
 		params.setKmers(data);
-		params.setKmerListName(data.get(0).getVarName());
+		for(int i=0; i<data.size();i++) {
+			params.addKmerName(data.get(i).getVarName());
+		}
+//		params.setKmerListName(data.get(0).getVarName());// change this
+		
 	}
 	
+	// this parse function is never called...
 	@Override
 	public void parse(ProgressListener l, BindingProfileParams params, String[] args){
 		params.KMER_NAMES.clear();

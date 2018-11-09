@@ -22,7 +22,6 @@ public class SaveUtil {
 	
 	public static void save(File saveTo, Map<String,Saveable> saveables) throws SaveException{
 		try {
-//			System.out.println("size of saveables in save: "+saveables.size()); // always 1 cause it's the core
 			ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(saveTo)));
 			String tempName = ".temp";
 			File temp = new File(tempName);

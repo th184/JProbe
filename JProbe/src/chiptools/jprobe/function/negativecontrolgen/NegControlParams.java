@@ -14,6 +14,7 @@ import chiptools.jprobe.function.params.KmerListParam;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.ProbeLenParam;
 import chiptools.jprobe.function.params.SummitParam;
+import jprobe.services.data.MetaObject;
 import jprobe.services.data.Metadata;
 
 public class NegControlParams implements GenomeParam, SummitParam, KmerListParam, EscoreParam, ProbeLenParam{
@@ -28,9 +29,6 @@ public class NegControlParams implements GenomeParam, SummitParam, KmerListParam
 	private int m_Len = 36;
 	
 	private String m_GenomeName = null;
-	private String m_IncludeName = null; // included peaks & excluded peaks... not sure
-	private String m_ExcludeName = null;
-	private String m_KmerName = null;
 	private Metadata m_Metadata = null;
 	
 	
@@ -109,53 +107,26 @@ public class NegControlParams implements GenomeParam, SummitParam, KmerListParam
 		return m_Len;
 	}
 	
-	public void setIncludePeaksName(String name) {
-		m_IncludeName = name;
-	}
-	public String getIncludePeaksName() {
-		return m_IncludeName;
-	}
-	public void setExcludePeaksName(String name) {
-		m_ExcludeName = name;
-	}
-	public String getExcludePeaksName() {
-		return m_ExcludeName;
-	}
-	@Override
-	public void setKmerListName(String name) {
-		m_KmerName = name;
-	}
-
-	@Override
-	public String getKmerListName() {
-		return m_KmerName;
-	}
-
 	@Override
 	public void setGenomeFileName(String name) {
 		m_GenomeName = name;
 	}
 
 	
-	public String getGenomeFileName() {
-		return m_GenomeName;
-	}
-	
 	public Metadata getMetadata(){
 		m_Metadata = new Metadata();
-		m_Metadata.put("Data", "output name");
-		m_Metadata.put("Type", "data type");
-		m_Metadata.put("Genome", m_GenomeName);
-		m_Metadata.put("Included peaks", m_IncludeName);
-		m_Metadata.put("Excluded peaks", m_ExcludeName);
-		m_Metadata.put("Summit", String.valueOf(m_Summit));
-		m_Metadata.put("K-mers", m_KmerName);
-		m_Metadata.put("E-score", String.valueOf(m_Escore));
-		m_Metadata.put("Probe length", String.valueOf(m_Len));
-		m_Metadata.put("Number of probes generated", String.valueOf(m_Num));
+		m_Metadata.put(Metadata.Field.DATA, null);
+		m_Metadata.put(Metadata.Field.DATA_TYPE, null);
+		m_Metadata.put(Metadata.Field.GENOME, new MetaObject(m_GenomeName));
+		m_Metadata.put(Metadata.Field.INC_PEAK_LIST, new MetaObject(m_Include));
+		m_Metadata.put(Metadata.Field.EXC_PEAK_LIST, new MetaObject(m_Exclude));
+		m_Metadata.put(Metadata.Field.SUMMIT, new MetaObject(m_Summit));
+		m_Metadata.put(Metadata.Field.KMER_LIST, new MetaObject(m_Kmers));
+		m_Metadata.put(Metadata.Field.E_SCORE, new MetaObject(m_Escore));
+		m_Metadata.put(Metadata.Field.PROBE_LEN, new MetaObject(m_Len));
+		m_Metadata.put(Metadata.Field.NUM_PROBE_GEN, new MetaObject(m_Num));
 		
 		return m_Metadata;
 	}
-
 
 }

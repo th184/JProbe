@@ -22,7 +22,7 @@ import plugins.dataviewer.gui.DataViewerSplitPane;
 import util.gui.TableFormatter;
 
 
-public abstract class AbstractFinalData implements Data{
+public abstract class AbstractFinalData extends MetaObject implements Data{
 	private static final long serialVersionUID = 1L;
 	
 	private transient Collection<TableModelListener> m_Listeners = new HashSet<TableModelListener>();
@@ -34,7 +34,7 @@ public abstract class AbstractFinalData implements Data{
 	private String m_InputName = null; // file/var name for INPUT data
 	private String m_OutputName = null; // file/var name for OUTPUT data
 	private Metadata m_Metadata;
-	private List<String> m_AgilentMetadata=null;
+	private StringBuilder m_AgilentMetadata=null;
 	
 	private String m_VarName = null;
 	
@@ -45,10 +45,10 @@ public abstract class AbstractFinalData implements Data{
 		m_OutputName = outputName;
 		m_Metadata = metadata;
 	}
-	public void setAgilentMetadata(List<String> AgilentMetadata) {
+	public void setAgilentMetadata(StringBuilder AgilentMetadata) {
 		m_AgilentMetadata = AgilentMetadata;
 	}
-	public List<String> getAgilentMetadata(){
+	public StringBuilder getAgilentMetadata(){
 		return m_AgilentMetadata;
 	}
 	//readObject method to init the transient listeners collection after deserialization
@@ -103,8 +103,8 @@ public abstract class AbstractFinalData implements Data{
 	public void setImportMetadata(String dataType) {
 		if(m_Type==DataType.INPUT && m_Metadata==null) {
 			Metadata inputMD= new Metadata();
-			inputMD.put("Data", m_VarName);
-			inputMD.put("Type", dataType+" (imported)");
+			inputMD.put(Metadata.Field.DATA, new MetaObject(this)); // m_VarName
+			inputMD.put(Metadata.Field.DATA_TYPE, new MetaObject(dataType+" (imported)")); // this --> later in display metadata: this.getDataType 
 			m_Metadata = inputMD;
 		}
 	}

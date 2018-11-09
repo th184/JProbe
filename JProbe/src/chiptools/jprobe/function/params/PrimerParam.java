@@ -4,6 +4,6 @@ public interface PrimerParam {
 	
 	public void setPrimer(String sequence);
 	public String getPrimer();
-	public void setPrimerName(String name);
+	public void setPrimerName(String s);
 	
 }

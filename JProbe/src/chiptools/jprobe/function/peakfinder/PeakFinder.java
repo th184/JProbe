@@ -14,6 +14,7 @@ import chiptools.jprobe.function.args.GenomeArgument;
 import chiptools.jprobe.function.args.OutputNameArgument;
 import chiptools.jprobe.function.args.PeaksArgument;
 import chiptools.jprobe.function.args.SummitArgument;
+import jprobe.services.JProbeCore;
 import jprobe.services.data.Data;
 import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;

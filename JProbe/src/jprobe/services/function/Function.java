@@ -3,6 +3,7 @@ package jprobe.services.function;
 import java.util.Collection;
 
 import util.progress.ProgressListener;
+import jprobe.services.JProbeCore;
 import jprobe.services.data.Data;
 
 /**
@@ -58,6 +59,7 @@ public interface Function<P> {
 	 * computations this Function performs.
 	 * @param l - ProgressListener to report execution progress to, if progress should be tracked
 	 * @param params - parameter object specified by the Arguments
+	 * @param m_Core 
 	 * @return data produced by this computation
 	 * @see Argument
 	 * @see ProgressListener

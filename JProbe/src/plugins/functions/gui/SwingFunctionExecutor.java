@@ -39,7 +39,7 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 		@Override
 		public void run(){
 			try {
-				final Data d = m_Function.execute(this, m_Params);
+				final Data d = m_Function.execute(this, m_Params); 
 				String func = m_Function.getClass().getSimpleName();
 				if(d == null) {
 					// func can return null when there's no output (e.g. input files don't match) 

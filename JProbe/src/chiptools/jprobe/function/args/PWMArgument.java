@@ -24,7 +24,6 @@ public class PWMArgument extends ChiptoolsDataArg<PWMParam, PWM>{
 	@Override
 	protected void process(PWMParam params, List<PWM> data) {
 		params.setPWM(data.get(0));
-		params.setPWMName(data.get(0).getVarName());
 	}
 
 	

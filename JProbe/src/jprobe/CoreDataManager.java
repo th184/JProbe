@@ -35,6 +35,8 @@ import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
+import jprobe.services.data.MetaObject;
+import jprobe.services.data.Metadata;
 import plugins.dataviewer.gui.DataViewerSplitPane;
 import jprobe.services.AbstractServiceListener;
 import jprobe.services.CoreListener;
@@ -241,9 +243,10 @@ public class CoreDataManager implements DataManager{
 			}else {
 				varName = assignName(d, func, filename);
 			}
-//			d.getMetadata().addListener(DataViewerSplitPane.getMetadataPane());
-			d.getMetadata().put("Data",varName); //fill in the variable name
-			d.getMetadata().put("Type", d.getClass().getSimpleName()+" (generated)");
+
+			d.setVarName(varName);
+			d.getMetadata().put(Metadata.Field.DATA, new MetaObject(d)); 
+			d.getMetadata().put(Metadata.Field.DATA_TYPE, new MetaObject(d.getClass().getSimpleName()+" (generated)"));
 			this.addData(d, varName, responsible, true);
 	}
 	@Override
@@ -470,6 +473,7 @@ public class CoreDataManager implements DataManager{
 		m_NameToData.remove(old);
 		m_NameToData.put(name, d);
 		m_DataToName.put(d, name);
+		d.setVarName(name); // so varName reflects the name-change
 		// update default name
 		checkIfDefaultName(old);
 		checkIfDefaultName(name);
@@ -589,7 +593,6 @@ public class CoreDataManager implements DataManager{
 
 	@Override
 	public synchronized Data readData(File file, Class<? extends Data> type, FileFilter format, Bundle responsible) throws Exception {
-		System.out.println("reading data");
 		if(!this.isReadable(type)){
 			throw new Exception(type+" not readable");
 		}

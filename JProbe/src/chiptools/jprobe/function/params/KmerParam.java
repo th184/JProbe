@@ -6,6 +6,5 @@ public interface KmerParam {
 	
 	public void setKmers(Kmer k);
 	public Kmer getKmers();
-	public void setKmersName(String name);
 	
 }

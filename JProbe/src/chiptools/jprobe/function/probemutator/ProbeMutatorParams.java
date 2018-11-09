@@ -10,6 +10,7 @@ import chiptools.jprobe.function.params.KmerParam;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PrimerParam;
 import chiptools.jprobe.function.params.ProbesParam;
+import jprobe.services.data.MetaObject;
 import jprobe.services.data.Metadata;
 
 public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, PrimerParam {
@@ -25,9 +26,7 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 	private Probes m_Probes = null;
 	private String m_OutputName = null;
 	
-	private String m_ProbesName = null;
 	private String m_PrimerName = null;
-	private String m_KmerName = null;
 	private Metadata m_Metadata = null;
 	
 	
@@ -84,28 +83,19 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 	@Override
 	public void setPrimerName(String name) { m_PrimerName = name; }
 
-	@Override
-	public void setKmersName(String name) { m_KmerName = name; }
-
-	@Override
-	public void setProbesName(String n) { m_ProbesName = n; }
-
-	@Override
-	public String getProbesName() { return m_ProbesName; }
 	
 	public Metadata getMetadata(){
 		m_Metadata = new Metadata();
-		m_Metadata.put("Data", "output name");
-		m_Metadata.put("Type", "data type");
-		m_Metadata.put("Function", "probe mutator");
-		m_Metadata.put("Probes", m_ProbesName);
-		m_Metadata.put("K-mer", m_KmerName);
-		m_Metadata.put("E-score", String.valueOf(m_Escore));
-		m_Metadata.put("Primer", m_PrimerName);
-		m_Metadata.put("Overlap", String.valueOf(MAXIMUM_OVERLAP));
-		m_Metadata.put("Binding site barrier", String.valueOf(BINDING_SITE_BARRIER));
-		m_Metadata.put("Mutate binding site", String.valueOf(MUTATE_BINDING_SITES));
-		
+		m_Metadata.put(Metadata.Field.DATA, null);
+		m_Metadata.put(Metadata.Field.DATA_TYPE, null);
+		m_Metadata.put(Metadata.Field.FUNC, new MetaObject("Probe mutator"));
+		m_Metadata.put(Metadata.Field.PROBE_SET, new MetaObject(m_Probes));
+		m_Metadata.put(Metadata.Field.KMER, new MetaObject(m_Kmer));
+		m_Metadata.put(Metadata.Field.E_SCORE, new MetaObject(m_Escore));
+		m_Metadata.put(Metadata.Field.PRIMER, new MetaObject(m_PrimerName));
+		m_Metadata.put(Metadata.Field.OVERLAP, new MetaObject(MAXIMUM_OVERLAP));
+		m_Metadata.put(Metadata.Field.BINDING_SITE_BARRIER, new MetaObject(BINDING_SITE_BARRIER));
+		m_Metadata.put(Metadata.Field.MUTATE_BINDING_SITE, new MetaObject(MUTATE_BINDING_SITES));
 		return m_Metadata;
 		
 	}

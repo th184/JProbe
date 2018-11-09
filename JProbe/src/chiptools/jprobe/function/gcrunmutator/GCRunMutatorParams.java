@@ -7,6 +7,7 @@ import chiptools.jprobe.data.Probes;
 import chiptools.jprobe.function.params.OutputNameParam;
 import chiptools.jprobe.function.params.PrimerParam;
 import chiptools.jprobe.function.params.ProbesParam;
+import jprobe.services.data.MetaObject;
 import jprobe.services.data.Metadata;
 
 public class GCRunMutatorParams implements ProbesParam, PrimerParam{
@@ -15,7 +16,6 @@ public class GCRunMutatorParams implements ProbesParam, PrimerParam{
 	private Probes m_Probes = null;
 	
 	private String m_PrimerName = null;
-	private String m_ProbesName = null;
 	private Metadata m_Metadata = null;
 	
 	public String m_OutputName = null;
@@ -54,30 +54,15 @@ public class GCRunMutatorParams implements ProbesParam, PrimerParam{
 	public void setPrimerName(String name) {
 		m_PrimerName = name;
 	}
-
-	@Override
-	public void setProbesName(String name) {
-		m_ProbesName = name;
-	}
-
-	@Override
-	public String getProbesName() {
-		return m_ProbesName;
-	}
 	
 	public Metadata getMetadata(){
 		m_Metadata = new Metadata();
-		m_Metadata.put("Data", "output name");
-		m_Metadata.put("Type", "data type");
-		m_Metadata.put("Function", "G-Runs mutator");
-		m_Metadata.put("Probes", m_ProbesName);
-		m_Metadata.put("Primer", check(m_PrimerName));
+		m_Metadata.put(Metadata.Field.DATA, null);
+		m_Metadata.put(Metadata.Field.DATA_TYPE, null);
+		m_Metadata.put(Metadata.Field.FUNC, new MetaObject("G-runs mutator"));
+		m_Metadata.put(Metadata.Field.PROBE_SET, new MetaObject(m_Probes));
+		m_Metadata.put(Metadata.Field.PRIMER, new MetaObject(m_PrimerName));
 		return m_Metadata;
 	}
-	public String check(String arg) {
-		if(arg==null) return "N/A";
-		return arg;
-	}
-
 
 }

@@ -16,29 +16,30 @@ public class AgilentArray extends AbstractFinalData{
 //	private final String m_Name;
 	private final List<AgilentProbe> m_Probes;
 	
-	public AgilentArray(String arrayName, List<AgilentProbe> probes, DataType type, List<Pair> AgilentMetadata) {
+	public AgilentArray(String arrayName, List<AgilentProbe> probes, DataType type, StringBuilder AgilentMetadata) {
 		super(NUM_COLS, probes.size(), type, arrayName, null); 
 //		m_Name = name;
 		m_Probes = probes;
-		this.setAgilentMetadata(parse(AgilentMetadata));
+//		this.setAgilentMetadata(parse(AgilentMetadata));
+		this.setAgilentMetadata(AgilentMetadata);
 	}
-	private List<String> parse(List<Pair> metadata){
-		List<String> str_metadata = new ArrayList<>();
-		for(int i=0;i<metadata.size();i++) {
-			String k = metadata.get(i).getKey();
-			String v = metadata.get(i).getValue();
-			String line;
-			if(!v.isEmpty()) {
-				line = k+": "+v;
-			}else if(!k.isEmpty()){
-				line = k;
-			}else {
-				line=""; //empty line separates probe set 
-			}
-			str_metadata.add(line);
-		}
-		return str_metadata;
-	}
+//	private List<String> parse(List<Pair> metadata){
+//		List<String> str_metadata = new ArrayList<>();
+//		for(int i=0;i<metadata.size();i++) {
+//			String k = metadata.get(i).getKey();
+//			String v = metadata.get(i).getValue();
+//			String line;
+//			if(!v.isEmpty()) {
+//				line = k+": "+v;
+//			}else if(!k.isEmpty()){
+//				line = k;
+//			}else {
+//				line=""; //empty line separates probe set 
+//			}
+//			str_metadata.add(line);
+//		}
+//		return str_metadata;
+//	}
 	@Override
 	public void dispose() {
 		//do nothing;
