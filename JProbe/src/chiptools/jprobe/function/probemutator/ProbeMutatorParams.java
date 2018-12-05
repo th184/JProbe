@@ -21,7 +21,7 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 	
 	
 	private String m_Primer = null;
-	private double m_Escore = 0.3;
+	private double m_Escore = 0.35;
 	private Kmer m_Kmer = null;
 	private Probes m_Probes = null;
 	private String m_OutputName = null;
@@ -80,9 +80,6 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 		return m_OutputName;
 	}
 
-	@Override
-	public void setPrimerName(String name) { m_PrimerName = name; }
-
 	
 	public Metadata getMetadata(){
 		m_Metadata = new Metadata();
@@ -92,12 +89,27 @@ public class ProbeMutatorParams implements ProbesParam, KmerParam, EscoreParam, 
 		m_Metadata.put(Metadata.Field.PROBE_SET, new MetaObject(m_Probes));
 		m_Metadata.put(Metadata.Field.KMER, new MetaObject(m_Kmer));
 		m_Metadata.put(Metadata.Field.E_SCORE, new MetaObject(m_Escore));
-		m_Metadata.put(Metadata.Field.PRIMER, new MetaObject(m_PrimerName));
+		m_Metadata.put(Metadata.Field.PRIMER, new MetaObject(addName(m_Primer)));
 		m_Metadata.put(Metadata.Field.OVERLAP, new MetaObject(MAXIMUM_OVERLAP));
-		m_Metadata.put(Metadata.Field.BINDING_SITE_BARRIER, new MetaObject(BINDING_SITE_BARRIER));
+		m_Metadata.put(Metadata.Field.BINDING_SITE_BARRIER, new MetaObject((Integer)BINDING_SITE_BARRIER));
 		m_Metadata.put(Metadata.Field.MUTATE_BINDING_SITE, new MetaObject(MUTATE_BINDING_SITES));
 		return m_Metadata;
 		
+	}
+	private String addName(String primer) {
+		if(m_Primer!=null && m_PrimerName!=null) {
+			primer = primer+" ("+m_PrimerName+")";
+		}
+		return primer;
+	}
+	@Override
+	public String getPrimerName() {
+		return m_PrimerName;
+	}
+
+	@Override
+	public void setPrimerName(String p) {
+		m_PrimerName = p;
 	}
 
 }

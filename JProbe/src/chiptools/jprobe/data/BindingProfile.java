@@ -37,7 +37,8 @@ public class BindingProfile extends AbstractFinalData implements Iterable<Profil
 	}
 	
 	private static final int NAME = 0;
-	private static final int WORD_LEN = 1;
+	private static final int METRIC = 1;
+	private static final int WORD_LEN = 2;
 	
 	private final List<Profile> m_Profiles;
 	private final Map<Integer, Profile> m_ProfileStarts = new HashMap<Integer, Profile>();
@@ -50,30 +51,9 @@ public class BindingProfile extends AbstractFinalData implements Iterable<Profil
 			m_ProfileStarts.put(start, p);
 			start += p.numEntries();
 		}
-		computeAverage(); 
 	}
-	// len of list = number of metrics used
-	// for each metric, compute avg of score for all positions across all profiles
-	public List<double[]> computeAverage() {
-		Profile profile_1 = m_Profiles.get(0);
-		int num_metrics = profile_1.size();
-		List<double[]> ret_avg = new ArrayList<>();
-		int num_profiles = m_Profiles.size();
-		for(int metric =0; metric<num_metrics; metric++) {
-			int num_pos = profile_1.getEntry(metric).length;
-			double[] avg = new double[num_pos];
-			for(int profile = 0; profile<num_profiles;profile++) {
-				double[] entries = m_Profiles.get(profile).getEntry(metric);
-				for(int pos=0; pos<num_pos;pos++) {
-					avg[pos]+=entries[pos];
-					if(profile==num_profiles-1) {
-						avg[pos] = avg[pos]/num_profiles;
-					}
-				}
-			}
-			ret_avg.add(avg);
-		}
-		return ret_avg;
+	public List<Profile> getProfile(){
+		return m_Profiles;
 	}
 	
 /* Compute avg and plot for each scoring metric
@@ -96,6 +76,7 @@ public class BindingProfile extends AbstractFinalData implements Iterable<Profil
 	public Class<?> getColumnClass(int col) {
 		switch(col){
 		case NAME: return String.class;
+		case METRIC: return String.class;
 		case WORD_LEN: return Integer.class;
 		default: return Double.class;
 		}
@@ -105,6 +86,7 @@ public class BindingProfile extends AbstractFinalData implements Iterable<Profil
 	public String getColumnName(int col) {
 		switch(col){
 		case NAME: return "Name";
+		case METRIC: return "Metric";
 		case WORD_LEN: return "Word length";
 		default: return String.valueOf(col);
 		}
@@ -121,6 +103,7 @@ public class BindingProfile extends AbstractFinalData implements Iterable<Profil
 		int e = row - profile;
 		switch(col){
 		case NAME: return p.getEntryName(e);
+		case METRIC: return p.getMetric(e);
 		case WORD_LEN: return p.getWordLen(e);
 		default:
 			double[] entries = p.getEntry(e);

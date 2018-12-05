@@ -38,11 +38,14 @@ public interface Data extends TableModel, Serializable{
 	public void setOutputName(String name);
 	public String getOutputName();
 	
-//	public void setImportMetadata();
 	public void setImportMetadata(String dataType);
 	public Metadata getMetadata();
 	public StringBuilder getAgilentMetadata();
 	
 	public void setVarName(String name);
 	public String getVarName();
+	
+	public void tabClosed();
+	public void tabOpen();
+	public boolean tabStatus();
 }

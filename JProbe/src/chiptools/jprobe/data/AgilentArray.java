@@ -2,28 +2,31 @@ package chiptools.jprobe.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
+import chiptools.jprobe.function.agilentformatter.AgilentFormatterParams;
 import chiptools.jprobe.function.agilentformatter.AgilentFormatter.Pair;
 import jprobe.services.data.AbstractFinalData;
+import jprobe.services.data.MetaObject;
+import jprobe.services.data.Metadata;
+import jprobe.services.data.Metadata.Field;
 
 public class AgilentArray extends AbstractFinalData{
 	private static final long serialVersionUID = 1L;
 
 	public static final int NUM_COLS = 1 + AgilentProbe.NUM_ENTRIES;
 	public static final int NAME = 0;
-	private static final String AGILENT_START = "Ctrl_PL";
+	private String m_AgilentStart = "";
 	
-//	private final String m_Name;
 	private final List<AgilentProbe> m_Probes;
 	
-	public AgilentArray(String arrayName, List<AgilentProbe> probes, DataType type, StringBuilder AgilentMetadata) {
-		super(NUM_COLS, probes.size(), type, arrayName, null); 
-//		m_Name = name;
+	public AgilentArray(AgilentFormatterParams params, List<AgilentProbe> probes, DataType type, StringBuilder AgilentMetadata) {
+		super(NUM_COLS, probes.size(), type, params.ARRAY_NAME, params.getMetadata()); 
 		m_Probes = probes;
-//		this.setAgilentMetadata(parse(AgilentMetadata));
+		m_AgilentStart = params.PROBE_START;
 		this.setAgilentMetadata(AgilentMetadata);
 	}
-//	private List<String> parse(List<Pair> metadata){
+	//	private List<String> parse(List<Pair> metadata){
 //		List<String> str_metadata = new ArrayList<>();
 //		for(int i=0;i<metadata.size();i++) {
 //			String k = metadata.get(i).getKey();
@@ -71,7 +74,7 @@ public class AgilentArray extends AbstractFinalData{
 	protected String getName(int index){
 		String format = "%s_%0"+this.getNumPlaces()+"d";
 //		return String.format(format, m_Name, index+1);
-		return String.format(format, AGILENT_START, index+1);
+		return String.format(format, m_AgilentStart, index+1);
 	}
 	
 	public String toString(int index){

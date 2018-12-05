@@ -42,7 +42,6 @@ public class MetadataPane extends JPanel {
 		m_Metadata = metadata;
 		textArea.setText(""); // clear text area
 		for (Entry<Field, MetaObject> entry: m_Metadata.entrySet()) {
-//			String val = m_Core.getDataManager().getDataName(m_Metadata.get(key));
 			Field f = entry.getKey();
 			FieldType ft = m_Metadata.getFieldType(f);
 			MetaObject metaObj = entry.getValue();
@@ -53,6 +52,7 @@ public class MetadataPane extends JPanel {
 			case DATA_SET: val = metaObj.getDataList(); break;
 			case STRING: val = metaObj.getString(); break;
 			case INT: val = metaObj.getInt(); break;
+			case DOUBLE: val = metaObj.getDouble(); break;
 			case BOOLEAN: val = metaObj.getBool(); break;
 			default: val = "";
 			}

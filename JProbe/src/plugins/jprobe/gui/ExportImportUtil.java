@@ -116,29 +116,25 @@ public class ExportImportUtil {
             	File f = (File) model.getElementAt(i);
  	            String fileName = f.getName();
  	            String name = fileName.substring(0, fileName.lastIndexOf('.'));
- 	            if(core.getDataManager().varExists(name)) {
- 	            	existed.add(name);
- 	            }else {
+ 	            if(!core.getDataManager().varExists(name)) {  
  	            	importData(core, f, reader, selectedFormat, GUIActivator.getBundle(),type);
+ 	            }else{
+ 	            	StringBuilder dup = new StringBuilder();
+ 	            	for (String s :existed){
+ 	            	    dup.append(s);
+ 	            	    dup.append("\n");
+ 	            	}
+ 	            	JOptionPane.showConfirmDialog(null,
+ 	             			"The following variable(s) were not imported because they already exist in the system.\n"
+ 	             			+ "Please import file(s) with unused variable names. \n"
+ 	             			+ dup,
+ 	             			"Existing variable",
+ 	             			JOptionPane.DEFAULT_OPTION,  // with one OK button
+ 	             			JOptionPane.WARNING_MESSAGE);
+ 	 	            	return;
  	            }
             }
-            for(int i =0;i<existed.size();i++) {
-            }
-            if(existed.size()!=0) {
-            	StringBuilder dup = new StringBuilder();
-            	for (String s :existed){
-            	    dup.append(s);
-            	    dup.append("\n");
-            	}
-            	JOptionPane.showConfirmDialog(null,
-             			"The following variable(s) were not imported because they already exist in the system.\n"
-             			+ "Please import file(s) with unused variable names. \n"
-             			+ dup,
-             			"Existing variable",
-             			JOptionPane.DEFAULT_OPTION,  // with one OK button
-             			JOptionPane.WARNING_MESSAGE);
- 	            	return;
- 	            }
+ 	          
             }
             
 		//show the file chooser and read data from the selected file using the selected file format
@@ -192,8 +188,6 @@ public class ExportImportUtil {
             for(int i=0; i<selected.length; i++) {
             	
             	//Data data = core.getDataManager().getData((String)model.getElementAt(i));
-            	System.out.println("inside approve option");
-//            	System.out.println("to export: "+(String)model.getElementAt(i));
 //            	DataWriter writer = core.getDataManager().getDataWriter(data.getClass());
 //        		if(writer == null){
 //        			ErrorHandler.getInstance().handleWarning("Data type \""+data.getClass()+"\" not writable.", GUIActivator.getBundle());

@@ -73,7 +73,7 @@ public class PeakFinderParams implements GenomeParam, PeaksParam, SummitParam {
 		m_Metadata.put(Metadata.Field.FUNC, new MetaObject("Get peak sequences"));
 		m_Metadata.put(Metadata.Field.PEAK_SET, new MetaObject(m_Peaks));
 		m_Metadata.put(Metadata.Field.GENOME, new MetaObject(m_GenomeName));
-		m_Metadata.put(Metadata.Field.SUMMIT, new MetaObject(m_Summit));
+		m_Metadata.put(Metadata.Field.SUMMIT, new MetaObject((Integer)m_Summit));
 		return m_Metadata;
 	}
 }

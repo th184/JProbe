@@ -40,7 +40,16 @@ public abstract class ChiptoolsIntArg<P> extends IntArgument<P> {
 			int min, 
 			int max, 
 			int increment){
-		this(funcClass, clazz, String.valueOf(startValue), optional, startValue, min, max, increment);
+		this( 
+				funcClass, 
+				clazz, 
+				String.valueOf(startValue), 
+				optional, 
+				startValue, 
+				min, 
+				max, 
+				increment
+			);
 	}
 
 }

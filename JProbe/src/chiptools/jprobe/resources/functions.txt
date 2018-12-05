@@ -6,9 +6,13 @@ chiptools.jprobe.function.probegenerator.ProbeGenerator	arguments/probegenerator
 
 chiptools.jprobe.function.probejoiner.ProbeJoiner	arguments/probejoiner.txt	Probe Joiner	Chiptools	This function takes existing probes and combines overlapping ones into multiple binding site probes.
 
+chiptools.jprobe.function.proberemover.ProbeRemover	arguments/proberemover.txt	Probe Remover	Chiptools	This function removes probes that have E-scores greater than the cutoff at non-binding sites.
+
 chiptools.jprobe.function.probemutator.ProbeMutator	arguments/probemutator.txt	Probe Mutator	Chiptools	This function takes existing probes and mutates them such that no Kmers outside of the binding site regions exceed a provided E-score cutoff.
 
 chiptools.jprobe.function.gcrunmutator.GCRunMutator	arguments/gcrunmutator.txt	G-Runs Mutator	Chiptools	This function takes probes and an optional primer and mutates 5G or 5C runs on the probes by changing the center C to a G or vice versa.
+
+chiptools.jprobe.function.unionprobesets.UnionProbeSets	arguments/unionprobesets.txt	Union probe sets	Chiptools	This function takes multiple probe sets and returns a union of the sets. 
 
 chiptools.jprobe.function.bindingprofiler.BindingProfiler	arguments/bindingprofiler.txt	Binding Profiler	Profile	This function takes existing probes and profiles them using specified KMers and/or PWMs.
 

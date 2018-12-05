@@ -9,7 +9,7 @@ public class NumberArg extends ChiptoolsIntArg<NegControlParams>{
 		super(
 				parent.getClass(),
 				NumberArg.class,
-				"unlimited",
+			//	"unlimited",  --> change the default to 500 
 				optional,
 				500,
 				0,

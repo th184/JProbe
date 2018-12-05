@@ -12,7 +12,6 @@ import org.osgi.framework.Bundle;
 import util.gui.OnPress;
 import util.progress.ProgressEvent;
 import util.progress.ProgressListener;
-import jprobe.CoreDataManager;
 import jprobe.services.DataManager;
 import jprobe.services.ErrorHandler;
 import jprobe.services.JProbeCore;
@@ -49,12 +48,12 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 			    			"Input files mismatch",
 			    			JOptionPane.DEFAULT_OPTION,  // with one OK button
 			    			JOptionPane.WARNING_MESSAGE);
-//				}else if(d.getRowCount()==0) {
-//					m_Monitor.dispose();
-//					JOptionPane.showMessageDialog(null,
-//						    "No output was generated.",
-//						    "Empty output object",
-//						    JOptionPane.PLAIN_MESSAGE);
+				}else if(d.getRowCount()==0) {
+					m_Monitor.dispose();
+					JOptionPane.showMessageDialog(null,
+						    "No output was generated.",
+						    "Empty output object",
+						    JOptionPane.PLAIN_MESSAGE);
 				}else {
 					done(d, func);
 				}
@@ -110,7 +109,6 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 	// add output name as a parameter
 	private void done(final Data d, String func){
 		SwingUtilities.invokeLater(new Runnable(){
-
 			@Override
 			public void run() {
 				if(d.getDataType()==DataType.EXPORT) {
@@ -118,8 +116,9 @@ public class SwingFunctionExecutor<T> extends FunctionExecutor<T>{
 				}else {
 					String name = d.getOutputName();
 					m_DataManager.addData(d, name, func, m_Bundle);
-				}
 					
+				}
+				
 				if(m_Monitor != null){
 					m_Monitor.dispose();
 					m_Monitor = null;

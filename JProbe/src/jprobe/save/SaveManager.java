@@ -27,6 +27,7 @@ public class SaveManager{
 	private final Collection<LoadListener> m_LoadLs = new HashSet<LoadListener>();
 
 	public void addSaveable(Saveable s, String tag){
+//		System.out.println("adding saveable: "+tag);
 		m_SaveablesLock.writeLock().lock();
 		try{
 			m_Saveables.put(tag, s);

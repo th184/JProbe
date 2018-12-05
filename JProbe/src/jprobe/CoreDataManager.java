@@ -18,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -31,13 +30,11 @@ import util.ClassLoaderObjectInputStream;
 import util.OSGIUtils;
 import jprobe.services.CoreEvent;
 import jprobe.services.CoreEvent.Type;
-import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
 import jprobe.services.data.DataReader;
 import jprobe.services.data.DataWriter;
 import jprobe.services.data.MetaObject;
 import jprobe.services.data.Metadata;
-import plugins.dataviewer.gui.DataViewerSplitPane;
 import jprobe.services.AbstractServiceListener;
 import jprobe.services.CoreListener;
 import jprobe.services.DataManager;
@@ -51,27 +48,18 @@ public class CoreDataManager implements DataManager{
 	private Map<Class<? extends Data>, List<Data>> m_Data = new HashMap<Class<? extends Data>, List<Data>>();
 	private Map<String, Data> m_NameToData = new HashMap<String, Data>();
 	private Map<Data, String> m_DataToName = new LinkedHashMap<Data, String>();
+	private List<Data> m_OpenedData = new ArrayList<>();
 	
 	private final int OCCUPANCY_ARRAY_SIZE = 50; // change this later!!!
 	
-	public Map<String, boolean[]> m_Index = new HashMap<>()
-	{{	// boolean array = "occupied?"; initialize to all false
-		put("JoinedProbes", new boolean[OCCUPANCY_ARRAY_SIZE]);
-		put("GenProbes", new boolean[OCCUPANCY_ARRAY_SIZE]);
-		put("NegCtrl", new boolean[OCCUPANCY_ARRAY_SIZE]);
-	}};	
-//	private Set<String> m_Standard = new HashSet<>()
-//	{{
-//		add("JoinedProbes"); add("GenProbes"); add("NegCtrl");
-//		add("PeakSeqs"); add("BindingProfile"); 
-//		add("mut"); add("GRunMut"); add("filtered");
-//	}};
+	private Map<String, boolean[]> m_Index = new HashMap<>();
 	
 	private Map<String, Boolean> m_Standard = new HashMap<>()
 	{{ //boolean: indicate whether in group_num
 		put("JoinedProbes",true); put("GenProbes", true); put("NegCtrl",true);
-		put("PeakSeqs", false); put("BindingProfile", false); 
+		put("PeakSeqs", false); put("BindingProfile", false); put("Union", false);
 		put("mut", false); put("GRunMut", false); put("filtered", false);
+		put("rm", false);
 	}};
 	
 	public static Map<String, String> m_Standard_Num = new HashMap<String, String>()
@@ -80,13 +68,15 @@ public class CoreDataManager implements DataManager{
 		put("ProbeGenerator", "GenProbes");
 		put("NegativeControlGenerator", "NegCtrl");
 	}};
+	
 	public static Map<String, String> m_Standard_Prefix = new HashMap<String, String>()
 	{{
 		// prefix_fileName   
 		put("PeakFinder", "PeakSeqs");
 		put("BindingProfiler", "BindingProfile");
-
+		put("UnionProbeSets", "Union");
 	}};
+	
 	public static Map<String, String> m_Standard_Suffix = new HashMap<String, String>()
 	{{
 		// fileName_suffix 
@@ -94,7 +84,9 @@ public class CoreDataManager implements DataManager{
 		put("GCRunMutator", "GRunMut");  
 		put("PeakFilter", "filtered");
 		put("ProbeFilter", "filtered");	
+		put("ProbeRemover", "rm");
 	}};
+	
 	
 //	private Map<Class<? extends Data>, List<Data>> m_Data = null;
 //	private Map<String, Data> m_NameToData = null;
@@ -208,21 +200,19 @@ public class CoreDataManager implements DataManager{
 		m_DataToName.putAll(m_OutputDataToName);
 	}
 		
+	// this function is called when a workspace is opened
 	private synchronized void addData(Data d, String name, Bundle responsible, boolean notify){
 		Class<? extends Data> clazz = d.getClass();
 		determineDataType(d);
-		
 		if(!m_Data.containsKey(clazz)){
 			List<Data> list = new ArrayList<Data>();
 			list.add(d);
 			m_Data.put(clazz, list);
-//			m_Counts.put(clazz, 1);
 			m_DataProviders.put(clazz, OSGIUtils.getProvider(clazz, m_Context).getSymbolicName());
 		}else{
 			List<Data> list = m_Data.get(clazz);
 			if(!list.contains(d)){
 				list.add(d);
-//				m_Counts.put(clazz, m_Counts.get(clazz)+1);
 			}
 		}
 		if(m_DataToName.containsKey(d)){
@@ -234,99 +224,84 @@ public class CoreDataManager implements DataManager{
 				notifyListeners(new CoreEvent(m_Core, Type.DATA_ADDED, responsible, d));
 			}
 		}
+		
 	}
 	@Override
 	public synchronized void addData(Data d, String filename, String func, Bundle responsible){
-		String varName = filename;
-			if(filename == null) {
-				varName = assignName(d, func);
-			}else {
-				varName = assignName(d, func, filename);
-			}
-
-			d.setVarName(varName);
-			d.getMetadata().put(Metadata.Field.DATA, new MetaObject(d)); 
-			d.getMetadata().put(Metadata.Field.DATA_TYPE, new MetaObject(d.getClass().getSimpleName()+" (generated)"));
-			this.addData(d, varName, responsible, true);
+		String varName = assignName(d, func, filename);
+		d.setVarName(varName);
+		d.getMetadata().put(Metadata.Field.DATA, new MetaObject(d)); 
+		d.getMetadata().put(Metadata.Field.DATA_TYPE, new MetaObject(d.getClass().getSimpleName()+" (generated)"));
+		if(!d.getMetadata().keySet().contains(Metadata.Field.NUM_PROBE_GEN)) {  
+			d.getMetadata().put(Metadata.Field.ROW_COUNT, new MetaObject((Integer)d.getRowCount()));
+		}
+		
+		this.addData(d, varName, responsible, true);
+	
 	}
 	@Override
 	public synchronized void addData(Data d, String filename, Bundle responsible){
 		this.addData(d, filename, responsible, true);
+		
 	}
-	
 	/*
 	 * return the next available index from m_Index
 	 */
 	private int nextIndex(String name, boolean group_num) { 
-		boolean[] avail = m_Index.get(name);
-		for(int i = 0; i<avail.length; i++) {
-			if(!avail[i]) {
-				avail[i] = true;
+		boolean[] occupied;
+		if(!m_Index.containsKey(name)) {
+			occupied = new boolean[OCCUPANCY_ARRAY_SIZE];
+			m_Index.put(name, occupied);
+			
+		}else {
+			occupied = m_Index.get(name);
+		}
+		for(int i=0; i<occupied.length; i++) {
+			if(!occupied[i]) {
+				occupied[i] = !occupied[i];
+				
 				if(group_num) return i+1;
-				return i; 
+				else return i;
 			}
 		}
+		
 		return -1; // array all full - need to handle this later (get a bigger array)
 	}
 	private void updateArray(String name, int num, boolean group_num) {
-//		System.out.println("NAME: "+name);
-//		System.out.println("group_num: "+group_num);
 		int i;
-		if(group_num) {
+		if(group_num && num!=0) {
 			i = num-1;
 		}else {
 			i = num;
 		}
 		if(!m_Index.containsKey(name)) {
-//			System.out.println("adding name to m_Index");
 			m_Index.put(name, new boolean[OCCUPANCY_ARRAY_SIZE]);
 		}
-//		System.out.println("updating index: "+i);
 		boolean[] array = m_Index.get(name);
 		array[i] = !array[i];
-//		System.out.println(Arrays.toString(array));
 	}
 	
-	private String assignName(Data d, String func) {
-		String name = null;
-		if(m_Standard_Num.containsKey(func)) {
-			String standardName = m_Standard_Num.get(func);
-			name = standardName +"_"+ nextIndex(standardName, true);
-								
-//			name = standardName +"_"+ m_Counts.get(standardName);
-//			m_Counts.put(standardName, m_Counts.get(standardName)+1); 
-		}
-		return name;
-	}
-	private String assignName(Data d, String func, String name) {
-		if(m_Standard_Prefix.containsKey(func)) {
-			name = m_Standard_Prefix.get(func) +"_"+ name;
-		}else {
-			name = name +"_"+ m_Standard_Suffix.get(func);
-		}
-		
-		if(!m_Index.containsKey(name)) {
-			
-			m_Index.put(name, new boolean[OCCUPANCY_ARRAY_SIZE]);
-//			System.out.println("putting "+name+" in m_Index");
-		}else {
-//			System.out.println("m_Index contains name: "+name);
-			int nextInd = nextIndex(name, false);
-			if(nextInd==0) {
-				name = name;
+	private String assignName(Data d, String func, String filename) {
+		int i;
+		String n;
+		if(filename==null) { // in m_Standard_Num
+			n = m_Standard_Num.get(func);
+			i = nextIndex(n, true);
+
+		}else { // in m_Standard_Prefix or m_Standard_Suffix
+			if(m_Standard_Prefix.containsKey(func)) {
+				n = m_Standard_Prefix.get(func) +"_"+ filename;
 			}else {
-				name = name +"_"+ nextInd;
+				n = filename +"_"+ m_Standard_Suffix.get(func);
 			}
+			i = nextIndex(n, false);
+			
+		}
+		String name;
+		if(i!=0) { name = n+"_"+i;
+		}else {    name = n;  
 		}
 		
-//		if(!m_Counts.containsKey(name)){
-//			m_Counts.put(name, 1);  // start from 1
-//			
-//		}else{
-//			String fullName = name +"_"+ m_Counts.get(name);
-//			m_Counts.put(name, m_Counts.get(name)+1);
-//			name = fullName;
-//		}
 		return name;
 	}
 	private boolean getTag(String pre, String suff) {
@@ -339,28 +314,24 @@ public class CoreDataManager implements DataManager{
 	@Override
 	public void checkIfDefaultName(String label) {
 		List<String> list = new LinkedList<String>(Arrays.asList(label.split("_",-1)));
-		
 		String pre = list.get(0);
 		String suff;
 		String name;
 		if(isNumeric(list.get(list.size()-1))) {
+			
 			int num = Integer.parseInt(list.get(list.size()-1));
 			suff = list.get(list.size()-2);
 			if(m_Standard.containsKey(pre)||m_Standard.containsKey(suff)) {
 				list.remove(list.size()-1);
 				name = String.join("_", list);
-//				System.out.println("num = "+ num);
 				updateArray(name, num, getTag(pre, suff));
-//				m_Counts.put(name, num+1);
 			}
 			
 		}else {
 			suff = list.get(list.size()-1);
 			if(m_Standard.containsKey(pre)||m_Standard.containsKey(suff)) {
-				
 				name = String.join("_", list);
 				updateArray(name, 0, getTag(pre, suff));
-//				m_Counts.put(name, 1);
 			}
 		}
 	}
@@ -373,11 +344,8 @@ public class CoreDataManager implements DataManager{
 		determineDataType(d);
 		checkIfDefaultName(name);
 		m_Data.get(d.getClass()).remove(d);
-//		System.out.println("name: "+name);
-//		System.out.println("m_NameToData contains name: "+m_NameToData.containsKey(name));
 		m_NameToData.remove(name);
 		m_DataToName.remove(d);
-//		System.out.println("m_NameToData contains name: "+m_NameToData.containsKey(name)); 
 		d.dispose();
 		notifyListeners(new CoreEvent(m_Core, Type.DATA_REMOVED, responsible, d));
 	}
@@ -411,6 +379,16 @@ public class CoreDataManager implements DataManager{
 			full.add(d);
 		}
 		return full;
+	}
+	@Override
+	public synchronized void setOpenedData(List<Data> d){
+		m_OpenedData = d;
+		System.out.println("done setting opened data");
+	}
+	
+	@Override
+	public synchronized List<Data> getOpenedData(){
+		return m_OpenedData;
 	}
 	
 	@Override
@@ -459,6 +437,7 @@ public class CoreDataManager implements DataManager{
 	@Override
 	public boolean varExists(String variable) {
 		// used in JProbeGUIFrame to check if a to-be-import variable is in the system already
+		m_NameToData = m_InputNameToData; // switch to type INPUT
 		return m_NameToData.containsKey(variable);
 	}
 	
@@ -660,10 +639,9 @@ public class CoreDataManager implements DataManager{
 		m_OutputNameToData.clear();
 		m_InputDataToName.clear();
 		m_OutputDataToName.clear();
-		
-//		m_Data.clear();
-//		m_NameToData.clear();
-//		m_DataToName.clear();
+		m_Data.clear();
+		m_NameToData.clear();
+		m_DataToName.clear();
 //		m_Counts.clear();
 		this.notifyListeners(new CoreEvent(m_Core, Type.WORKSPACE_CLEARED, JProbeActivator.getBundle()));
 		this.m_ChangesSinceLastSave = false;
@@ -681,6 +659,7 @@ public class CoreDataManager implements DataManager{
 			ObjectOutputStream oout = new ObjectOutputStream(counter);
 			combineDataToName();
 			for(Data stored : m_DataToName.keySet()){
+//				System.out.println("stored data tab state: "+stored.tabStatus());
 				String name = this.getDataName(stored);
 				String bundle = m_DataProviders.get(stored.getClass());
 				oout.writeObject(name);

@@ -1,5 +1,6 @@
 package chiptools.jprobe.function.negativecontrolgen;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.TreeMap;
 
 import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.data.Data;
+import jprobe.services.data.Metadata;
 import jprobe.services.function.Argument;
 import util.genome.Chromosome;
 import util.genome.GenomicCoordinate;
@@ -57,14 +59,14 @@ public class NegativeControlGenerator extends AbstractChiptoolsFunction<NegContr
 		args.add(new ExcludePeaksArg(this, true));
 		args.add(new SummitArgument(this, true));
 		args.add(new KmerListArgument(this, true));
-		args.add(new EscoreArgument(this, true, 0.3));
+		args.add(new EscoreArgument(this, true, 0.35));
+		args.add(new RepeatArg(this, true));
 		args.add(new ProbeLengthArgument(this, true));
 		args.add(new NumberArg(this, true));
 		//args.add(new OutputNameArgument(this, false));
 		
 		return args;
 	}
-
 	@Override
 	public Data execute(ProgressListener l, NegControlParams params) throws Exception {
 		//get peaks and center peaks around the summit if necessary
@@ -117,11 +119,60 @@ public class NegativeControlGenerator extends AbstractChiptoolsFunction<NegContr
 				params.getProbeLength(),
 				params.getNumPeaks()
 				);
+		params.createMetadata();
+		String repeatScore = calculateRepeatScore(probes, params);
+		
+		params.addMetadata(Metadata.Field.REPEAT_SCORE, repeatScore);
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done generating probes."));
 		return new Probes(probes, DataType.OUTPUT, null, params.getMetadata());
 		
 	}
 	
+	private String calculateRepeatScore(ProbeGroup probes, NegControlParams params) {
+		int stretch = params.getRepeat(); // TAKE AS INPUT?
+		int probe_len = params.getProbeLength();
+		int num_probes = probes.size();
+		int denom = probe_len *num_probes / stretch; // int division? or round on double?
+		int numerator = 0;
+		for(Probe p: probes.toList()) {
+			int start = 0;
+			while(start+stretch<=probe_len) {
+				int end = start+stretch;
+				String seq = p.getSequence();
+				String window = seq.substring(start,end);
+				String continous = "^(.)\\1*$";
+				String alternate = "^([ACGT])(?!\\1)([ACGT])(?:\\1\\2)*\\1?$";
+				boolean repeat = window.matches(continous) || window.matches(alternate);
+				if(!repeat) {
+					start++;
+				}else {
+					int len_repeat = 0;
+					char base = seq.charAt(start);
+					for(int i=0; i<seq.substring(start).length();i++) {
+						if(seq.charAt(start+i)==base) {
+							len_repeat++;
+						}else {
+							break;
+						}
+					}
+					numerator += Math.round(len_repeat/(float)stretch);
+					start = start+len_repeat;
+				}
+			}
+			
+		}
+		
+		
+		double s = (double)numerator/denom;
+		NumberFormat defaultFormat = NumberFormat.getPercentInstance();
+		defaultFormat.setMinimumFractionDigits(2);
+		String s_percent = defaultFormat.format(s);
+		String score = String.format("%s (%,d / %,d)", s_percent, numerator, denom);
+		
+		return score;
+		
+	}
+
 	private static ProbeGroup generateProbes(ProgressListener l, PeakSequenceGroup peakSeqs, Kmer kmer, double escore, int length){
 		List<Probe> probes = new ArrayList<Probe>();
 		int count = 0;

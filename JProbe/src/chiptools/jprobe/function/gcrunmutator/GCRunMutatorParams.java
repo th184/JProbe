@@ -50,10 +50,6 @@ public class GCRunMutatorParams implements ProbesParam, PrimerParam{
 		return m_OutputName;
 	}
 
-	@Override
-	public void setPrimerName(String name) {
-		m_PrimerName = name;
-	}
 	
 	public Metadata getMetadata(){
 		m_Metadata = new Metadata();
@@ -61,8 +57,23 @@ public class GCRunMutatorParams implements ProbesParam, PrimerParam{
 		m_Metadata.put(Metadata.Field.DATA_TYPE, null);
 		m_Metadata.put(Metadata.Field.FUNC, new MetaObject("G-runs mutator"));
 		m_Metadata.put(Metadata.Field.PROBE_SET, new MetaObject(m_Probes));
-		m_Metadata.put(Metadata.Field.PRIMER, new MetaObject(m_PrimerName));
+		m_Metadata.put(Metadata.Field.PRIMER, new MetaObject(addName(m_Primer)));
 		return m_Metadata;
+	}
+	private String addName(String primer) {
+		if(m_Primer!=null && m_PrimerName!=null) {
+			primer = primer+" ("+m_PrimerName+")";
+		}
+		return primer;
+	}
+	@Override
+	public String getPrimerName() {
+		return m_PrimerName;
+	}
+
+	@Override
+	public void setPrimerName(String p) {
+		m_PrimerName = p;
 	}
 
 }

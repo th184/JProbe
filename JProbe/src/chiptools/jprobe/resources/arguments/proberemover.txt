@@ -1,0 +1,5 @@
+chiptools.jprobe.function.args.ProbesArgument	Probes	p	FILE	Probes	Probe set from which the probes with E-score greater than the cutoff at non-binding site will be removed.
+
+chiptools.jprobe.function.args.ProfileArgument	Profile		FILE	Profile	Binding profile generated for the probe set. 
+
+chiptools.jprobe.function.args.EscoreArgument	E-score	e	ESCORE	Binding Sites	E-score cutoff above which a probe will be removed.

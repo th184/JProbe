@@ -15,7 +15,7 @@ public class EscoreArgument extends ChiptoolsDoubleArg<EscoreParam>{
 				defaultVal,
 				-0.5,
 				0.5,
-				0.1
+				0.1 // increment
 				);
 	}
 

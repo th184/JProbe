@@ -60,10 +60,10 @@ public class ProbeJoinerParams implements ProbesParam, ProbeLenParam {
 		m_Metadata.put(Metadata.Field.DATA_TYPE, null);
 		m_Metadata.put(Metadata.Field.FUNC, new MetaObject("Probe joiner"));
 		m_Metadata.put(Metadata.Field.PROBE_SET, new MetaObject(m_Probes));
-		m_Metadata.put(Metadata.Field.PROBE_LEN, new MetaObject(m_ProbeLen));
-		m_Metadata.put(Metadata.Field.NUM_BINDING_SITE, new MetaObject(NUMBINDINGSITES));
-		m_Metadata.put(Metadata.Field.MIN_SITE_DIST, new MetaObject(MINSITEDIST));
-		m_Metadata.put(Metadata.Field.MAX_SITE_DIST, new MetaObject(MAXSITEDIST));
+		m_Metadata.put(Metadata.Field.PROBE_LEN, new MetaObject((Integer)m_ProbeLen));
+		m_Metadata.put(Metadata.Field.NUM_BINDING_SITE, new MetaObject((Integer)NUMBINDINGSITES));
+		m_Metadata.put(Metadata.Field.MIN_SITE_DIST, new MetaObject((Integer)MINSITEDIST));
+		m_Metadata.put(Metadata.Field.MAX_SITE_DIST, new MetaObject((Integer)MAXSITEDIST));
 		return m_Metadata;
 	}
 

@@ -1,0 +1,1 @@
+chiptools.jprobe.function.mutationprofiler.MutationProfiler	arguments/mutationprofiler.txt	Mutation Profiler	Profile	This function takes two sequences and a library of Kmers. For each Kmer it reports the E-scores of the words with the largest difference at each base that differs between the sequences.

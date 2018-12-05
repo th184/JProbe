@@ -80,7 +80,7 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 	}
 
 	
-	public Metadata getMetadata(){
+	public void createMetadata(){
 		m_Metadata = new Metadata();
 		m_Metadata.put(Metadata.Field.DATA, null);
 		m_Metadata.put(Metadata.Field.DATA_TYPE, null);
@@ -88,10 +88,16 @@ public class ProbeGeneratorParams implements PeakSeqsParam, KmerParam, PWMParam,
 		m_Metadata.put(Metadata.Field.PEAK_SEQ, new MetaObject(m_PeakSeqs)); 
 		m_Metadata.put(Metadata.Field.KMER, new MetaObject(m_Kmers)); 
 		m_Metadata.put(Metadata.Field.PWM, new MetaObject(m_PWM) ); 
-		m_Metadata.put(Metadata.Field.PROBE_LEN, new MetaObject(m_ProbeLen));
-		m_Metadata.put(Metadata.Field.BINDING_SITE_SIZE, new MetaObject(BINDINGSITE));
-		m_Metadata.put(Metadata.Field.WINDOW_SIZE, new MetaObject(WINDOWSIZE));
+		m_Metadata.put(Metadata.Field.PROBE_LEN, new MetaObject((Integer)m_ProbeLen));
+		m_Metadata.put(Metadata.Field.BINDING_SITE_SIZE, new MetaObject((Integer)BINDINGSITE));
+		m_Metadata.put(Metadata.Field.WINDOW_SIZE, new MetaObject((Integer)WINDOWSIZE));
 		m_Metadata.put(Metadata.Field.E_SCORE, new MetaObject(m_Escore));
+		
+	}
+	public void addMetadata(Metadata.Field f, MetaObject o) {
+		m_Metadata.put(f, o);
+	}
+	public Metadata getMetadata() {
 		return m_Metadata;
 	}
 

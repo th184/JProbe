@@ -106,6 +106,7 @@ class Mutate {
 		for(GenomicCoordinate coord = p.getRegion().getEnd().increment(1); coord.compareTo(fwdRegion.getEnd()) <= 0; coord = coord.increment(1)){
 			fwdImmutable.add(coord);
 		}
+		
 		MutationRecord record = new MutationRecord();
 		record.seq = fwdGenomicSeq;
 		//only use the binding sites as protected regions, but prevent mutations in binding site barrier
@@ -117,7 +118,7 @@ class Mutate {
 			mutations.put(m.coord, m);
 		}
 		
-		//mutate reverse comp primer + probe sequence - this is the reverse compliment probe + primerr
+		//mutate reverse comp primer + probe sequence - this is the reverse compliment probe + primer
 		String rvsSeq = DNAUtils.reverseCompliment(primer) + genomicSeq.getSequence();
 		GenomicRegion rvsRegion = new GenomicRegion(p.getRegion().getStart().decrement(primer.length()), p.getRegion().getEnd());
 		GenomicSequence rvsGenomicSeq = new GenomicSequence(rvsSeq, rvsRegion);
@@ -126,7 +127,8 @@ class Mutate {
 		for(GenomicCoordinate coord = rvsRegion.getStart(); coord.compareTo(p.getRegion().getStart()) < 0; coord = coord.increment(1)){
 			rvsImmutable.add(coord);
 		}
-		record = new MutationRecord();
+		
+  		record = new MutationRecord();
 		record.seq = rvsGenomicSeq;
 		record = mutateRecursive(l, record, kmer, bindingSites, rvsImmutable, escoreCutoff, overlap, alphabet);
 		

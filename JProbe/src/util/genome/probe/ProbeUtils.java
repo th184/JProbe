@@ -31,7 +31,16 @@ public class ProbeUtils {
 	public static interface Filter{
 		public boolean keep(Probe p);
 	}
-	
+	public static ProbeGroup remove(ProbeGroup probes, Set<Integer> toRemove) {
+		List<Probe> remain = new ArrayList<Probe>();
+		for(int i=0; i<probes.size();i++) {
+			if(!toRemove.contains(i)) {
+				remain.add(probes.getProbe(i));
+			}
+		}
+		
+		return new ProbeGroup(remain);
+	}
 	public static ProbeGroup filter(ProbeGroup probes, Filter f){
 		List<Probe> filtered = new ArrayList<Probe>();
 		for(Probe p : probes){
@@ -204,7 +213,9 @@ public class ProbeUtils {
 			//check if the binding site meets the threshhold criteria
 			if(meetsThreshhold(score(bindingSite, kmer), escoreThreshhold)){
 				//scan window around binding site with the PWM for best scoring region
+				
 				GenomicRegion center = scanWindow(seq, bindingSite.getRegion(), pwm, windowSize);
+				
 				if(center != null){
 					//check which orientation the probe should be
 					boolean reverse = reverseOrientation(seq.subsequence(center), pwm);
@@ -219,6 +230,8 @@ public class ProbeUtils {
 			}
 			start = start.increment(1);
 		}
+//		int num_peak_used = probes.size();
+//		System.out.println("num probe created: "+num_peak_used);
 		List<Probe> probeList = new ArrayList<Probe>(probes);
 		//System.err.println("PWM Score time = "+scorePWM+", Kmer Score time = "+scoreKmer);
 		//System.err.println(kmer.getClass());

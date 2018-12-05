@@ -54,7 +54,9 @@ public interface DataManager extends Saveable{
 	public boolean containsAll(List<Data> data);
 	public List<Data> getData(Class<? extends Data> type);
 	public boolean varExists(String variable); 
+	public void setOpenedData(List<Data> openedTab);
+	public List<Data> getOpenedData();
 	
-	public void checkIfDefaultName(String label); 
+	public void checkIfDefaultName(String label);
 	
 }

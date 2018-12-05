@@ -1,11 +1,15 @@
 package plugins.dataviewer.gui;
 
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JTabbedPane;
@@ -15,6 +19,7 @@ import plugins.dataviewer.gui.services.DataViewer;
 import jprobe.services.CoreEvent;
 import jprobe.services.CoreListener;
 import jprobe.services.DataManager;
+import jprobe.services.JProbeCore;
 import jprobe.services.data.Data;
 import jprobe.services.data.Metadata;
 
@@ -88,20 +93,43 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 			int j = this.getSelectedIndex();// index of the tab that's in focus
 			MetadataPane.displayMetadata(this.getIndexData(j).getMetadata());
 		}
-		// these cases need the same result
-//		if(focused_data==closed_data) { 
-//		System.out.println("closed data == focused data");
-////		if(tab_count-1==i) {// right-most tab
-//			// next focused tab is on the left
-////		}else {
-////			// next focused tab is on the right
-////		}
-//	}else {
-//		System.out.println("not equal");
-//	}
+	}
+	private List<Data> getOpenedTab(){
+//		System.out.println("in getOpenedTab");
+		List<Data> opened = new ArrayList<>();
+//		System.out.println("tab count: "+this.getTabCount());
+		for(int i = 0; i < this.getTabCount(); i++)
+		{
+		   DataTab tab = (DataTab) this.getComponentAt(i);
+		   Data d = tab.getData();
+		   opened.add(d);
+//		   System.out.println("data opened: "+d.getVarName());
+		}
+		return opened;
 	}
 	public void initTabs(){
-		for(Data d : m_DataManager.getAllData()){
+		List<Data> toOpen = new ArrayList<>();
+		for(Data d: m_DataManager.getAllData()) {
+//			System.out.println("data open status: "+d.tabStatus());
+			if(d.tabStatus()) {
+				toOpen.add(d);
+			}
+		}
+//		if(m_DataManager.getOpenedData()!=null) {
+//			System.out.println("num opened data: "+m_DataManager.getOpenedData().size());
+//		}
+//		
+//		if(!m_DataManager.getOpenedData().isEmpty()) {
+//			toOpen = m_DataManager.getOpenedData();
+//			for(Data d: toOpen) {
+//				if(d!=null) {
+//					System.out.println("in toOpen: "+d.getVarName());
+//				}else {
+//					System.out.println("d in toOpen is null");
+//				}
+//			}
+//		}
+		for(Data d : toOpen){ 
 			DataTab tab = new DataTab(d);
 			String label = m_DataManager.getDataName(d);
 			m_DataToTabs.put(d, tab);
@@ -149,6 +177,7 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 		// create new tab for imported data
 		if(!m_DataToTabs.containsKey(data)){
 			m_dataDisplayed = data;
+			data.tabOpen();
 			DataTab tab = new DataTab(data);
 			m_DataToTabs.put(data, tab);
 			this.addTab("", tab);
@@ -180,7 +209,9 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	
 	public void closeTab(DataTab tab){
 		last_action_closed_tab = true;
-		
+//		System.out.println("tab status before close: "+tab.getData().tabStatus());
+		tab.getData().tabClosed();
+//		System.out.println("tab status after close: "+tab.getData().tabStatus());
 		this.remove(tab);
 		m_DataToTabs.remove(tab.getData());
 		m_TabLables.remove(tab.getData());	
@@ -196,6 +227,9 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 	}
 	
 	void cleanup(){
+//		System.out.println("cleaing up in DataTabPane");
+//		System.out.println(Arrays.toString(getOpenedTab().toArray()));
+//		m_DataManager.setOpenedData(getOpenedTab());
 		m_DataManager.removeListener(this);
 	}
 	
@@ -224,6 +258,8 @@ public class DataTabPane extends JTabbedPane implements CoreListener, DataViewer
 			break;
 		case WORKSPACE_CLEARED:
 			this.clear();
+//			System.out.println("workspace cleared");
+//			getOpenedTab();
 			break;
 		case WORKSPACE_LOADED:
 			this.initTabs();

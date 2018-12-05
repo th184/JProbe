@@ -72,9 +72,9 @@ public class DataListTable extends JTable implements MouseListener, KeyListener{
 		
 		this.setPreferredScrollableViewportSize(this.getPreferredSize());
 		TableColumn col_0 = this.getColumnModel().getColumn(0);
-		col_0.setPreferredWidth(120);
+		col_0.setPreferredWidth(140);
 		TableColumn col_1 = this.getColumnModel().getColumn(1);
-		col_1.setPreferredWidth(80);
+		col_1.setPreferredWidth(60);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		this.addMouseListener(this);

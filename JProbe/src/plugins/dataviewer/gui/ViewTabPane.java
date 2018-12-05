@@ -1,6 +1,8 @@
 package plugins.dataviewer.gui;
 
 
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -27,12 +29,15 @@ public class ViewTabPane extends JTabbedPane{
         
         m_inputList = new DataListPanel(core, gui, tabPane, DataType.INPUT, this);
         JScrollPane scroll_in = new JScrollPane(m_inputList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll_in.setPreferredSize(new Dimension(220,320)); // maybe not hard code?
         panelOne.add(scroll_in);
         
         m_outputList = new DataListPanel(core, gui, tabPane, DataType.OUTPUT, this);
         JScrollPane scroll_out = new JScrollPane(m_outputList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll_out.setPreferredSize(new Dimension(220,320)); // width, height
         panelTwo.add(scroll_out);
         
+          
         this.setVisible(true);
     }
     

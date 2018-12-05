@@ -6,11 +6,13 @@ chiptools.jprobe.function.negativecontrolgen.ExcludePeaksArg	Excluded peaks	r	PE
 
 chiptools.jprobe.function.args.SummitArgument	Summit	s	INT	Summit	Specifies that peaks should be treated as the summit +/- this value. The summit is determined by the PointSource column of the peak file. If there is none or the PointSource is < 0, then the summit will be the center of the peak region. The size of the resulting regions will be 1 + 2*value.
 
-chiptools.jprobe.function.negativecontrolgen.KmerListArgument	K-mers	k	KMERS	Scoring	K-mers used to ensure that probes have no good binding sites. Only probes with no k-mers above the e-score threshold will be generated. [Default = Off]
+chiptools.jprobe.function.negativecontrolgen.KmerListArgument	K-mers	k	KMERS	Scoring	K-mers used to ensure that probes have no good binding sites. Only probes with no k-mers above the e-score threshold will be generated. 
 
-chiptools.jprobe.function.args.EscoreArgument	E-score	e	ESCORE	Scoring	E-score value between -0.5 and 0.5. This is the maximum e-score that a negative probe may contain. 
+chiptools.jprobe.function.args.EscoreArgument	E-score	e	ESCORE	Scoring	E-score value between -0.5 and 0.5. This is the maximum e-score that a negative probe may contain.
 
-chiptools.jprobe.function.negativecontrolgen.NumberArg	Number	n	INT	Probes	The number of negative control probes to generate. WARNING: if you do not set this parameter and you have many large regions, this function may take a VERY long time to run.
+chiptools.jprobe.function.negativecontrolgen.RepeatArg	Repeat length	r	INT	Scoring	The length of a repeat stretch used for the repeat score calculation.  
+
+chiptools.jprobe.function.negativecontrolgen.NumberArg	Number	n	INT	Probes	The number of negative control probes to generate. 
 
 chiptools.jprobe.function.args.ProbeLengthArgument	Probe length	l	INT	Probes	Length of probes to be generated. 
 

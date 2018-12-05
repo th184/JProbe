@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.10.5
+Created-By: 10.0.2+13 ("Oracle Corporation")
+Bundle-ManifestVersion: 2
+Bundle-Name: Chiptools
+Bundle-SymbolicName: chiptools.jprobe
+Bundle-Version: 1.0.0
+Bundle-Activator: chiptools.jprobe.ChiptoolsActivator
+Bundle-Vendor: Tristan Bepler
+Bundle-Localization: plugin
+Import-Package: org.osgi.framework,jprobe.services,jprobe.services.fun
+ ction,jprobe.services.function.components,jprobe.services.data,plugin
+ s.jprobe.gui.services,util.genome.peak,util.genome,util.genome.reader
+ ,util.genome.reader.query,util.genome.kmer,util.genome.probe,util.gen
+ ome.pwm,util.progress,util
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: chiptools.jprobe.data, chiptools.jprobe.field
+

@@ -74,8 +74,10 @@ public class DataviewerActivator implements BundleActivator{
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		
 		if(m_Panel != null){
-			m_Panel.cleanup();
+
+			m_Panel.cleanup(); // when window is closed
 			m_Gui.removeComponent(m_Panel, context.getBundle());
 			m_Panel = null;
 		}

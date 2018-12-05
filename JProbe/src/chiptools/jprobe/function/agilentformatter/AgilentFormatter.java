@@ -34,6 +34,7 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 		Collection<Argument<? super AgilentFormatterParams>> args = new ArrayList<Argument<? super AgilentFormatterParams>>();
 		args.add(new ProbeCategoriesArgument(this.getClass(), false));
 		args.add(new ArrayNameArgument(this, false));
+		args.add(new ProbeStartArgument(this, false));
 		//args.add(new OutputNameArgument(this, false));
 		args.add(new PrimerArgument(this, true));
 		args.add(new ForwardReplicatesArgument(this, true));
@@ -53,10 +54,8 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 	@Override
 	public Data execute(ProgressListener l, AgilentFormatterParams params) throws Exception {
 		int maxProgress = 0;
-		int counter = 1;
 		
 		for(DataCategory<Probes> cat : params.PROBE_CATEGORIES){
-//			System.out.println("data: "+cat.DATA.getVarName());
 			maxProgress += cat.DATA.getProbeGroup().size();
 		}
 		
@@ -67,14 +66,19 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 		int rvsReps = params.RVS_REPS;
 		String primer = params.getPrimer() != null ? params.getPrimer() : "";
 		List<AgilentProbe> agilentProbes = new ArrayList<AgilentProbe>();
+		
 		StringBuilder agilentMetadata = new StringBuilder();
-		agilentMetadata.append("[Number of probe sets formatted: "+params.PROBE_CATEGORIES.size()+"] \n");
+		agilentMetadata.append("[Agilent Metadata] \n");
+		AgilentMetadata metaArray = new AgilentMetadata(params.getMetadata());
+		agilentMetadata = metaArray.buildArray(agilentMetadata);
+		agilentMetadata.append("["+params.PROBE_CATEGORIES.size()+" sets of probe were formatted] \n");
+		
 		for(DataCategory<Probes> cat : params.PROBE_CATEGORIES){
 			String category = cat.CATEGORY;
 			ProbeGroup probes = cat.DATA.getProbeGroup();
 			int categoryIndex = 1;
-			AgilentMetadata metaAgilent = new AgilentMetadata(cat.DATA);
-			agilentMetadata = metaAgilent.buildString(agilentMetadata);
+			AgilentMetadata metaProbe = new AgilentMetadata(cat.DATA);
+			agilentMetadata = metaProbe.buildString(agilentMetadata);
 			for(Probe p : probes){
 				percent = this.fireProgressUpdate(l, count, maxProgress, percent, category);
 				String type = p.getType();
@@ -101,7 +105,7 @@ public class AgilentFormatter extends AbstractChiptoolsFunction<AgilentFormatter
 		
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done converting probes to Agilent format."));
 		
-		return new AgilentArray(params.ARRAY_NAME, agilentProbes, DataType.EXPORT, agilentMetadata);
+		return new AgilentArray(params, agilentProbes, DataType.EXPORT, agilentMetadata);
 	}
 	
 	protected static String createInfo(String direction, int replicate, String type){

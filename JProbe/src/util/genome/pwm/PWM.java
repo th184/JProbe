@@ -14,6 +14,8 @@ import util.genome.NoSuchBaseException;
  * This class represents a position weight matrix
  * 
  * @author Tristan Bepler
+ * @edited Tiffany Ho
+ * PWM scoring changed from sum to product. 
  *
  */
 public class PWM implements Serializable{
@@ -161,16 +163,16 @@ public class PWM implements Serializable{
 	}
 	
 	/**
-	 * Returns the score of the given word according to this PWM. The word score is the sum of the (char,position) scores.
+	 * Returns the score of the given word according to this PWM. 
 	 * @param word - sequence to be scored by this PWM
-	 * @return the summed position scores
+	 * @return the product of position scores
 	 */
 	public double score(String word){
 		if(word.length() == this.length()){
-			double score = 0;
+			double score = 1;
 			for(int i=0; i<word.length(); i++){
 				char base = word.charAt(i);
-				score += score(base, i);
+				score *= score(base, i);
 			}
 			return score;
 		}
@@ -182,15 +184,21 @@ public class PWM implements Serializable{
 	 * natural log of the product of the scores of each position in the word.
 	 * @param word - sequence to be scored
 	 * @return log ratio score
+	 * @update changed from natural log to log base 2
 	 */
 	public double scoreLogRatio(String word){
 		if(word.length() == this.length()){
-			double score = 0;
-			for( int i = 0 ; i < word.length() ; ++i ){
-				char base = word.charAt(i);
-				score += Math.log(score(base, i));
-			}
-			return score;
+			double background = Math.pow(0.25, word.length());
+			double foreground = score(word);
+			double ratio = foreground/background;
+			return (Math.log(ratio)/Math.log(2));
+			
+//			double score = 0;
+//			for( int i = 0 ; i < word.length() ; ++i ){
+//				char base = word.charAt(i);
+//				score += Math.log(score(base, i));
+//			}
+//			return score;
 		}
 		throw new RuntimeException("Cannot score word: "+word+". Word length is not the same as PWM length: "+this.length()+".");
 	}
@@ -198,10 +206,12 @@ public class PWM implements Serializable{
 	public double score(String seq, int start, int stop){
 		int len = stop-start;
 		if(len == this.length()){
-			double score = 0;
+			double score = 1;
+//			double score = 0;
 			for(int i=start; i<stop; i++){
 				char base = seq.charAt(i);
-				score += m_Scores[getBaseIndex(base)][i-start];
+				score *= m_Scores[getBaseIndex(base)][i-start];
+//				score += m_Scores[getBaseIndex(base)][i-start];
 			}
 			return score;
 		}
@@ -211,10 +221,10 @@ public class PWM implements Serializable{
 	public double scoreReverseCompliment(String seq, int start, int stop){
 		int len = stop-start;
 		if(len == this.length()){
-			double score = 0;
+			double score = 1;
 			for(int i=start; i<stop; i++){
 				char base = DNAUtils.compliment(seq.charAt(i));
-				score += m_Scores[getBaseIndex(base)][this.length() - (i-start) - 1];
+				score *= m_Scores[getBaseIndex(base)][this.length() - (i-start) - 1];
 			}
 			return score;
 		}

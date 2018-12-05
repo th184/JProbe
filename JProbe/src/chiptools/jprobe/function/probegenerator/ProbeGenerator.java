@@ -1,11 +1,15 @@
 package chiptools.jprobe.function.probegenerator;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 import jprobe.services.data.Data;
+import jprobe.services.data.MetaObject;
+import jprobe.services.data.Metadata;
 import jprobe.services.JProbeCore;
 import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
@@ -34,7 +38,6 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 		args.add(new PeakSeqsArgument(this, false));
 		args.add(new KmerArgument(this, false));
 		args.add(new PWMArgument(this, false));
-		
 		args.add(new ProbeLengthArgument(this, true));
 		args.add(new BindingSiteArgument(this, true));
 		args.add(new WindowSizeArgument(this, true));
@@ -62,9 +65,10 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 		int count = 0;
 		int prevPercent = this.fireProgressEvent(l, count, peakSeqs.size(), -1);
 		Queue<Probe> probes = new PriorityQueue<Probe>();
+		int num_probes_created = 0;
 		for(PeakSequence peakSeq : peakSeqs){
 			try{
-				probes.addAll(ProbeUtils.extractFrom(
+				List<Probe> probesCreated = ProbeUtils.extractFrom(
 						peakSeq.getGenomicSequence(),
 						peakSeq.getStrand(),
 						peakSeq.getName(),
@@ -74,16 +78,27 @@ public class ProbeGenerator extends AbstractChiptoolsFunction<ProbeGeneratorPara
 						params.BINDINGSITE,
 						params.WINDOWSIZE,
 						params.getEscore()
-						));
+						);
+				probes.addAll(probesCreated);
+				num_probes_created += probesCreated.size();
 			} catch (Exception e){
 				throw e;
 			}
-
+			  
 			prevPercent = this.fireProgressEvent(l, ++count, peakSeqs.size(), prevPercent);
 		}
-		ProbeGroup group = new ProbeGroup(probes);
 		
+		ProbeGroup group = new ProbeGroup(probes);
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done generating probes."));
+		
+		params.createMetadata();
+		double avg_probe_per_peak = num_probes_created/peakSeqs.size();
+//		NumberFormat defaultFormat = NumberFormat.getPercentInstance();
+//		defaultFormat.setMinimumFractionDigits(2);
+//		String percent = defaultFormat.format(avg_probe_per_peak);
+		String avg = String.format("%.2f (%,d / %,d)", avg_probe_per_peak, num_probes_created, peakSeqs.size());
+		params.addMetadata(Metadata.Field.NUM_PROBE_GEN, new MetaObject((Integer)group.size()));
+		params.addMetadata(Metadata.Field.AVG_PROBE_PER_PEAK, new MetaObject(avg));
 		
 		return new Probes(group, DataType.OUTPUT, null, params.getMetadata());
 	}

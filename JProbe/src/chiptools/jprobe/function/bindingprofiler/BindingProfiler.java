@@ -1,43 +1,32 @@
 package chiptools.jprobe.function.bindingprofiler;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
+import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import jprobe.services.data.Data;
-import jprobe.services.JProbeCore;
 import jprobe.services.data.AbstractFinalData.DataType;
 import jprobe.services.function.Argument;
 import util.genome.Sequences;
@@ -50,11 +39,11 @@ import util.progress.ProgressEvent;
 import util.progress.ProgressListener;
 import util.progress.ProgressEvent.Type;
 import chiptools.jprobe.data.BindingProfile;
-import chiptools.jprobe.data.BindingProfilePlot;
 //import chiptools.jprobe.data.BindingProfilePlot;
 import chiptools.jprobe.function.AbstractChiptoolsFunction;
-import chiptools.jprobe.function.args.OutputNameArgument;
+import chiptools.jprobe.function.args.PrimerArgument;
 import chiptools.jprobe.function.args.ProbesArgument;
+import chiptools.jprobe.function.bindingprofiler.BindingProfiler.Plot.PlotType;
 
 public class BindingProfiler extends AbstractChiptoolsFunction<BindingProfileParams>{
 
@@ -66,6 +55,7 @@ public class BindingProfiler extends AbstractChiptoolsFunction<BindingProfilePar
 	public Collection<Argument<? super BindingProfileParams>> getArguments() {
 		Collection<Argument<? super BindingProfileParams>> args = new ArrayList<Argument<? super BindingProfileParams>>();
 		args.add(new ProbesArgument(this, false));
+		args.add(new PrimerArgument(this, true));
 		args.add(new BindingKmerArgument(this, true));
 		args.add(new BindingPWMArgument(this, true));
 		//args.add(new OutputNameArgument(this, false));
@@ -79,198 +69,285 @@ public class BindingProfiler extends AbstractChiptoolsFunction<BindingProfilePar
 		}
 		return percent;
 	}
-
+	private int kmer_len = -1; // should be a list (could have multiple kmers)
+	private int pwm_len = -1; // should be a list
+	private int probe_len = -1;
+	private static int[] probe_end = new int[2]; // kmer, pwm
+	private static boolean m_PrimerAdded = false;
 	@Override
 	public Data execute(ProgressListener l, BindingProfileParams params) throws Exception {
 		util.genome.kmer.Kmer[] kmers = new util.genome.kmer.Kmer[params.getKmers().size()];
+		if(params.getKmers().size()!=0) {
+			kmer_len = params.getKmers().get(0).getKmer().getWordLengths()[0];}
+		if(params.getPWMs().size()!=0) {
+			pwm_len = params.getPWMs().get(0).getPWM().length();}
+		
 		for(int i=0; i<kmers.length; i++){
 			kmers[i] = params.getKmers().get(i).getKmer();
 		}
+		
 		String[] kmerNames = params.KMER_NAMES.toArray(new String[params.KMER_NAMES.size()]);
-//		System.out.println("kmerNames = "+Arrays.toString(kmerNames));
 		util.genome.pwm.PWM[] pwms = new util.genome.pwm.PWM[params.getPWMs().size()];
 		for(int i=0; i<pwms.length; i++){
 			pwms[i] = params.getPWMs().get(i).getPWM();
 		}
 		String[] pwmNames = params.PWM_NAMES.toArray(new String[params.PWM_NAMES.size()]);
-//		System.out.println("pwmNames="+ Arrays.toString(pwmNames));
+		
+		//REMOVE LATER
 		List<Profile> bindingProfiles = new ArrayList<Profile>();
 		
-		// key:val = metric: scores (2D array)
+		List<Profile> bindingProfilesKmer = new ArrayList<Profile>();
+		List<Profile> bindingProfilesPWM = new ArrayList<Profile>();
+		
+		// key:val = metric: scores (mimic 2D array, a list element is a row)
 		Map<String, ArrayList<double[]>> bp_kmer_score = new HashMap<>();
 		Map<String, ArrayList<double[]>> bp_pwm_score = new HashMap<>();
 		
+		String primer="";
+		if(params.getPrimer()!=null) {
+			m_PrimerAdded = true;
+			primer=params.getPrimer();
+		}
 		
 		ProbeGroup group = params.getProbes().getProbeGroup();
+		probe_len = group.getProbe(0).getSequence().length();
+		if(kmer_len!=-1) {probe_end[0] = probe_len - kmer_len + 1;}
+		if(pwm_len!=-1)  { probe_end[1] = probe_len - pwm_len + 1;}
+		
 		int percentComplete = this.fireProgressUpdate(l, 0, group.size(), -1);
 		for(int i=0; i<group.size(); i++){
 			Probe p = group.getProbe(i);
-			bindingProfiles.add(Sequences.profile(p.getSequence(), p.getName(i+1), kmers, kmerNames, pwms, pwmNames));
+			//REMOVE LATER
+//			bindingProfiles.add(Sequences.profile(p.getSequence()+primer, p.getName(i+1), kmers, kmerNames, pwms, pwmNames));
+			
+			String seq = p.getSequence()+primer;
+			String seqName = p.getName(i+1);
+			
 			for(int j=0; j<kmers.length;j++) {
+				Profile profile = new Profile();
 				Kmer kmer = kmers[j];
 				String kmerName = kmerNames[j];
-				double[] kmerScore = Sequences.getKmerScore(p.getSequence(), kmer);
-				if(!bp_kmer_score.containsKey(kmerName)) {
-					bp_kmer_score.put(kmerName, new ArrayList<double[]>());
+				
+				if(kmer == null) continue; //
+				String name = seqName + "_"; //
+				name += j < kmerNames.length ? kmerNames[j] : "Kmer"+(j+1); //
+				
+				for(int wordLen : kmer.getWordLengths()){
+					if(seq.length() < wordLen) continue;
+					double[] kmerScore = Sequences.getKmerScore(p.getSequence()+primer, kmer);
+					if(!bp_kmer_score.containsKey(kmerName)) {
+						bp_kmer_score.put(kmerName, new ArrayList<double[]>());
+					}
+					bp_kmer_score.get(kmerName).add(kmerScore);
+					profile.put(name, "Kmer", wordLen, kmerScore);
+					
 				}
-				bp_kmer_score.get(kmerName).add(kmerScore);
+				bindingProfilesKmer.add(profile);
 			}
-//			for(int k=0; k<pwms.length; k++) {
-//				PWM pwm = pwms[k];
-//				String pwmName = pwmNames[k];
-//				double[] pwmScore = Sequences.getPWMScore(p.getSequence(), pwm);
-//				if(!bp_pwm_score.containsKey(pwmName)) {
-//					bp_pwm_score.put(pwmName, new ArrayList<double[]>());
-//				}
-//				bp_pwm_score.get(pwmName).add(pwmScore);
-//			}
-			
+			for(int k=0; k<pwms.length; k++) {
+				Profile profile = new Profile();
+				PWM pwm = pwms[k];
+				String pwmName = pwmNames[k];
+				
+				if(pwm == null) continue; //
+				String name = seqName + "_";
+				name += k < pwmNames.length ? pwmNames[k] : "PWM"+(k+1);
+				if(seq.length() < pwm.length()) continue;
+				
+				double[] pwmScore = Sequences.getPWMScore(p.getSequence()+primer, pwm);
+				if(!bp_pwm_score.containsKey(pwmName)) {
+					bp_pwm_score.put(pwmName, new ArrayList<double[]>());
+				}
+				bp_pwm_score.get(pwmName).add(pwmScore);
+				
+				profile.put(name, "PWM",pwm.length(), pwmScore); //
+				bindingProfilesPWM.add(profile);
+			}
 			
 			percentComplete = this.fireProgressUpdate(l, i+1, group.size(), percentComplete);
 		}
+		bindingProfiles.addAll(bindingProfilesKmer);
+		bindingProfiles.addAll(bindingProfilesPWM);
+		
 		l.update(new ProgressEvent(this, Type.COMPLETED, "Done profiling binding."));
 		String outputName = params.getOutputName();
 
-		// temp plot
 		// key:val = metric: avg (1D array)
-		Map<String, double[]> bp_kmer_avg = computeAverage(bp_kmer_score);
-//		Map<String, double[]> bp_pwm_avg = computeAverage(bp_pwm_score);
-		Plot plot= new Plot(bp_kmer_avg);
-//		BindingProfilePlot plot = new BindingProfilePlot(bp_kmer_avg); 
+		Map<String, double[][]> bp_kmer_stats = computeStatistics(bp_kmer_score);
+		Map<String, double[][]> bp_pwm_stats = computeStatistics(bp_pwm_score);
 		
-//		System.out.println("calling binding profile plot");
+		JFrame f = new JFrame("Binding Profiles of "+params.getProbes().getVarName());
+		int num_panel = 0;
+		if(bp_kmer_stats.size()!=0) {
+			for(String metric: bp_kmer_stats.keySet()) {
+				f.add(new Plot(bp_kmer_stats.get(metric), metric, PlotType.KMER));
+				num_panel++;
+			}
+		}
+		if(bp_pwm_stats.size()!=0) {
+			for(String metric: bp_pwm_stats.keySet()) {
+				f.add(new Plot(bp_pwm_stats.get(metric), metric, PlotType.PWM));
+				num_panel++;
+			}
+		}
+		
+        f.setLayout(new GridLayout(0,num_panel));
+        f.pack();
+        f.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        f.setVisible(true);
+		f.setLocationRelativeTo(null);
+
+        
 		return new BindingProfile(bindingProfiles, DataType.OUTPUT, outputName, params.getMetadata());
 	}
-
-	private Map<String, double[]> computeAverage(Map<String, ArrayList<double[]>> bp_score) {
-		// TODO Auto-generated method stub
-		Map<String, double[]> bp_avg = new HashMap<String, double[]>();
+//	public int getProbeEndPos() { // get probe end position for Kmer
+//		return probe_end[0];
+//	}
+	private final static int AVG = 0;
+	private final static int SD_ABOVE = 1;
+	private final static int MAX = 2;
+	
+	private final static String[] STAT_NAME = { "Mean", "1 SD above mean", "Max" };
+	private final static int NUM_STATS = STAT_NAME.length;
+	
+	private Map<String, double[][]> computeStatistics(Map<String, ArrayList<double[]>> bp_score) {
+		Map<String, double[][]> metric_stats = new HashMap<String, double[][]>();
 		for(String metric: bp_score.keySet()) {
 			ArrayList<double[]> entries = bp_score.get(metric);
 			int num_pos = entries.get(0).length;
+			
 			double[] avg = new double[num_pos];
-			for(int profile=0;profile<entries.size();profile++) {
-				for(int pos=0;pos<num_pos;pos++) {
-					avg[pos]+=entries.get(profile)[pos];
-					if(profile==entries.size()-1) {
+			double[] max = new double[num_pos]; Arrays.fill(max, -1000);
+			double[] sd = new double[num_pos]; 
+			double[] sd_above_avg = new double[num_pos];
+			
+			for(int profile=0;profile<entries.size();profile++) { // a profile = a row
+				for(int pos=0;pos<num_pos;pos++) { 				  // a pos = a col
+					double score = entries.get(profile)[pos];
+					avg[pos] += score;
+					if(score>max[pos]) max[pos] = score;
+					if(profile == entries.size()-1) { 
 						avg[pos]=avg[pos]/entries.size();
 					}
 				}
 			}
-			bp_avg.put(metric, avg);
+			
+			// calulate sd at each position
+			int N = entries.size();
+			for(int pos=0;pos<num_pos;pos++) {
+				double mean = avg[pos];
+				double sum = 0;
+				for(int profile=0; profile<N; profile++) {
+					double i = entries.get(profile)[pos];
+					sum += Math.pow((i - mean), 2);
+				}
+				sd[pos] = Math.sqrt(sum/(N-1)); 
+				sd_above_avg[pos] = avg[pos] + sd[pos];
+			}
+			// a set of stats for each matric
+			double[][] stats = new double[NUM_STATS][]; 
+			stats[AVG] = avg;
+			stats[SD_ABOVE] = sd_above_avg;
+			stats[MAX] = max;
+			
+			metric_stats.put(metric, stats);
 		}
-		return bp_avg;
+		return metric_stats;
 	}
 	
-	
-	public class Plot extends JFrame{
-		Map<String, double[]> m_Avg;
-		public Plot(Map<String, double[]> scores) {
-			m_Avg = scores;
-			XYDataset dataset = createDataset();
+	public static class Plot extends JPanel{
+		private static final long serialVersionUID = 1L;
+		
+	    enum PlotType{ KMER, PWM }
+	    
+		private static final int H = 200;
+	    private static final int W = 2*H;
+	    	    
+	    public Plot(double[][] stats, String metric, PlotType type) {
+	    	this.setLayout(new GridLayout());
+	    	XYDataset dataset=createDataset(stats);
+	    	String plot_name="";
+	    	Color[] color = null;
+	    	// dark to light 
+	    	Color[] blue = {new Color(0, 0, 205), new Color(30, 144, 255), new Color(0, 191, 255)};
+	    	Color[] red = {new Color(255,0,0), new Color(255,127,80), new Color(255,165,0)};
+	    	Color[] green = {new Color(34,139,34), new Color(50,205,50), new Color(102,205,170)};
+	    	int dashline_pos = 0;
+	    	switch(type) {
+	    	case KMER:
+	    		plot_name = "E-scores using "+metric; 
+	    		color = blue;
+	    		dashline_pos = probe_end[0];
+	    		break;
+	    	case PWM:
+	    		plot_name = "PWM scores using "+metric; 
+	    		color = green;
+	    		dashline_pos = probe_end[1];
+	    		break;
+	    	}
+	    
 		    JFreeChart chart = ChartFactory.createScatterPlot(
-		        "Average E-Scores across Positions", 
-		        "Position", "E-Score", dataset,  PlotOrientation.VERTICAL,
+		        plot_name, 
+		        "Position", "Score", dataset,  PlotOrientation.VERTICAL,
 		        true,            // include legend
 		        true,            // tooltips
-		        true             // urls
+		        false             // urls
 		        );
-		    //Changes background color
 		    XYPlot plot = (XYPlot)chart.getPlot();
 		    plot.setBackgroundPaint(new Color(255,228,196));
-		    
-		    // Create Panel
-		    ChartPanel panel = new ChartPanel(chart);
-		    setContentPane(panel);
-		    panel.setSize(600, 300);
-//		    this.setSize(800, 400);
-//		    this.setLocationRelativeTo(null);
-//		    this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//		    this.setVisible(true);
-		    
-		    
-		    JFileChooser exportChooser = new JFileChooser();
-		    exportChooser.setSelectedFile(new File("test plot"));
-		    FileFilter filter = new FileNameExtensionFilter("JPEG File","jpg");
-		    exportChooser.setFileFilter(filter);
-			int returnVal = exportChooser.showDialog(null, "Export");
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-			    File file = exportChooser.getSelectedFile();
-//			    BufferedImage img = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_ARGB);
-//	            Graphics g = img.getGraphics();
-//	            panel.paint(g);
-			    
-//			    BufferedImage img=chart.createBufferedImage(600,800);
-			    ClassLoader cl = ClassLoader.getSystemClassLoader();
-		        URL[] urls = ((URLClassLoader)cl).getURLs();
-		        System.out.println("IN PROFILER");
-		        for(URL url: urls){
-		        	System.out.println(url.getFile());
-		        }
-//			    BufferedImage image = null;
-//	            try {
-//	            	URL url = new URL("http://www.mkyong.com/image/mypic.jpg");
-//		            image = ImageIO.read(url);
-//	                ImageIO.write(image, "jpg", file);
-////	                JOptionPane.showMessageDialog(null, "Export", "", JOptionPane.INFORMATION_MESSAGE);
-//	            }catch (IOException e) {
-//			        e.printStackTrace();
-//			    } catch (Throwable t){
-//			    	t.printStackTrace();
-//			    }
-		        
-		        
-		        
-		        
-//	            BufferedImage objBufferedImage=objJFreechart.createBufferedImage(600,800);
-	           
-	            
-//	            ByteArrayOutputStream bas = new ByteArrayOutputStream();
-//	                    try {
-//	                        ImageIO.write(img, "png", bas);
-//	                    } catch (IOException e) {
-//	                        e.printStackTrace();
-//	                    }
-//
-//	            byte[] byteArray=bas.toByteArray();
-//	            InputStream in = new ByteArrayInputStream(byteArray);
-//	            BufferedImage image;
-//				try {
-//					image = ImageIO.read(in);
-//					File outputfile = new File("image.png");
-//		            ImageIO.write(image, "png", outputfile);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-	            
-//			    try {
-//			    	OutputStream out = new FileOutputStream(file);
-//			        ChartUtilities.saveChartAsJPEG(file,
-//			                chart,
-//			                panel.getWidth(),
-//			                panel.getHeight());
-//			    }
-//			    catch (IOException e) {
-//			        e.printStackTrace();
-//			    } catch (Throwable t){
-//			    	t.printStackTrace();
-//			    }
-			}
-
-		}
-		private XYDataset createDataset() {
-			XYSeriesCollection dataset = new XYSeriesCollection();
-			for(String metric: m_Avg.keySet()) {
-				XYSeries series = new XYSeries(metric);
-				double[] entries = m_Avg.get(metric);
-				for(int pos=0; pos<entries.length;pos++) {
-					series.add(pos, entries[pos]);
-				}
-				dataset.addSeries(series);
-			}
-		    return dataset;
-		}
-
-	}
-
+		    StandardXYItemRenderer renderer = new StandardXYItemRenderer();
+	        renderer.setSeriesPaint(0, color[0]); 
+	        renderer.setSeriesPaint(1, color[1]); 
+	        renderer.setSeriesPaint(2, color[2]); 
+	        
+	        renderer.setDrawSeriesLineAsPath(true);
+	        renderer.setStroke(new BasicStroke(3));
+	        plot.setRenderer(renderer);
+	        if(dashline_pos!=0 && m_PrimerAdded) {
+	        	ValueMarker marker = new ValueMarker(dashline_pos);  // position is the value on the axis
+	 	        marker.setPaint(Color.black);
+	 	        marker.setStroke(new BasicStroke( // dashed line
+	 	                1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+	 	                1.0f, new float[] {6.0f, 6.0f}, 0.0f
+	 	            ));
+	 	        plot.addDomainMarker(marker);
+	        }
+	        if(type==PlotType.KMER) {
+	        	ValueMarker binding_cutoff = new ValueMarker(0.4);
+	 	        binding_cutoff.setPaint(Color.red);
+	 	        binding_cutoff.setStroke(new BasicStroke( // dashed line
+	 	                1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+	 	                1.0f, new float[] {6.0f, 6.0f}, 0.0f
+	 	            ));
+	 	        ValueMarker nobinding_cutoff = new ValueMarker(0.35);
+	 	        nobinding_cutoff.setPaint(Color.red);
+	 	        nobinding_cutoff.setStroke(new BasicStroke( // dashed line
+	 	                1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+	 	                1.0f, new float[] {6.0f, 6.0f}, 0.0f
+	 	            ));
+	 	        plot.addRangeMarker(binding_cutoff);
+	 	        plot.addRangeMarker(nobinding_cutoff);
+	        }
+	        
+	        this.add(new ChartPanel(chart, W, H, W, H, W, H,
+	             false, true, true, true, true, true));
+	        this.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
+	     }
+	    private XYDataset createDataset(double[][] stats) {
+	    	XYSeriesCollection dataset = new XYSeriesCollection();
+	    	System.out.println("num of stats: "+stats.length);
+	    	for(int s=0; s<stats.length;s++) {
+	    		XYSeries series = new XYSeries(STAT_NAME[s]);
+	    		double[] stat = stats[s];
+	    		for(int pos=0; pos<stat.length; pos++) {
+	    			series.add(pos, stat[pos]);
+	    		}
+	    		dataset.addSeries(series);
+	    	}
+	    	return dataset;
+	    }
+	    
+	 }
 }
+
+

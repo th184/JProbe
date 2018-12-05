@@ -1,0 +1,8 @@
+
+Usage: jprobe [-g] [-h] <function> [<args>]
+
+Options:
+-g	--gui	Launches JProbe in GUI mode
+-h	--help	Displays this help statement
+
+Functions:

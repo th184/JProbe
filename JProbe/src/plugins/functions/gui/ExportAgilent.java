@@ -30,13 +30,17 @@ public class ExportAgilent {
 		JFileChooser exportChooser = new JFileChooser(){
 			@Override
 	        public void approveSelection() {
-	            File f = new File(this.getSelectedFile().toString()+".txt");
+				String name = this.getSelectedFile().toString();
+				if (!name.endsWith(".txt")) {
+			        name += ".txt";
+			    }
+	            File f = new File(name);
 	            if (f.exists()) {
 	                int result = JOptionPane.showConfirmDialog(this,
 	                        "The file already exists. Do you wish overwrite?", 
 	                        "Existing file",
 	                        JOptionPane.YES_NO_CANCEL_OPTION, 
-	                        JOptionPane.WARNING_MESSAGE); // "warning message" dictates the icon
+	                        JOptionPane.WARNING_MESSAGE); // "warning message" determines the icon
 	                switch (result) {
 	                case JOptionPane.YES_OPTION:
 	                    super.approveSelection();
@@ -91,7 +95,7 @@ public class ExportAgilent {
 				writer.write(data, format, bw);
 				bw.close();
 		        try (BufferedWriter metaBW = new BufferedWriter(new FileWriter(metaFile))) {
-					metaBW.append(data.getAgilentMetadata());
+					metaBW.append(data.getAgilentMetadata()); // recursive metadata of probes
 					metaBW.close();
 		        }
 		    } catch (IOException ex) {

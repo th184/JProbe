@@ -27,6 +27,4 @@ public class PeaksArgument extends ChiptoolsDataArg<PeaksParam, Peaks> {
 		params.setOutputName(data.get(0).getOutputName());
 	}
 
-	
-
 }

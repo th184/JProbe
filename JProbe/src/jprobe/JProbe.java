@@ -170,6 +170,7 @@ public class JProbe implements JProbeCore{
 	
 	@Override
 	public void save(File toFile){
+//		System.out.println("saving in JPROBE");
 		m_SaveManager.save(toFile);
 	}
 	

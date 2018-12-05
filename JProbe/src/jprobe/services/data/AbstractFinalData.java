@@ -35,6 +35,7 @@ public abstract class AbstractFinalData extends MetaObject implements Data{
 	private String m_OutputName = null; // file/var name for OUTPUT data
 	private Metadata m_Metadata;
 	private StringBuilder m_AgilentMetadata=null;
+	private boolean m_OpenInTab = true;
 	
 	private String m_VarName = null;
 	
@@ -112,6 +113,13 @@ public abstract class AbstractFinalData extends MetaObject implements Data{
 	public Metadata getMetadata(){
 		return m_Metadata;
 	}
+	
+	public void tabClosed() { 
+		m_OpenInTab = false; 
+//		System.out.println("closing tab");
+		}
+	public void tabOpen() { m_OpenInTab = true; }
+	public boolean tabStatus() { return m_OpenInTab; }
 	
 	@Override
 	public boolean isCellEditable(int arg0, int arg1) {
